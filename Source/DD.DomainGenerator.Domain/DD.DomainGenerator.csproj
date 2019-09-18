@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="ReadLine" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Actions\Github\" />
+    <Folder Include="Actions\AzurePipelines\" />
+    <Folder Include="Actions\Azure\" />
+    <Folder Include="Actions\AWS\" />
+  </ItemGroup>
+
+</Project>

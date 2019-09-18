@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.DomainGenerator", "DD.DomainGenerator.Domain\DD.DomainGenerator.csproj", "{306CF89A-E8C6-4516-9DC8-E81DA2741F05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromptClient", "PromptClient\PromptClient.csproj", "{9C529AC9-98A8-4983-988A-5A0C6D523FFE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{306CF89A-E8C6-4516-9DC8-E81DA2741F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306CF89A-E8C6-4516-9DC8-E81DA2741F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306CF89A-E8C6-4516-9DC8-E81DA2741F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306CF89A-E8C6-4516-9DC8-E81DA2741F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C529AC9-98A8-4983-988A-5A0C6D523FFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C529AC9-98A8-4983-988A-5A0C6D523FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C529AC9-98A8-4983-988A-5A0C6D523FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C529AC9-98A8-4983-988A-5A0C6D523FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CCAFE342-CD00-4089-A276-EB068E2173C4}
+	EndGlobalSection
+EndGlobal
