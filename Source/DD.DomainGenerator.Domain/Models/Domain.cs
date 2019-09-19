@@ -17,6 +17,7 @@ namespace DD.DomainGenerator.Models
         public Domain ParentDomain { get; set; }
         public SchemaModel Schema { get; set; }
 
+
         public Domain()
         {
             Domains = new List<Domain>();
@@ -71,6 +72,20 @@ namespace DD.DomainGenerator.Models
             }
             return null;
         }
+
+
+        public List<Domain> GetDomainsBelow()
+        {
+            List<Domain> domainsBelow = new List<Domain>();
+            domainsBelow.Add(this);
+            foreach (var item in Domains)
+            {
+                domainsBelow.AddRange(item.GetDomainsBelow());
+            }
+            return domainsBelow;
+        }
+
+
 
         public void AddDomain(Domain childDomain)
         {

@@ -41,6 +41,8 @@ namespace DD.DomainGenerator
         private readonly IFileService _fileService;
 
         public string LastFilePath { get; set; }
+
+        public ReadLineAutocompleteHandler ReadLineSuggestionHandler { get; set; }
         public ProjectManager()
         {
             ProjectState = new ProjectState();
@@ -56,7 +58,8 @@ namespace DD.DomainGenerator
 
         public void PromptMode()
         {
-            ReadLine.AutoCompletionHandler = new ReadLineAutocompleteHandler(ActionManager.Actions);
+            ReadLineSuggestionHandler = new ReadLineAutocompleteHandler(ActionManager.Actions);
+            ReadLine.AutoCompletionHandler = ReadLineSuggestionHandler;
             string input = string.Empty;
             ProjectInfrastructureAction lastAction = ProjectInfrastructureAction.Help;
             do
@@ -89,10 +92,23 @@ namespace DD.DomainGenerator
                     }
                 }
                 CommitVirtualProjectChanges();
+                UpdateDomainSuggestions();
             } while (lastAction != ProjectInfrastructureAction.ExitPromptMode);
         }
 
 
+        private void UpdateDomainSuggestions()
+        {
+            ReadLineSuggestionHandler.UpdateDomains(GetCurrentDomainsList());
+        }
+        private List<string> GetCurrentDomainsList()
+        {
+            if (VirtualProjectState.Domain == null)
+            {
+                return new List<string>();
+            }
+            return VirtualProjectState.Domain.GetDomainsBelow().Select(k => k.Name).ToList();
+        }
 
         private void ExecuteProjectAction(ProjectInfrastructureAction action)
         {
@@ -179,6 +195,8 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new MoveDomain());
             actionManager.RegisterAction(new DeleteDomainSchema());
             actionManager.RegisterAction(new InitializeDomainSchema());
+            actionManager.RegisterAction(new ModifyDomainSchema());
+            actionManager.RegisterAction(new AddSchemaProperty());
 
             return actionManager;
         }
@@ -292,12 +310,20 @@ namespace DD.DomainGenerator
 
         private string Stringfy(ProjectState projectState)
         {
-            return JsonConvert.SerializeObject(projectState, Formatting.Indented);
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            };
+            return JsonConvert.SerializeObject(projectState, Formatting.Indented, settings);
         }
 
         private ProjectState Objectify(string json)
         {
-            return JsonConvert.DeserializeObject<ProjectState>(json);
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            };
+            return JsonConvert.DeserializeObject<ProjectState>(json, settings);
         }
     }
 }

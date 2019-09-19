@@ -18,9 +18,11 @@ namespace DD.DomainGenerator.Actions.Domains
         public MoveDomain() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n")
+            { IsDomainSuggestion = true };
             NewParentParameter = new ActionParameterDefinition(
-                "newparent", ActionParameterDefinition.TypeValue.String, "New parent domain name", "p");
+                "newparent", ActionParameterDefinition.TypeValue.String, "New parent domain name", "p")
+            { IsDomainSuggestion = true };
 
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(NewParentParameter);

@@ -23,6 +23,9 @@ namespace DD.DomainGenerator.Models
         public string ShortCut { get; }
         public string Name { get; }
 
+
+        public bool IsDomainSuggestion { get; set; }
+
         public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut = null)
         {
             if (string.IsNullOrEmpty(name))

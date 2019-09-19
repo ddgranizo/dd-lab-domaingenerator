@@ -20,7 +20,8 @@ namespace DD.DomainGenerator.Actions.Domains
             NameParameter = new ActionParameterDefinition(
                 "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n");
             ParentParameter = new ActionParameterDefinition(
-                "parent", ActionParameterDefinition.TypeValue.String, "Parent domain name", "p");
+                "parent", ActionParameterDefinition.TypeValue.String, "Parent domain name", "p")
+            { IsDomainSuggestion = true };
 
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(ParentParameter);

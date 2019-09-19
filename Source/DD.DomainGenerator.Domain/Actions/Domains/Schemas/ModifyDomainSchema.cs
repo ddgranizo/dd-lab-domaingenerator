@@ -10,111 +10,114 @@ using DD.DomainGenerator.Utilities;
 
 namespace DD.DomainGenerator.Actions.Domains.Schemas
 {
-    public class InitializeDomainSchema : ActionBase
+    public class ModifyDomainSchema : ActionBase
     {
-        public const string ActionName = "InitializeDomainSchema";
+        public const string ActionName = "ModifyDomainSchema";
         public ActionParameterDefinition DomainNameParameter { get; set; }
         public ActionParameterDefinition NameParameter { get; set; }
-        public ActionParameterDefinition HasIdParameter { get; set; }
-        public ActionParameterDefinition HasStateParameter { get; set; }
-        public ActionParameterDefinition HasDatesParameter { get; set; }
-        public ActionParameterDefinition HasUserRelationshipParameter { get; set; }
-        public ActionParameterDefinition HasOwnerParameter { get; set; }
-        public InitializeDomainSchema() : base(ActionName)
+        public ActionParameterDefinition AddIdParameter { get; set; }
+        public ActionParameterDefinition AddStateParameter { get; set; }
+        public ActionParameterDefinition AddDatesParameter { get; set; }
+        public ActionParameterDefinition AddUserRelationshipParameter { get; set; }
+        public ActionParameterDefinition AddOwnerParameter { get; set; }
+        public ModifyDomainSchema() : base(ActionName)
         {
             DomainNameParameter = new ActionParameterDefinition(
-               "domainname", ActionParameterDefinition.TypeValue.String, "Domain name", "d")
+                "domainname", ActionParameterDefinition.TypeValue.String, "Domain name", "d")
             { IsDomainSuggestion = true };
 
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Schema name. Recomended to use same domain name but not in plural. The name will be converted to PascalCase", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "Name", "n");
 
-            HasIdParameter = new ActionParameterDefinition(
-               "hasid", ActionParameterDefinition.TypeValue.Boolean, "The new schema has id. It will add 'Id' attribute with GUID and primary key. Default value = true", "i");
+            AddIdParameter = new ActionParameterDefinition(
+               "addid", ActionParameterDefinition.TypeValue.Boolean, "Add id to the schema. It will add 'Id' attribute with GUID and primary key. Default value = false", "i");
 
-            HasStateParameter = new ActionParameterDefinition(
-               "hasstate", ActionParameterDefinition.TypeValue.Boolean, "The new schema has state. It will add 'State' attribute with values 1 enbled, 0 disabled. Default value = false", "s");
+            AddStateParameter = new ActionParameterDefinition(
+               "addstate", ActionParameterDefinition.TypeValue.Boolean, "Add state to the schema. It will add 'State' attribute with values 1 enbled, 0 disabled. Default value = false", "s");
 
-            HasUserRelationshipParameter = new ActionParameterDefinition(
-              "hasuserrelationship", ActionParameterDefinition.TypeValue.Boolean, "The new schema has user relationship. It will add 'CreatedBy' and 'ModifiedBy' forening keys to the schema, related with 'User' schema (must be created first). Default value = false", "u");
+            AddUserRelationshipParameter = new ActionParameterDefinition(
+              "adduserrelationship", ActionParameterDefinition.TypeValue.Boolean, "Add user relationships to schema. It will add 'CreatedBy' and 'ModifiedBy' forening keys to the schema, related with 'User' schema (must be created first). Default value = false", "u");
 
-            HasDatesParameter = new ActionParameterDefinition(
-               "hasdates", ActionParameterDefinition.TypeValue.Boolean, "The new schema has dates. It will add 'CreatedOn' and 'ModifiedOn' of DateTime type. Default value = false", "d");
+            AddDatesParameter = new ActionParameterDefinition(
+               "adddates", ActionParameterDefinition.TypeValue.Boolean, "Add dates to schema. It will add 'CreatedOn' and 'ModifiedOn' of DateTime type. Default value = false", "d");
 
-            HasDatesParameter = new ActionParameterDefinition(
-              "hasowner", ActionParameterDefinition.TypeValue.Boolean, "The new schema has owner. It will add 'Owner'. Default value = false", "o");
+            AddOwnerParameter = new ActionParameterDefinition(
+               "addowner", ActionParameterDefinition.TypeValue.Boolean, "Add owner to schema. It will add 'Owner'. Default value = false", "o");
 
-
-            ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(DomainNameParameter);
-            ActionParametersDefinition.Add(HasIdParameter);
-            ActionParametersDefinition.Add(HasDatesParameter);
-            ActionParametersDefinition.Add(HasStateParameter);
-            ActionParametersDefinition.Add(HasDatesParameter);
-            ActionParametersDefinition.Add(HasUserRelationshipParameter);
+            ActionParametersDefinition.Add(NameParameter);
+            ActionParametersDefinition.Add(AddIdParameter);
+            ActionParametersDefinition.Add(AddDatesParameter);
+            ActionParametersDefinition.Add(AddStateParameter);
+            ActionParametersDefinition.Add(AddOwnerParameter);
+            ActionParametersDefinition.Add(AddUserRelationshipParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {
-            return IsParamOk(parameters, DomainNameParameter) && IsParamOk(parameters, NameParameter);
+            return IsParamOk(parameters, DomainNameParameter);
         }
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
             var domainName = GetStringParameterValue(parameters, DomainNameParameter, string.Empty).ToWordPascalCase();
             var name = GetStringParameterValue(parameters, NameParameter, string.Empty).ToWordPascalCase();
-            var hasId = GetBoolParameterValue(parameters, HasIdParameter, true);
-            var hasState = GetBoolParameterValue(parameters, HasStateParameter, false);
-            var hasDates = GetBoolParameterValue(parameters, HasDatesParameter, false);
-            var hasUserRelationship = GetBoolParameterValue(parameters, HasUserRelationshipParameter, false);
-            var hasOwner = GetBoolParameterValue(parameters, HasOwnerParameter, false);
+
+            var addId = GetBoolParameterValue(parameters, AddIdParameter, false);
+            var addState = GetBoolParameterValue(parameters, AddStateParameter, false);
+            var addDates = GetBoolParameterValue(parameters, AddDatesParameter, false);
+            var addUserRelationship = GetBoolParameterValue(parameters, AddUserRelationshipParameter, false);
+            var addOwner = GetBoolParameterValue(parameters, AddOwnerParameter, false);
 
             var domain = Domain.FindChildDomain(project.Domain, domainName);
             if (domain == null)
             {
                 throw new Exception($"Can't find any domain named '{domainName}'");
             }
-            if (domain.Domains.Count > 0)
+            if (!domain.HasModel)
             {
-                throw new Exception($"Domain named '{domainName}' already has child domains. Only childest domains can contain schema definitions");
+                throw new Exception($"Domain named '{domainName}' cannot be modified. Initialize the schema domain first");
             }
-            domain.Schema = new SchemaModel(name);
-            if (hasId)
+            if (!string.IsNullOrEmpty(name))
+            {
+                domain.Schema.Name = name;
+            }
+            if (addId && !domain.Schema.HasId)
             {
                 domain.Schema.HasId = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaModelProperty.PropertyTypes.PrimaryKey)
                 { IsPrimaryKey = true });
             }
-            if (hasState)
+            if (addState && !domain.Schema.HasState)
             {
                 domain.Schema.HasState = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.State, SchemaModelProperty.PropertyTypes.State));
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Status, SchemaModelProperty.PropertyTypes.Status));
             }
-            if (hasDates)
+            if (addDates && !domain.Schema.HasDates)
             {
                 domain.Schema.HasDates = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedOn, SchemaModelProperty.PropertyTypes.DateTime));
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.DateTime));
             }
-            if (hasOwner)
+            if (addOwner && !domain.Schema.HasOwner)
             {
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
-                    throw new Exception("Can't add user relationship because user domain doesn't exists");
+                    throw new Exception("Can't add owner because user domain doesn't exists");
                 }
                 domain.Schema.HasOwner = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingDomain = userDomain });
             }
-            if (hasUserRelationship)
+            if (addUserRelationship && !domain.Schema.HasUserRelationship)
             {
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
                     throw new Exception("Can't add user relationship because user domain doesn't exists");
                 }
-                domain.Schema. HasUserRelationship = true;
+                domain.Schema.HasUserRelationship = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingDomain = userDomain });
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)

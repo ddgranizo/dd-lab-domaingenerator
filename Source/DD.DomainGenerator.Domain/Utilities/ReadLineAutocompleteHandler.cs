@@ -6,13 +6,22 @@ using System.Text;
 
 namespace DD.DomainGenerator.Utilities
 {
-    class ReadLineAutocompleteHandler : IAutoCompleteHandler
+    public class ReadLineAutocompleteHandler : IAutoCompleteHandler
     {
-
         public List<ActionBase> Actions { get; set; }
+        public List<string> Domains { get; set; }
         public ReadLineAutocompleteHandler(List<ActionBase> actions)
         {
             Actions = actions ?? throw new ArgumentNullException(nameof(actions));
+        }
+
+        public void UpdateDomains(List<string> domains)
+        {
+            if (domains is null)
+            {
+                throw new ArgumentNullException(nameof(domains));
+            }
+            Domains = domains;
         }
 
         public char[] Separators { get; set; } = new char[] { ' ' };
@@ -40,18 +49,37 @@ namespace DD.DomainGenerator.Utilities
             var actionName = text
                 .Split(new char[] { ' ' })
                 .FirstOrDefault();
-            if (actionName!=null)
+            if (actionName != null)
             {
                 var action = Actions.FirstOrDefault(k => k.GetInvocationCommandName() == actionName.Trim());
                 if (action != null)
                 {
-                    return action.ActionParametersDefinition
+                    var outputSuggestions = new List<string>();
+                    var parameters = action.ActionParametersDefinition
                         .Where(k => !parametersInputed.Any(l => l == k.GetInvokeName()))
                         .Select(k => k.GetInvokeName())
                         .ToArray();
+                    if (parametersInputed.Any())
+                    {
+                        var lastWord = parametersInputed.Last();
+                        var lastParameter = action.ActionParametersDefinition.FirstOrDefault(k => k.GetInvokeName() == lastWord);
+                        if (lastParameter != null)
+                        {
+                            if (lastParameter.InputSuggestions != null)
+                            {
+                                outputSuggestions.AddRange(lastParameter.InputSuggestions.ToList());
+                            }
+                            if (lastParameter.IsDomainSuggestion)
+                            {
+                                outputSuggestions.AddRange(Domains);
+                            }
+                        }
+                    }
+                    outputSuggestions.AddRange(parameters.ToList());
+                    return outputSuggestions.ToArray();
                 }
             }
-            
+
             return new string[] { };
         }
     }

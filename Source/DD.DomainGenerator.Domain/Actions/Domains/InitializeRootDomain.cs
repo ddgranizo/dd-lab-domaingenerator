@@ -34,7 +34,7 @@ namespace DD.DomainGenerator.Actions.Domains
         {
             var name = GetStringParameterValue(parameters, NameParameter, string.Empty).ToWordPascalCase();
             var nameSpace = GetStringParameterValue(parameters, NamespaceParameter, string.Empty).ToNamespacePascalCase();
-            project.Domain = new Domain(nameSpace, name);
+            project.Domain = new Domain() { Namespace = nameSpace, Name = name, IsRootDomain = true };
         }
 
     }

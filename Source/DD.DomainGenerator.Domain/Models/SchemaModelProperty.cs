@@ -9,15 +9,18 @@ namespace DD.DomainGenerator.Models
     {
         public enum PropertyTypes
         {
-            Guid = 1,
-            Boolean = 2,
-            Integer = 3,
-            Decimal = 4,
-            Float = 5,
-            Time = 6,
-            DateTime = 7,
-            String = 8,
-            LongString = 9,
+            PrimaryKey = 1,
+            State = 2,
+            Status = 3,
+            ForeingKey = 4,
+            Boolean = 10,
+            Integer = 11,
+            Decimal = 12,
+            Float = 13,
+            Time = 30,
+            DateTime = 31,
+            String = 40,
+            LongString = 41,
             Password = 99,
         }
 
@@ -28,6 +31,7 @@ namespace DD.DomainGenerator.Models
         public bool IsNullable { get; set; }
         public bool IsUnique { get; set; }
         public bool IsAutoIncremental { get; set; }
+        public Domain ForeingDomain { get; set; }
 
         public SchemaModelProperty()
         {

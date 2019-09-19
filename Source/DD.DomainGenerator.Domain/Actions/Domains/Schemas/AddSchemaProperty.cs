@@ -24,7 +24,8 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
         public AddSchemaProperty() : base(ActionName)
         {
             DomainNameParameter = new ActionParameterDefinition(
-                "domainname", ActionParameterDefinition.TypeValue.String, "Domain name", "d");
+                "domainname", ActionParameterDefinition.TypeValue.String, "Domain name", "d")
+            { IsDomainSuggestion = true };
             NameParameter = new ActionParameterDefinition(
                 "name", ActionParameterDefinition.TypeValue.String, "Name. Use PascalCase or the name will be converted to PascalCase automatically", "n");
             TypeParameter = new ActionParameterDefinition(
