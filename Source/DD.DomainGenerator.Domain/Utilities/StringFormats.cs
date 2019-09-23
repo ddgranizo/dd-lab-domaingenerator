@@ -8,6 +8,13 @@ namespace DD.DomainGenerator.Utilities
 {
     public static class StringFormats
     {
+        public static Uri ParseStringUri(string uri)
+        {
+            Uri uriResult;
+            bool result = Uri.TryCreate(uri, UriKind.Absolute, out uriResult)
+                && uriResult.Scheme == Uri.UriSchemeHttp;
+            return uriResult;
+        }
 
         public static string ToNamespacePascalCase(this string s)
         {

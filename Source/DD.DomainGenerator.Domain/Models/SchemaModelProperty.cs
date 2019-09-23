@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DD.DomainGenerator.Models
@@ -31,7 +32,7 @@ namespace DD.DomainGenerator.Models
         public bool IsNullable { get; set; }
         public bool IsUnique { get; set; }
         public bool IsAutoIncremental { get; set; }
-        public Domain ForeingDomain { get; set; }
+        public SchemaModel ForeingSchema { get; set; }
 
         public SchemaModelProperty()
         {
@@ -59,6 +60,11 @@ namespace DD.DomainGenerator.Models
                 }
             }
             throw new Exception($"Can't find type named {type}");
+        }
+
+        public static List<string> GetUseCaseTypesList()
+        {
+            return Enum.GetNames(typeof(PropertyTypes)).ToList();
         }
     }
 }

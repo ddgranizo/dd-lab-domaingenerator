@@ -17,9 +17,12 @@ namespace DD.DomainGenerator.Models
         public Domain ParentDomain { get; set; }
         public SchemaModel Schema { get; set; }
 
+        public List<UseCase> UseCases { get; set; }
+        public bool NeedsAuthorization { get; set; }
 
         public Domain()
         {
+            UseCases = new List<UseCase>();
             Domains = new List<Domain>();
         }
 
@@ -49,6 +52,53 @@ namespace DD.DomainGenerator.Models
             Name = name;
         }
 
+        public void DeleteUseCase(UseCase.UseCaseTypes type, SchemaModel intersectionDomain = null)
+        {
+            if (!HasModel)
+            {
+                throw new Exception("Current domain doesn't contain any use case becouse it hasn't schema yet");
+            }
+            var item = UseCases.FirstOrDefault(k => k.Type == type && k.Schema?.Name == intersectionDomain?.Name);
+            if (item == null)
+            {
+                throw new Exception("Can't find use case");
+            }
+            UseCases.Remove(item);
+        }
+
+        public void AddUseCase(UseCase useCase)
+        {
+            if (!HasModel)
+            {
+                throw new Exception("Use case can only be added to domains with schema");
+            }
+            var repeatedCrud = UseCases.Where(k => k.Type == useCase.Type);
+            if (repeatedCrud.Count() > 0
+                && (useCase.Type == UseCase.UseCaseTypes.Authorise
+                || useCase.Type == UseCase.UseCaseTypes.Create
+                || useCase.Type == UseCase.UseCaseTypes.DeleteByPk
+                || useCase.Type == UseCase.UseCaseTypes.DeleteByUn
+                || useCase.Type == UseCase.UseCaseTypes.RetrieveByPk
+                || useCase.Type == UseCase.UseCaseTypes.RetrieveByUn
+                || useCase.Type == UseCase.UseCaseTypes.RetrieveMultiple
+                || useCase.Type == UseCase.UseCaseTypes.Update))
+            {
+                throw new Exception("Repeated use case");
+            }
+
+            if (useCase.Schema != null)
+            {
+                var repeatedIntersection = repeatedCrud
+                    .Where(k => k.Schema?.Name == useCase.Schema.Name);
+                if (repeatedIntersection.Count() > 0
+                    && (useCase.Type == UseCase.UseCaseTypes.RetrieveMultipleIntersection))
+                {
+                    throw new Exception("Repeated use case");
+                }
+            }
+
+            UseCases.Add(useCase);
+        }
 
         public static bool IsDomainNameRepeated(Domain domain, string name)
         {
@@ -104,7 +154,7 @@ namespace DD.DomainGenerator.Models
             {
                 throw new Exception($"Can't find child domain with name '{childDomainName}'");
             }
-            if (domain.Domains.Count>0)
+            if (domain.Domains.Count > 0)
             {
                 throw new Exception($"Can't delete domain with childs domains. Delete first the childs");
             }

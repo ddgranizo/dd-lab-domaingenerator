@@ -104,24 +104,32 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
-                    throw new Exception("Can't add owner because user domain doesn't exists");
+                    throw new Exception("Can't add owner because 'User' domain doesn't exists");
+                }
+                if (!userDomain.HasModel)
+                {
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't contain schema yet");
                 }
                 domain.Schema.HasOwner = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
             }
             if (addUserRelationship && !domain.Schema.HasUserRelationship)
             {
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
-                    throw new Exception("Can't add user relationship because user domain doesn't exists");
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
+                }
+                if (!userDomain.HasModel)
+                {
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't contain schema yet");
                 }
                 domain.Schema.HasUserRelationship = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
             }
         }
 

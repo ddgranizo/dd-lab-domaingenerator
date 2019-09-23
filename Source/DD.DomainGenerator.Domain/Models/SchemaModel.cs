@@ -14,8 +14,9 @@ namespace DD.DomainGenerator.Models
         public bool HasUserRelationship { get; set; }
         public bool HasState { get; set; }
         public bool HasOwner { get; set; }
-
+        public bool IsIntersection { get; set; }
         public List<SchemaModelProperty> Properties { get; set; }
+
 
         public SchemaModel(string name)
         {

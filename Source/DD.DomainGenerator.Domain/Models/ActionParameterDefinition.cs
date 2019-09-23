@@ -13,6 +13,7 @@ namespace DD.DomainGenerator.Models
             Decimal = 3,
             Guid = 9,
             String = 10,
+            Password = 99,
         }
 
 
@@ -22,7 +23,6 @@ namespace DD.DomainGenerator.Models
         public string Description { get; }
         public string ShortCut { get; }
         public string Name { get; }
-
 
         public bool IsDomainSuggestion { get; set; }
 

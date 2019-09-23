@@ -7,6 +7,32 @@ namespace DD.DomainGenerator
     public class Definitions
     {
 
+
+        public struct DefaultEnvironmentNames
+        {
+            public  struct Production
+            {
+                public const string Name = "Production";
+                public const string Shortname = "pro";
+            }
+            public struct Preproduction
+            {
+                public const string Name = "Preproduction";
+                public const string Shortname = "pre";
+            }
+            public struct Integration
+            {
+                public const string Name = "Integration";
+                public const string Shortname = "int";
+            }
+            public struct Development
+            {
+                public const string Name = "Development";
+                public const string Shortname = "dev";
+            }
+        }
+
+
         public static string[] AvailableTrueStrings = new string[] {
                 "true",
                 "yes",

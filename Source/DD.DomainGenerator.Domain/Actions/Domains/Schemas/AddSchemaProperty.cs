@@ -31,12 +31,7 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
             TypeParameter = new ActionParameterDefinition(
                 "type", ActionParameterDefinition.TypeValue.String, "Type. Possible values: Guid = 1, Boolean = 2, Integer = 3, Decimal = 4,  Float = 5, Time = 6, DateTime = 7, String = 8, LongString = 9, Password = 99, ",
                 "t")
-            {
-                InputSuggestions = new List<string>()
-                {
-                    "Guid", "Boolean", "Integer", "Decimal", "Float","Time", "DateTime", "String", "LongString", "Password"
-                }
-            };
+            { InputSuggestions = SchemaModelProperty.GetUseCaseTypesList() };
 
             LengthParameter = new ActionParameterDefinition(
                 "length", ActionParameterDefinition.TypeValue.Integer, "Length. Use only for String types", "l");

@@ -1,7 +1,9 @@
 ﻿using DD.DomainGenerator.Actions;
+using DD.DomainGenerator.Actions.AzurePipelines;
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Actions.Domains;
 using DD.DomainGenerator.Actions.Domains.Schemas;
+using DD.DomainGenerator.Actions.Github;
 using DD.DomainGenerator.Actions.Project;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
@@ -20,6 +22,9 @@ namespace DD.DomainGenerator
 {
     public class ProjectManager
     {
+
+        public IRegistryService _registryService { get; set; }
+        public ICryptoService _cryptoService { get; set; }
         public enum ProjectInfrastructureAction
         {
             Help = 0,
@@ -50,9 +55,13 @@ namespace DD.DomainGenerator
             ActionManager = GetActionManager();
 
             _fileService = new FileService();
+            _registryService = new RegistryService();
+            _cryptoService = new CryptoService(_registryService);
+
 
             ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
+            
         }
 
 
@@ -184,7 +193,7 @@ namespace DD.DomainGenerator
             _fileService.SaveFile(absolutePath, json);
         }
 
-        private static ActionManager GetActionManager()
+        private  ActionManager GetActionManager()
         {
             var actionManager = new ActionManager();
 
@@ -197,6 +206,10 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new InitializeDomainSchema());
             actionManager.RegisterAction(new ModifyDomainSchema());
             actionManager.RegisterAction(new AddSchemaProperty());
+            actionManager.RegisterAction(new AddAzurePipelinesSetting(_cryptoService));
+            actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
+            actionManager.RegisterAction(new AddGithubSetting(_cryptoService));
+            actionManager.RegisterAction(new DeleteGithubSetting());
 
             return actionManager;
         }
@@ -275,7 +288,8 @@ namespace DD.DomainGenerator
 
         private void ActionManager_OnQueuedAction(object sender, ActionEventArgs args)
         {
-            ProjectState.Actions.Add(new ActionExecution(args.Action.Name, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition)));
+            ProjectState.Actions.Add(
+                new ActionExecution(args.Action.Name, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition)));
             RaiseProjectStateChange();
         }
 

@@ -20,6 +20,8 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
         public ActionParameterDefinition HasDatesParameter { get; set; }
         public ActionParameterDefinition HasUserRelationshipParameter { get; set; }
         public ActionParameterDefinition HasOwnerParameter { get; set; }
+        public ActionParameterDefinition AddCRUDUseCasesParameter { get; set; }
+
         public InitializeDomainSchema() : base(ActionName)
         {
             DomainNameParameter = new ActionParameterDefinition(
@@ -41,17 +43,20 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
             HasDatesParameter = new ActionParameterDefinition(
                "hasdates", ActionParameterDefinition.TypeValue.Boolean, "The new schema has dates. It will add 'CreatedOn' and 'ModifiedOn' of DateTime type. Default value = false", "d");
 
-            HasDatesParameter = new ActionParameterDefinition(
+            HasOwnerParameter = new ActionParameterDefinition(
               "hasowner", ActionParameterDefinition.TypeValue.Boolean, "The new schema has owner. It will add 'Owner'. Default value = false", "o");
 
+            AddCRUDUseCasesParameter = new ActionParameterDefinition(
+              "addcrudusecases", ActionParameterDefinition.TypeValue.Boolean, "Add CRUD use cases. Default value = yes", "a");
 
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(DomainNameParameter);
             ActionParametersDefinition.Add(HasIdParameter);
             ActionParametersDefinition.Add(HasDatesParameter);
             ActionParametersDefinition.Add(HasStateParameter);
-            ActionParametersDefinition.Add(HasDatesParameter);
+            ActionParametersDefinition.Add(HasOwnerParameter);
             ActionParametersDefinition.Add(HasUserRelationshipParameter);
+            ActionParametersDefinition.Add(AddCRUDUseCasesParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -67,11 +72,15 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
             var hasDates = GetBoolParameterValue(parameters, HasDatesParameter, false);
             var hasUserRelationship = GetBoolParameterValue(parameters, HasUserRelationshipParameter, false);
             var hasOwner = GetBoolParameterValue(parameters, HasOwnerParameter, false);
-
+            var addCrudUseCases = GetBoolParameterValue(parameters, AddCRUDUseCasesParameter, true);
             var domain = Domain.FindChildDomain(project.Domain, domainName);
             if (domain == null)
             {
                 throw new Exception($"Can't find any domain named '{domainName}'");
+            }
+            if (domain.HasModel)
+            {
+                throw new Exception($"Domain '{domainName}' has already model. Use a non-initialized domain");
             }
             if (domain.Domains.Count > 0)
             {
@@ -101,26 +110,41 @@ namespace DD.DomainGenerator.Actions.Domains.Schemas
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
-                    throw new Exception("Can't add user relationship because user domain doesn't exists");
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
+                }
+                if (!userDomain.HasModel)
+                {
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't contain schema yet");
                 }
                 domain.Schema.HasOwner = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
             }
             if (hasUserRelationship)
             {
                 var userDomain = Domain.FindChildDomain(project.Domain, Definitions.DefaultBasicDomainNames.User);
                 if (userDomain == null)
                 {
-                    throw new Exception("Can't add user relationship because user domain doesn't exists");
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
                 }
-                domain.Schema. HasUserRelationship = true;
+                if (!userDomain.HasModel)
+                {
+                    throw new Exception("Can't add user relationship because 'User' domain doesn't contain schema yet");
+                }
+                domain.Schema.HasUserRelationship = true;
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
                 domain.Schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)
-                { ForeingDomain = userDomain });
+                { ForeingSchema = userDomain.Schema });
+            }
+            if (addCrudUseCases)
+            {
+                domain.AddUseCase(new UseCase(UseCase.UseCaseTypes.Create));
+                domain.AddUseCase(new UseCase(UseCase.UseCaseTypes.DeleteByPk));
+                domain.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveByPk));
+                domain.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultiple));
+                domain.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
             }
         }
-
     }
 }
