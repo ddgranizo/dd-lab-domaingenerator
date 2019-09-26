@@ -59,5 +59,7 @@ namespace DD.DomainGenerator.Models
             ParameterName = parameterName ?? throw new ArgumentNullException(nameof(parameterName));
             ValueDecimal = value;
         }
+
+        
     }
 }

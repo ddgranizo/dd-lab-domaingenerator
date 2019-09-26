@@ -16,15 +16,13 @@ namespace DD.DomainGenerator.Models
             Password = 99,
         }
 
-
         public List<string> InputSuggestions { get; set; }
-
         public TypeValue Type { get; set; }
         public string Description { get; }
         public string ShortCut { get; }
         public string Name { get; }
-
         public bool IsDomainSuggestion { get; set; }
+
 
         public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut = null)
         {
@@ -37,7 +35,6 @@ namespace DD.DomainGenerator.Models
             Description = description ?? throw new ArgumentNullException(nameof(description));
             ShortCut = shortCut;
         }
-
 
         public string GetInvokeName()
         {

@@ -1,8 +1,10 @@
 ﻿using DD.DomainGenerator.Actions;
+using DD.DomainGenerator.Actions.Architecture;
 using DD.DomainGenerator.Actions.AzurePipelines;
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Actions.Domains;
 using DD.DomainGenerator.Actions.Domains.Schemas;
+using DD.DomainGenerator.Actions.Domains.UseCases;
 using DD.DomainGenerator.Actions.Github;
 using DD.DomainGenerator.Actions.Project;
 using DD.DomainGenerator.Events;
@@ -14,14 +16,18 @@ using DD.DomainGenerator.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
 namespace DD.DomainGenerator
 {
+
+    public delegate void ProjectHandler(object sender, ProjectEventArgs args);
     public class ProjectManager
     {
+        public event ProjectHandler OnProjectChanged;
 
         public IRegistryService _registryService { get; set; }
         public ICryptoService _cryptoService { get; set; }
@@ -52,12 +58,10 @@ namespace DD.DomainGenerator
         {
             ProjectState = new ProjectState();
             VirtualProjectState = new ProjectState();
-            ActionManager = GetActionManager();
-
             _fileService = new FileService();
             _registryService = new RegistryService();
             _cryptoService = new CryptoService(_registryService);
-
+            ActionManager = GetActionManager();
 
             ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
@@ -116,7 +120,9 @@ namespace DD.DomainGenerator
             {
                 return new List<string>();
             }
-            return VirtualProjectState.Domain.GetDomainsBelow().Select(k => k.Name).ToList();
+            return VirtualProjectState.Domain.GetDomainsBelow()
+                .Select(k => k.Name)
+                .ToList();
         }
 
         private void ExecuteProjectAction(ProjectInfrastructureAction action)
@@ -162,9 +168,7 @@ namespace DD.DomainGenerator
             }
             else if (action == ProjectInfrastructureAction.NewProject)
             {
-                ProjectState = new ProjectState();
-                VirtualProjectState = new ProjectState();
-                LastFilePath = null;
+                NewProject();
             }
             else if (action == ProjectInfrastructureAction.DiscardAllQueuedChanges)
             {
@@ -176,9 +180,20 @@ namespace DD.DomainGenerator
             }
         }
 
-        private void OpenFile(string path)
+        public void NewProject()
+        {
+            ProjectState = new ProjectState();
+            LastFilePath = null;
+            RaiseProjectStateChange();
+        }
+
+        public void OpenFile(string path)
         {
             var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
+            if (Path.GetExtension(absolutePath) != ".json")
+            {
+                throw new Exception("Invalid extension file. Select .json file");
+            }
             var json = _fileService.OpenFile(absolutePath);
             ProjectState = Objectify(json);
             VirtualProjectState = Objectify(json);
@@ -195,7 +210,7 @@ namespace DD.DomainGenerator
 
         private  ActionManager GetActionManager()
         {
-            var actionManager = new ActionManager();
+            var actionManager = new ActionManager(_cryptoService);
 
             actionManager.RegisterAction(new InitializeRootDomain());
             actionManager.RegisterAction(new UpdateProjectName());
@@ -206,10 +221,16 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new InitializeDomainSchema());
             actionManager.RegisterAction(new ModifyDomainSchema());
             actionManager.RegisterAction(new AddSchemaProperty());
-            actionManager.RegisterAction(new AddAzurePipelinesSetting(_cryptoService));
+            actionManager.RegisterAction(new AddAzurePipelinesSetting());
             actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
-            actionManager.RegisterAction(new AddGithubSetting(_cryptoService));
+            actionManager.RegisterAction(new AddGithubSetting());
             actionManager.RegisterAction(new DeleteGithubSetting());
+
+            actionManager.RegisterAction(new InitializeArchitectureSetup());
+            actionManager.RegisterAction(new InitializeDomainSchemaIntersection());
+            actionManager.RegisterAction(new AddUseCase());
+            actionManager.RegisterAction(new DeleteUseCase());
+            actionManager.RegisterAction(new UpdateProjectReposPath(_fileService));
 
             return actionManager;
         }
@@ -229,7 +250,6 @@ namespace DD.DomainGenerator
         {
             ProjectState.Actions.RemoveAll(k => k.State == ActionExecution.ActionExecutionState.Queued);
             RaiseProjectStateChange();
-
         }
 
         public void DiscardLastQueuedAction()
@@ -240,9 +260,7 @@ namespace DD.DomainGenerator
                 ProjectState.Actions.Remove(lastQueuedAction);
             }
             RaiseProjectStateChange();
-
         }
-
 
         private void ExecuteChanges(ProjectState projectState, bool isVirtual)
         {
@@ -296,6 +314,7 @@ namespace DD.DomainGenerator
         private void RaiseProjectStateChange()
         {
             VirtualProjectState = Objectify(Stringfy(ProjectState));
+            OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState));
         }
 
         private static void ActionManager_OnLog(object sender, LogEventArgs e)

@@ -14,8 +14,7 @@ namespace DD.DomainGenerator.Actions.Github
         public const string ActionName = "AddGithubSetting";
         public ActionParameterDefinition NameParameter { get; set; }
         public ActionParameterDefinition OAuthTokenKeyParameter { get; set; }
-        public ICryptoService CryptoService { get; }
-        public AddGithubSetting(ICryptoService cryptoService) : base(ActionName)
+        public AddGithubSetting() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
                 "name", ActionParameterDefinition.TypeValue.String, "Name", "n");
@@ -25,7 +24,6 @@ namespace DD.DomainGenerator.Actions.Github
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(OAuthTokenKeyParameter);
 
-            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -37,13 +35,12 @@ namespace DD.DomainGenerator.Actions.Github
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var token = GetStringParameterValue(parameters, OAuthTokenKeyParameter);
-            var tokenCrypted = CryptoService.Encrypt(token);
 
             var repeated = project.GithubSettings
-                .FirstOrDefault(k => k.OauthToken == tokenCrypted)
+                .FirstOrDefault(k => k.OauthToken == token)
                 ?? throw new Exception("Repeated Github setting");
 
-            project.GithubSettings.Add(new GithubSetting(name, tokenCrypted));
+            project.GithubSettings.Add(new GithubSetting(name, token));
         }
     }
 }

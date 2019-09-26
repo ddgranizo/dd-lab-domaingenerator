@@ -44,7 +44,6 @@ namespace DD.DomainGenerator.Models
             {
                 throw new ArgumentException("message", nameof(name));
             }
-
             Type = type;
             Name = name;
         }

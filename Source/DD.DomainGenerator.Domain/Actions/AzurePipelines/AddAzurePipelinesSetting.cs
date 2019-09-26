@@ -18,9 +18,8 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
         public ActionParameterDefinition TokenParameter { get; set; }
         public ActionParameterDefinition ProjectIdParameter { get; set; }
         public ActionParameterDefinition NameParameter { get; set; }
-        public ICryptoService CryptoService { get; }
 
-        public AddAzurePipelinesSetting(ICryptoService cryptoService) : base(ActionName)
+        public AddAzurePipelinesSetting() : base(ActionName)
         {
 
             NameParameter = new ActionParameterDefinition(
@@ -28,7 +27,7 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             OrganizationUriParameter = new ActionParameterDefinition(
                 "organizationuri", ActionParameterDefinition.TypeValue.String, "Organization URI. Use https://xxxxx.visualstudio.com/", "o");
             TokenParameter = new ActionParameterDefinition(
-                "token", ActionParameterDefinition.TypeValue.String, "Token for access", "t");
+                "token", ActionParameterDefinition.TypeValue.Password, "Token for access", "t");
             ProjectIdParameter = new ActionParameterDefinition(
                 "projectid", ActionParameterDefinition.TypeValue.Guid, "Azure pipelines project id", "p");
             
@@ -37,7 +36,6 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             ActionParametersDefinition.Add(OrganizationUriParameter);
             ActionParametersDefinition.Add(TokenParameter);
 
-            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -53,17 +51,14 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             var organizationUri = GetStringParameterValue(parameters, OrganizationUriParameter);
             var token = GetStringParameterValue(parameters, TokenParameter);
             var projectId = GetGuidParameterValue(parameters, ProjectIdParameter);
-            var tokenCrypted = CryptoService.Encrypt(token);
 
             var repeated = project.AzurePipelineSettings
-                .FirstOrDefault(k => k.OrganizationUri == organizationUri
-                                    && k.Token == tokenCrypted
-                                    && k.ProjectId == projectId) 
+                .FirstOrDefault(k => k.Name == name) 
                 ?? throw new Exception("Repeated Azure pipeline setting");
 
             var standardUri = StringFormats.ParseStringUri(organizationUri);
             
-            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), tokenCrypted, projectId));
+            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), token, projectId));
         }
     }
 }

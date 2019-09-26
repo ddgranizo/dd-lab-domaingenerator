@@ -2,6 +2,7 @@
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Models;
+using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Services.Implementations;
 using DD.DomainGenerator.Utilities;
 using System;
@@ -18,13 +19,15 @@ namespace DD.DomainGenerator
     public class ActionManager
     {
         public List<ActionBase> Actions { get; set; }
+        public ICryptoService CryptoService { get; }
 
         public event OnLogHandler OnLog;
         public event ActionHandler OnQueueAction;
 
-        public ActionManager()
+        public ActionManager(ICryptoService cryptoService)
         {
             Actions = new List<ActionBase>();
+            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         }
         public ActionManager(List<ActionBase> actions)
         {
@@ -200,7 +203,7 @@ namespace DD.DomainGenerator
 
 
 
-        private static ActionParameter GetParsedActionParameter(ActionBase action, ActionParameterDefinition item, InputParameter itemInput)
+        private ActionParameter GetParsedActionParameter(ActionBase action, ActionParameterDefinition item, InputParameter itemInput)
         {
             var parameterName = item.Name;
             ActionParameter actionParameter = null;
@@ -208,6 +211,10 @@ namespace DD.DomainGenerator
             if (item.Type == ActionParameterDefinition.TypeValue.String)
             {
                 actionParameter = new ActionParameter(parameterName, rawString);
+            }
+            else if (item.Type == ActionParameterDefinition.TypeValue.Password)
+            {
+                actionParameter = new ActionParameter(parameterName, CryptoService.Encrypt(rawString));
             }
             else if (item.Type == ActionParameterDefinition.TypeValue.Boolean)
             {

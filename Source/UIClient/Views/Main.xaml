@@ -1,0 +1,65 @@
+﻿<Window x:Class="UIClient.Views.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UIClient.Views"
+        mc:Ignorable="d"
+        Title="Main" Height="450" Width="800">
+    <Grid x:Name="MainGrid" AllowDrop="True" Drop="MainGrid_Drop">
+        <Grid.Resources>
+
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="auto"/>
+            <RowDefinition  Height="*"/>
+            <RowDefinition  Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top" Background="White">
+                <MenuItem Header="Menu" >
+                    <MenuItem Header="New" Command="{Binding NewProjectCommand,  Mode=OneWay}" />
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <StatusBar Grid.Row="2">
+            <Label></Label>
+        </StatusBar>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ComboBox ItemsSource="{Binding WorkSpace.ActionsCollection}" DisplayMemberPath="Name" SelectedItem="{Binding WorkSpace.SelectedAction}"></ComboBox>
+
+                    <ScrollViewer Grid.Row="2">
+
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
+            <Grid Grid.Column="2">
+
+            </Grid>
+            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="3" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
+            <Grid Grid.Column="4">
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

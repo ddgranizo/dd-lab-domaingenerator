@@ -37,6 +37,10 @@ namespace DD.DomainGenerator.Extensions
                     {
                         value = item.ValueString;
                     }
+                    else if (definition.Type == ActionParameterDefinition.TypeValue.Password)
+                    {
+                        value = item.ValueString;
+                    }
                     output.Add(item.ParameterName, value);
                 }
             }
