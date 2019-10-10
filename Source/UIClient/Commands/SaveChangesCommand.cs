@@ -6,20 +6,19 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    public class NewProjectCommand: RelayCommand
+    public class SaveChangesCommand : RelayCommand
     {
-        public NewProjectCommand(MainViewModel vm)
+        public SaveChangesCommand(MainViewModel vm)
         {
             Initialize((input) => {
                 try
                 {
-                    vm.ProjectManager.NewProject();
+                    vm.ProjectManager.SaveChanges(vm.LastFileLoaded);
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
-               
             });
         }
     }

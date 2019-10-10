@@ -12,18 +12,18 @@ namespace UIClient.ViewModels.Base
 {
     public class BaseViewModel : BaseModel
     {
-        public List<ICommand> Commands { get; set; }
+        
         public BaseViewModel()
         {
-            Commands = new List<ICommand>();
+            
         }
 
-        protected virtual void RaiseError(string message)
+        public virtual void RaiseError(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        protected virtual void RaiseOkCancelDialog(string message, string title, Action okAction, Action cancelAction = null)
+        public virtual void RaiseOkCancelDialog(string message, string title, Action okAction, Action cancelAction = null)
         {
             var response = MessageBox.Show(message, "", MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (response == MessageBoxResult.OK)
@@ -36,9 +36,6 @@ namespace UIClient.ViewModels.Base
             }
         }
 
-        internal void RegisterCommand(ICommand command)
-        {
-            Commands.Add(command);
-        }
+        
     }
 }

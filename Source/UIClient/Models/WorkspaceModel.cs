@@ -18,12 +18,7 @@ namespace UIClient.Models
             Vm = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         }
 
-        public List<ActionBase> NewActions { get { return GetValue<List<ActionBase>>(); } set { NewActionsCollection = SetCollection(value); } }
-        public ObservableCollection<ActionBase> NewActionsCollection { get; set; }
-        public ActionBase SelectedNewAction { get { return GetValue<ActionBase>(); } set { SetValue(value, Vm.OnNewActionChanged); } }
-
-        public List<ActionParameterDefinition> NewActionParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { NewActionParametersDefinitionsCollection = SetCollection(value); } }
-        public ObservableCollection<ActionParameterDefinition> NewActionParametersDefinitionsCollection { get; set; }
+       
 
     }
 }

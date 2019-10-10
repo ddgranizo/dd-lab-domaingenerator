@@ -14,7 +14,7 @@ namespace DD.DomainGenerator.Models
             Executed = 3,
         }
 
-
+        public Guid Id { get; set; }
         public ActionExecutionState State { get; set; }
         public string ActionName { get; set; }
         public Dictionary<string, object> Parameters { get; set; }
@@ -22,6 +22,7 @@ namespace DD.DomainGenerator.Models
 
         public ActionExecution(string actionName, Dictionary<string, object> parameters)
         {
+            Id = Guid.NewGuid();
             if (string.IsNullOrEmpty(actionName))
             {
                 throw new ArgumentException("message", nameof(actionName));

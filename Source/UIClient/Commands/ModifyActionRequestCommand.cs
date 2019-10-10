@@ -6,20 +6,19 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    public class NewProjectCommand: RelayCommand
+    public class ModifyActionRequestCommand : RelayCommand
     {
-        public NewProjectCommand(MainViewModel vm)
+        public ModifyActionRequestCommand(MainViewModel vm)
         {
             Initialize((input) => {
                 try
                 {
-                    vm.ProjectManager.NewProject();
+                    vm.SelectedActionForModify = vm.SelectedAction;
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
-               
             });
         }
     }

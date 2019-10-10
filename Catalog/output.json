@@ -4,79 +4,20 @@
   "Actions": [
     {
       "$id": "2",
+      "Id": "3127e687-4447-460e-9c1a-187df61b2a07",
       "State": 1,
       "ActionName": "InitializeRootDomain",
       "Parameters": {
         "$id": "3",
-        "name": "Adoptapp",
-        "namespace": "dd.lab"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "4",
-      "State": 1,
-      "ActionName": "AddDomain",
-      "Parameters": {
-        "$id": "5",
-        "name": "pets",
-        "parent": "adoptapp"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "6",
-      "State": 1,
-      "ActionName": "DeleteDomain",
-      "Parameters": {
-        "$id": "7",
-        "name": "pets"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "8",
-      "State": 1,
-      "ActionName": "AddDomain",
-      "Parameters": {
-        "$id": "9",
-        "name": "pets",
-        "parent": "adoptapp"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "10",
-      "State": 1,
-      "ActionName": "AddDomain",
-      "Parameters": {
-        "$id": "11",
-        "name": "PetHouse",
-        "parent": "Adoptapp"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "12",
-      "State": 1,
-      "ActionName": "DeleteDomain",
-      "Parameters": {
-        "$id": "13",
-        "name": "Pethouse"
-      },
-      "ActionParameters": null
-    },
-    {
-      "$id": "14",
-      "State": 1,
-      "ActionName": "AddDomain",
-      "Parameters": {
-        "$id": "15",
-        "name": "Pet-House",
-        "parent": "Adoptapp"
+        "name": "AdoptApp",
+        "namespace": "AdoptApp"
       },
       "ActionParameters": null
     }
   ],
-  "Domain": null
+  "Domain": null,
+  "ReposPath": null,
+  "AzurePipelineSettings": [],
+  "GithubSettings": [],
+  "Architecture": null
 }

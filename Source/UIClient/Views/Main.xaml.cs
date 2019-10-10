@@ -9,21 +9,19 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UIClient.Events;
 using UIClient.ViewModels;
 
 namespace UIClient.Views
 {
-    /// <summary>
-    /// Interaction logic for Main.xaml
-    /// </summary>
     public partial class Main : Window
     {
         public MainViewModel ViewModel { get; set; }
         public Main()
         {
             InitializeComponent();
-            ViewModel = new MainViewModel(this);
-            this.DataContext = ViewModel;
+            ViewModel = Resources["ViewModel"] as MainViewModel;
+            ViewModel.Initialize(this);
         }
 
         private void MainGrid_Drop(object sender, DragEventArgs e)
@@ -33,6 +31,34 @@ namespace UIClient.Views
             {
                 ViewModel.DraggedFiles(files);
             }
+        }
+
+
+        private void NewActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as ValueChangedEventArgs;
+            ViewModel.NewActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
+        }
+
+        private void ModifyActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as ValueChangedEventArgs;
+            ViewModel.ModifyActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
+        }
+
+
+        private void ActionsVirtualStateListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = ActionsVirtualStateScrollViewer;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
+        private void ActionsCurrentStateListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = ActionsCurrentStateScrollViewer;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

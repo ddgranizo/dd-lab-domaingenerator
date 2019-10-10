@@ -20,20 +20,30 @@ namespace UIClient.Commands.Base
         public RelayCommand(Action<object> execute)
             : this(execute, null)
         {
+
         }
 
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            _execute = execute;
-            _canExecute = canExecute;
+            Initialize(execute, canExecute);
         }
 
         public void Initialize(Action<object> execute, Predicate<object> canExecute)
         {
-            _canExecute = canExecute;
             _execute = execute;
+            _canExecute = canExecute;
+            if (canExecute == null)
+            {
+                _canExecute = (data) => { return true; };
+            }
         }
+
+        public void Initialize(Action<object> execute)
+        {
+            Initialize(execute, null);
+        }
+
 
         public bool CanExecute(object parameter)
         {

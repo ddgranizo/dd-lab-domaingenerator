@@ -199,9 +199,9 @@ namespace DD.DomainGenerator
             VirtualProjectState = Objectify(json);
         }
 
+      
 
-
-        private void SaveChanges(string path)
+        public void SaveChanges(string path)
         {
             var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
             var json = Stringfy(ProjectState);
@@ -303,12 +303,51 @@ namespace DD.DomainGenerator
             //}
         }
 
+        public void AddQueueAction(string actionName, Dictionary<string, object> parameters)
+        {
+            ProjectState.Actions.Add(new ActionExecution(actionName, parameters));
+            RaiseProjectStateChange();
+        }
+
+
+        public void UpdateQueuedAction(ActionExecution action, Dictionary<string, object> values)
+        {
+            var myAction = ProjectState.Actions.FirstOrDefault(k => k.Id == action.Id);
+            var myActionDefinition = ActionManager.Actions.FirstOrDefault(k => k.Name == myAction.ActionName);
+            if (myAction.State != ActionExecution.ActionExecutionState.Queued)
+            {
+                throw new Exception($"Only actions in state Queued can be modified");
+            }
+            foreach (var item in values)
+            {
+                var parameter = myActionDefinition
+                    .ActionParametersDefinition
+                    .FirstOrDefault(k => k.Name == item.Key);
+                if (parameter.Type == ActionParameterDefinition.TypeValue.Password
+                    && !string.IsNullOrEmpty((string)item.Value)
+                    || parameter.Type != ActionParameterDefinition.TypeValue.Password)
+                {
+                    myAction.Parameters[parameter.Name] = item.Value;
+                }
+            }
+            RaiseProjectStateChange();
+        }
+
+
+        public void RemoveQueuedAction(ActionExecution action)
+        {
+            var myAction = ProjectState.Actions.FirstOrDefault(k => k.Id == action.Id);
+            if (myAction == null)
+            {
+                throw new Exception($"Cannot find action with id {myAction.Id}");
+            }
+            ProjectState.Actions.Remove(myAction);
+            RaiseProjectStateChange();
+        }
 
         private void ActionManager_OnQueuedAction(object sender, ActionEventArgs args)
         {
-            ProjectState.Actions.Add(
-                new ActionExecution(args.Action.Name, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition)));
-            RaiseProjectStateChange();
+            AddQueueAction(args.Action.Name, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition));
         }
 
         private void RaiseProjectStateChange()

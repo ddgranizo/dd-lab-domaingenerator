@@ -41,5 +41,35 @@ namespace DD.DomainGenerator.Models
             return $"--{this.Name.ToLowerInvariant()}";
         }
 
+
+        public static object GetDefaultObject(TypeValue type)
+        {
+            object value = null;
+            if (type == ActionParameterDefinition.TypeValue.Boolean)
+            {
+                value = false;
+            }
+            else if (type == ActionParameterDefinition.TypeValue.Decimal)
+            {
+                value = default(decimal);
+            }
+            else if (type == ActionParameterDefinition.TypeValue.Guid)
+            {
+                value = Guid.Empty;
+            }
+            else if (type == ActionParameterDefinition.TypeValue.Integer)
+            {
+                value = default(int);
+            }
+            else if (type == ActionParameterDefinition.TypeValue.Password)
+            {
+                value = string.Empty;
+            }
+            else if (type == ActionParameterDefinition.TypeValue.String)
+            {
+                value = string.Empty;
+            }
+            return value;
+        }
     }
 }
