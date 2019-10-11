@@ -23,13 +23,13 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
         {
 
             NameParameter = new ActionParameterDefinition(
-                   "name", ActionParameterDefinition.TypeValue.String, "Name", "n");
+                   "name", ActionParameterDefinition.TypeValue.String, "Name", "n", string.Empty);
             OrganizationUriParameter = new ActionParameterDefinition(
-                "organizationuri", ActionParameterDefinition.TypeValue.String, "Organization URI. Use https://xxxxx.visualstudio.com/", "o");
+                "organizationuri", ActionParameterDefinition.TypeValue.String, "Organization URI. Use https://xxxxx.visualstudio.com/", "o", string.Empty);
             TokenParameter = new ActionParameterDefinition(
-                "token", ActionParameterDefinition.TypeValue.Password, "Token for access", "t");
+                "token", ActionParameterDefinition.TypeValue.Password, "Token for access", "t", string.Empty);
             ProjectIdParameter = new ActionParameterDefinition(
-                "projectid", ActionParameterDefinition.TypeValue.Guid, "Azure pipelines project id", "p");
+                "projectid", ActionParameterDefinition.TypeValue.Guid, "Azure pipelines project id", "p", Guid.Empty);
             
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(ProjectIdParameter);

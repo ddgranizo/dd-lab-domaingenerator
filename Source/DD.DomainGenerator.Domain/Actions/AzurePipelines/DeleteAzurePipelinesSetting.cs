@@ -17,7 +17,7 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
         public DeleteAzurePipelinesSetting() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Name", "o");
+                "name", ActionParameterDefinition.TypeValue.String, "Name", "o", string.Empty);
             ActionParametersDefinition.Add(NameParameter);
         }
 

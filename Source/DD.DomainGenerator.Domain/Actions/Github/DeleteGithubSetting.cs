@@ -15,7 +15,7 @@ namespace DD.DomainGenerator.Actions.Github
         public DeleteGithubSetting() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Name", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "Name", "n", string.Empty);
 
             ActionParametersDefinition.Add(NameParameter);
         }

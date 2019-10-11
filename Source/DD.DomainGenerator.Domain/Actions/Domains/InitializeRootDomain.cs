@@ -18,9 +18,9 @@ namespace DD.DomainGenerator.Actions.Domains
         public InitializeRootDomain() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty);
             NamespaceParameter = new ActionParameterDefinition(
-                "namespace", ActionParameterDefinition.TypeValue.String, "Namespace. Is mandatory to use My.Domain.Project.Convention for your namespace. Otherwise the namespace will be converterd", "s");
+                "namespace", ActionParameterDefinition.TypeValue.String, "Namespace. Is mandatory to use My.Domain.Project.Convention for your namespace. Otherwise the namespace will be converterd", "s", string.Empty);
 
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(NamespaceParameter);
@@ -32,9 +32,9 @@ namespace DD.DomainGenerator.Actions.Domains
         }
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
-            var name = GetStringParameterValue(parameters, NameParameter, string.Empty).ToWordPascalCase();
-            var nameSpace = GetStringParameterValue(parameters, NamespaceParameter, string.Empty).ToNamespacePascalCase();
-            project.Domain = new Domain() { Namespace = nameSpace, Name = name, IsRootDomain = true };
+            var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
+            var nameSpace = GetStringParameterValue(parameters, NamespaceParameter).ToNamespacePascalCase();
+            project.Domains.Add(new Domain() { Namespace = nameSpace, Name = name, IsRootDomain = true });
         }
 
     }

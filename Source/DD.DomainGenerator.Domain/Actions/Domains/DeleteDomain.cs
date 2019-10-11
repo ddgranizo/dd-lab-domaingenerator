@@ -17,7 +17,7 @@ namespace DD.DomainGenerator.Actions.Domains
         public DeleteDomain() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n")
+                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty)
             { IsDomainSuggestion = true };
 
             ActionParametersDefinition.Add(NameParameter);
@@ -30,9 +30,13 @@ namespace DD.DomainGenerator.Actions.Domains
 
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
-            var name = GetStringParameterValue(parameters, NameParameter, string.Empty).ToWordPascalCase();
-            project.Domain.DeleteDomain(name);
+            var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
+            var domain = project.Domains.FirstOrDefault(k => k.Name == name);
+            if (domain == null)
+            {
+                throw new Exception($"Domain with name {name} not found");
+            }
+            project.Domains.Remove(domain);
         }
-
     }
 }

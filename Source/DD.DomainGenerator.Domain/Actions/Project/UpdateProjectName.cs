@@ -19,7 +19,7 @@ namespace DD.DomainGenerator.Actions.Project
         public UpdateProjectName() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "New name", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "New name", "n", string.Empty);
 
             ActionParametersDefinition.Add(NameParameter);
         }

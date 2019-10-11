@@ -3,10 +3,10 @@ using DD.DomainGenerator.Actions.Architecture;
 using DD.DomainGenerator.Actions.AzurePipelines;
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Actions.Domains;
-using DD.DomainGenerator.Actions.Domains.Schemas;
-using DD.DomainGenerator.Actions.Domains.UseCases;
 using DD.DomainGenerator.Actions.Github;
 using DD.DomainGenerator.Actions.Project;
+using DD.DomainGenerator.Actions.Schemas;
+using DD.DomainGenerator.Actions.Schemas.UseCases;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.Models;
@@ -114,15 +114,16 @@ namespace DD.DomainGenerator
         {
             ReadLineSuggestionHandler.UpdateDomains(GetCurrentDomainsList());
         }
+
+
         private List<string> GetCurrentDomainsList()
         {
-            if (VirtualProjectState.Domain == null)
-            {
-                return new List<string>();
-            }
-            return VirtualProjectState.Domain.GetDomainsBelow()
-                .Select(k => k.Name)
-                .ToList();
+            return VirtualProjectState.GetAllDomains().Select(k => k.Name).ToList();
+        }
+
+        private List<string> GetCurrentSchemaList()
+        {
+            return VirtualProjectState.GetAllSchemas().Select(k => k.Name).ToList();
         }
 
         private void ExecuteProjectAction(ProjectInfrastructureAction action)
@@ -216,10 +217,9 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new UpdateProjectName());
             actionManager.RegisterAction(new AddDomain());
             actionManager.RegisterAction(new DeleteDomain());
-            actionManager.RegisterAction(new MoveDomain());
-            actionManager.RegisterAction(new DeleteDomainSchema());
-            actionManager.RegisterAction(new InitializeDomainSchema());
-            actionManager.RegisterAction(new ModifyDomainSchema());
+            actionManager.RegisterAction(new DeleteSchema());
+            actionManager.RegisterAction(new AddSchema());
+            actionManager.RegisterAction(new ModifySchema());
             actionManager.RegisterAction(new AddSchemaProperty());
             actionManager.RegisterAction(new AddAzurePipelinesSetting());
             actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
@@ -227,7 +227,7 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new DeleteGithubSetting());
 
             actionManager.RegisterAction(new InitializeArchitectureSetup());
-            actionManager.RegisterAction(new InitializeDomainSchemaIntersection());
+            actionManager.RegisterAction(new AddSchemaIntersection());
             actionManager.RegisterAction(new AddUseCase());
             actionManager.RegisterAction(new DeleteUseCase());
             actionManager.RegisterAction(new UpdateProjectReposPath(_fileService));

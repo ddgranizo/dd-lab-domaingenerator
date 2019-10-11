@@ -72,7 +72,7 @@ namespace DD.DomainGenerator.Actions.Base
 
         public void ImplementHelpCommand()
         {
-            var helpCommand = new ActionParameterDefinition("help", ActionParameterDefinition.TypeValue.Boolean, "Details about the command and it's available parameters", "h");
+            var helpCommand = new ActionParameterDefinition("help", ActionParameterDefinition.TypeValue.Boolean, "Details about the command and it's available parameters", "h", false);
             ActionParametersDefinition.Add(helpCommand);
         }
 
@@ -126,53 +126,37 @@ namespace DD.DomainGenerator.Actions.Base
             return false;
         }
 
-
-        public string GetStringParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter, string defaultValue = "")
+        public string GetStringParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter)
         {
-            return GetStringParameterValue(parameters, parameter.Name, defaultValue);
+            var param = parameters.FirstOrDefault(k => k.ParameterName == parameter.Name);
+            return IsParamOk(parameters, parameter.Name) ? param.ValueString : (string) parameter.DefaultValue;
         }
 
-        public string GetStringParameterValue(List<ActionParameter> parameters, string name, string defaultValue = "")
+        public bool GetBoolParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter)
         {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueString : defaultValue;
+            var param = parameters.FirstOrDefault(k => k.ParameterName == parameter.Name);
+            return IsParamOk(parameters, parameter.Name) ? param.ValueBool : (bool)parameter.DefaultValue;
         }
 
-        public bool GetBoolParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter, bool defaultValue = false)
+        public int GetIntParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter)
         {
-            return GetBoolParameterValue(parameters, parameter.Name, defaultValue);
+            var param = parameters.FirstOrDefault(k => k.ParameterName == parameter.Name);
+            return IsParamOk(parameters, parameter.Name) ? param.ValueInt : (int)parameter.DefaultValue;
         }
-        public bool GetBoolParameterValue(List<ActionParameter> parameters, string name, bool defaultValue = false)
+       
+        public decimal GetDecimalParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter)
         {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueBool : defaultValue;
-        }
-
-        public int GetIntParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter, int defaultValue = 0)
-        {
-            return GetIntParameterValue(parameters, parameter.Name, defaultValue);
-        }
-        public int GetIntParameterValue(List<ActionParameter> parameters, string name, int defaultValue = 0)
-        {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueInt : defaultValue;
+            var param = parameters.FirstOrDefault(k => k.ParameterName == parameter.Name);
+            return IsParamOk(parameters, parameter.Name) ? param.ValueDecimal : (decimal)parameter.DefaultValue;
         }
 
-        public decimal GetDecimalParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter, decimal defaultValue = 0m)
-        {
-            return GetDecimalParameterValue(parameters, parameter.Name, defaultValue);
-        }
-        public decimal GetDecimalParameterValue(List<ActionParameter> parameters, string name, decimal defaultValue = 0m)
-        {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueDecimal : defaultValue;
-        }
 
         public Guid GetGuidParameterValue(List<ActionParameter> parameters, ActionParameterDefinition parameter)
         {
-            return GetGuidParameterValue(parameters, parameter.Name);
+            var param = parameters.FirstOrDefault(k => k.ParameterName == parameter.Name);
+            return IsParamOk(parameters, parameter.Name) ? param.ValueGuid : (Guid)parameter.DefaultValue;
         }
-        public Guid GetGuidParameterValue(List<ActionParameter> parameters, string name)
-        {
-            return IsParamOk(parameters, name) ? parameters.FirstOrDefault(k => k.ParameterName == name).ValueGuid : Guid.Empty;
-        }
-
+       
 
         public virtual bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {

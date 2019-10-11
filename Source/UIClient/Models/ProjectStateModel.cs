@@ -11,7 +11,16 @@ namespace UIClient.Models
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public List<ActionExecutionModel> Actions { get { return GetValue<List<ActionExecutionModel>>(); } set { ActionsCollection = SetCollection(value); } }
         public ObservableCollection<ActionExecutionModel> ActionsCollection { get; set; }
-        public DomainModel Domain { get { return GetValue<DomainModel>(); } set { SetValue(value); } }
+
+        public List<DomainModel> Domains { get { return GetValue<List<DomainModel>>(); } set { DomainsCollection = SetCollection(value); } }
+        public ObservableCollection<DomainModel> DomainsCollection { get; set; }
+        
+        public List<SchemaModelModel> Schemas { get { return GetValue<List<SchemaModelModel>>(); } set { SetValue(value); SchemasCollection = SetCollection(value); } }
+        public ObservableCollection<SchemaModelModel> SchemasCollection { get; set; }
+
+        public List<SchemaModelModel> SchemaInDomain { get { return GetValue<List<SchemaModelModel>>(); } set { SetValue(value); SchemaInDomainCollection = SetCollection(value); } }
+        public ObservableCollection<SchemaModelModel> SchemaInDomainCollection { get; set; }
+
         public string ReposPath { get { return GetValue<string>(); } set { SetValue(value); } }
         public List<AzurePipelineSettingModel> AzurePipelineSettings { get { return GetValue<List<AzurePipelineSettingModel>>(); } set { AzurePipelineSettingsCollection = SetCollection(value); } }
         public ObservableCollection<AzurePipelineSettingModel> AzurePipelineSettingsCollection { get; set; }

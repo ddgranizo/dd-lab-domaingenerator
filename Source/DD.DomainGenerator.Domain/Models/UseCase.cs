@@ -23,6 +23,9 @@ namespace DD.DomainGenerator.Models
         public UseCaseTypes Type { get; set; }
         public SchemaModelProperty Attribute { get; set; }
         public SchemaModel Schema { get; set; }
+
+        public bool NeedsAuthorization { get; set; }
+
         public UseCase()
         {
 

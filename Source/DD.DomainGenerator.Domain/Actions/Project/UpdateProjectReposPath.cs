@@ -21,7 +21,7 @@ namespace DD.DomainGenerator.Actions.Project
         public UpdateProjectReposPath(IFileService fileService) : base(ActionName)
         {
             PathParameter = new ActionParameterDefinition(
-                "path", ActionParameterDefinition.TypeValue.String, "Path for the repos", "p");
+                "path", ActionParameterDefinition.TypeValue.String, "Path for the repos", "p", string.Empty);
             ActionParametersDefinition.Add(PathParameter);
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }

@@ -33,15 +33,15 @@ namespace DD.DomainGenerator.Models
             ProjectState project,
             ArchitectureNodesSetup nodesSetup)
         {
-            var service = new Service();
-            if (nodesSetup == ArchitectureNodesSetup.Microservices)
-            {
-                service.AddDomains(project.Domain.GetDomainsBelow().Where(k=>k.HasModel).ToList());
-            }
-            else if (nodesSetup == ArchitectureNodesSetup.Monolith)
-            {
-                service.AddDomain(project.Domain);
-            }
+            //var service = new Service();
+            //if (nodesSetup == ArchitectureNodesSetup.Microservices)
+            //{
+            //    service.AddDomains(project.Domain.GetDomainsBelow().Where(k=>k.HasModel).ToList());
+            //}
+            //else if (nodesSetup == ArchitectureNodesSetup.Monolith)
+            //{
+            //    service.AddDomain(project.Domain);
+            //}
         }
 
         public void InitializeEnvironmentsSetup(

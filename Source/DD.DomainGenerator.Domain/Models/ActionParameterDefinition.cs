@@ -22,9 +22,9 @@ namespace DD.DomainGenerator.Models
         public string ShortCut { get; }
         public string Name { get; }
         public bool IsDomainSuggestion { get; set; }
+        public bool IsSchemaSuggestion { get; set; }
 
-
-        public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut = null)
+        public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut, object defaultValue)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -34,7 +34,10 @@ namespace DD.DomainGenerator.Models
             Type = type;
             Description = description ?? throw new ArgumentNullException(nameof(description));
             ShortCut = shortCut;
+            DefaultValue = defaultValue;
         }
+
+        public object DefaultValue { get; set; }
 
         public string GetInvokeName()
         {

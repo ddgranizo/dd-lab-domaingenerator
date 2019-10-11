@@ -15,7 +15,13 @@ namespace UIClient.Models
         public bool HasState { get { return GetValue<bool>(); } set { SetValue(value); } }
         public bool HasOwner { get { return GetValue<bool>(); } set { SetValue(value); } }
         public bool IsIntersection { get { return GetValue<bool>(); } set { SetValue(value); } }
+
         public List<SchemaModelPropertyModel> Properties { get { return GetValue<List<SchemaModelPropertyModel>>(); } set { PropertiesCollection = SetCollection(value); } }
         public ObservableCollection<SchemaModelPropertyModel> PropertiesCollection { get; set; }
+
+        public List<UseCaseModel> UseCases { get { return GetValue<List<UseCaseModel>>(); } set { SetValue(value); } }
+        public ObservableCollection<UseCaseModel> UseCasesCollection { get; set; }
+
+        public bool NeedsAuthorization { get { return GetValue<bool>(); } set { SetValue(value); } }
     }
 }

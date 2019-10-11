@@ -93,7 +93,6 @@ namespace UIClient.ViewModels
                 SelectedActionForModifyParametersDefinitions = new List<ActionParameterDefinition>();
                 SelectedActionForModifyParametersDefinitionsValues = new Dictionary<string, object>();
             }
-            
         }
 
         public void ModifyActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
@@ -123,14 +122,12 @@ namespace UIClient.ViewModels
 
         public void OnNewActionChanged(ActionBase action)
         {
-            
             if (action != null)
             {
-               
                 var itemsValues = new Dictionary<string, object>();
                 foreach (var item in action.ActionParametersDefinition)
                 {
-                    object value = ActionParameterDefinition.GetDefaultObject(item.Type);
+                    object value = item.DefaultValue;
                     itemsValues.Add(item.Name, value);
                 }
                 NewActionParametersDefinitionsValues = itemsValues;
@@ -184,8 +181,6 @@ namespace UIClient.ViewModels
             RaiseCanExecuteCommandChanged();
         }
 
-
-
         public void DraggedFiles(string[] files)
         {
             OpenFile(files);
@@ -228,6 +223,7 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new SchemaModelPropertyProfile());
                 mc.AddProfile(new ServiceProfile());
                 mc.AddProfile(new UseCaseProfile());
+                mc.AddProfile(new SchemaInDomainProfile());
             });
         }
     }

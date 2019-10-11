@@ -17,9 +17,9 @@ namespace DD.DomainGenerator.Actions.Github
         public AddGithubSetting() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Name", "n");
+                "name", ActionParameterDefinition.TypeValue.String, "Name", "n", string.Empty);
             OAuthTokenKeyParameter = new ActionParameterDefinition(
-                "oauthtokenkey", ActionParameterDefinition.TypeValue.String, "Oauth token key for access", "t");
+                "oauthtokenkey", ActionParameterDefinition.TypeValue.String, "Oauth token key for access", "t", string.Empty);
 
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(OAuthTokenKeyParameter);

@@ -18,13 +18,13 @@ namespace DD.DomainGenerator.Actions.Architecture
         public InitializeArchitectureSetup() : base(ActionName)
         {
             EnvironmentsParameter = new ActionParameterDefinition(
-                "environments", ActionParameterDefinition.TypeValue.String, "Distribution of the environments", "e")
+                "environments", ActionParameterDefinition.TypeValue.String, "Distribution of the environments", "e", string.Empty)
             {
                 InputSuggestions = ArchitectureSetup.GetArchitectureEnvironmentsSetupTypesList(),
             };
 
             NodesParameter = new ActionParameterDefinition(
-                "nodes", ActionParameterDefinition.TypeValue.String, "Distribution of the nodes", "n")
+                "nodes", ActionParameterDefinition.TypeValue.String, "Distribution of the nodes", "n", string.Empty)
             {
                 InputSuggestions = ArchitectureSetup.GetArchitectureNodesSetupTypesList(),
             };
