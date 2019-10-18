@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using UIClient.Models.Base;
+using UIClient.Views;
 
 namespace UIClient.ViewModels.Base
 {
@@ -36,6 +37,12 @@ namespace UIClient.ViewModels.Base
             }
         }
 
+        public string GetInputText(string description, string caption)
+        {
+            var view = new InputTextBox(description, caption);
+            view.ShowDialog();
+            return view.ReturnedText;
+        }
         
     }
 }

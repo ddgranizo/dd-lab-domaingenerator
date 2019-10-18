@@ -6,20 +6,22 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    public class NewProjectCommand: RelayCommand
+    public class OpenFileCommand : RelayCommand
     {
-        public NewProjectCommand(MainViewModel vm)
+        public OpenFileCommand(MainViewModel vm)
         {
-            Initialize((input) => {
+            Initialize(data =>
+            {
                 try
                 {
-                    vm.NewProject();
+                    vm.OpenFile((string)data);
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
-            });
+            },
+            data => { return true; });
         }
     }
 }

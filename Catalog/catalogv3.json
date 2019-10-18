@@ -1,0 +1,26 @@
+{
+  "$id": "1",
+  "Name": null,
+  "Actions": [
+    {
+      "$id": "2",
+      "Id": "561ab517-4b29-475c-9a7a-b92bc4757163",
+      "State": 1,
+      "ActionName": "InitializeRootDomain",
+      "Parameters": {
+        "$id": "3",
+        "help": false,
+        "name": "MyApp",
+        "namespace": "MyApp.Us"
+      },
+      "ActionParameters": null
+    }
+  ],
+  "Domains": [],
+  "Schemas": [],
+  "SchemaInDomain": [],
+  "ReposPath": null,
+  "AzurePipelineSettings": [],
+  "GithubSettings": [],
+  "Architecture": null
+}

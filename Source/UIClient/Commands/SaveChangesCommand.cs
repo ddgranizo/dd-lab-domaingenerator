@@ -13,7 +13,17 @@ namespace UIClient.Commands
             Initialize((input) => {
                 try
                 {
-                    vm.ProjectManager.SaveChanges(vm.LastFileLoaded);
+                    var path =
+                        string.IsNullOrEmpty(vm.LastFileLoaded)
+                        ? vm.GetInputText("Path for save the file", "Save the file")
+                        : vm.LastFileLoaded;
+                    vm.ProjectManager.SaveChanges(path);
+                    var currentProjectsStored = vm.StoredRecentProjectsService.GetStoredData();
+                    if (currentProjectsStored.Paths.IndexOf(vm.LastFileLoaded) == -1)
+                    {
+                        currentProjectsStored.Paths.Add(path);
+                        vm.StoredRecentProjectsService.SaveStoredData(currentProjectsStored);
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -15,7 +15,10 @@ using System.Windows.Input;
 using UIClient.Commands;
 using UIClient.Commands.Base;
 using UIClient.Models;
+using UIClient.Models.Stored;
 using UIClient.Profiles;
+using UIClient.Services;
+using UIClient.Services.Implementations;
 using UIClient.ViewModels.Base;
 
 namespace UIClient.ViewModels
@@ -41,19 +44,37 @@ namespace UIClient.ViewModels
         public ObservableCollection<ActionParameterDefinition> SelectedActionForModifyParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
         public Dictionary<string, object> SelectedActionForModifyParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
 
+        public List<string> RecentProjects { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, RecentProjectsCollection); } }
+        public ObservableCollection<string> RecentProjectsCollection { get; set; } = new ObservableCollection<string>();
+
 
         public IMapper Mapper { get; set; }
         private Window _window;
         public ProjectManager ProjectManager { get; set; }
 
+        public readonly IStoredDataService<RecentProjects> StoredRecentProjectsService;
+
         public MainViewModel()
         {
+            StoredRecentProjectsService = new StoredRecentProjectsService();
+            SetRecentProjects();
+
             InitializeCommands();
             InitializePorjectManager();
             InitializeMapper();
             RaiseStateChanged();
         }
 
+        private void SetRecentProjects()
+        {
+            var allRecentProjects = StoredRecentProjectsService.GetStoredData()
+                            .Paths;
+            allRecentProjects.Reverse();
+
+            RecentProjects = allRecentProjects.Count <= 10
+                ? allRecentProjects
+                : allRecentProjects.Take(10).ToList();
+        }
 
         public void Initialize(Window window)
         {
@@ -158,7 +179,7 @@ namespace UIClient.ViewModels
         public ICommand RemoveSelectedNewActionCommand { get; set; }
         public ICommand ModifyActionRequestCommand { get; set; }
         public ICommand ModifyActionConfirmCommand { get; set; }
-        
+        public ICommand OpenFileCommand { get; set; }
 
         private void InitializeCommands()
         {
@@ -169,6 +190,7 @@ namespace UIClient.ViewModels
             RemoveSelectedNewActionCommand = new RemoveSelectedNewActionCommand(this);
             ModifyActionRequestCommand = new ModifyActionRequestCommand(this);
             ModifyActionConfirmCommand = new ModifyActionConfirmCommand(this);
+            OpenFileCommand = new OpenFileCommand(this);
 
             RegisterCommand(NewProjectCommand);
             RegisterCommand(AddActionCommand);
@@ -177,6 +199,8 @@ namespace UIClient.ViewModels
             RegisterCommand(RemoveSelectedNewActionCommand);
             RegisterCommand(ModifyActionRequestCommand);
             RegisterCommand(ModifyActionConfirmCommand);
+            RegisterCommand(OpenFileCommand);
+
 
             RaiseCanExecuteCommandChanged();
         }
@@ -195,17 +219,30 @@ namespace UIClient.ViewModels
                     throw new Exception("Select only one file");
                 }
                 var file = files[0];
-                RaiseOkCancelDialog("Do you want to open this new project?", "Open project", () =>
+                base.RaiseOkCancelDialog("Do you want to open this new project?", "Open project", () =>
                 {
-                    ProjectManager.OpenFile(file);
-                    LastFileLoaded = file;
-                    RaiseStateChanged();
+                    OpenFile(file);
                 });
             }
             catch (Exception ex)
             {
                 RaiseError(ex.Message);
             }
+        }
+
+
+        public void NewProject()
+        {
+            ProjectManager.NewProject();
+            LastFileLoaded = null;
+            RaiseStateChanged();
+        }
+
+        public void OpenFile(string file)
+        {
+            ProjectManager.OpenFile(file);
+            LastFileLoaded = file;
+            RaiseStateChanged();
         }
 
         private MapperConfiguration ConfigureMappingProfiles()

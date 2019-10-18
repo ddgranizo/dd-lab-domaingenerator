@@ -31,6 +31,20 @@
                 <MenuItem Header="Menu" >
                     <MenuItem Header="New" Command="{Binding Source={StaticResource ViewModel}, Path=NewProjectCommand,  Mode=OneWay}" />
                     <Separator />
+                    <MenuItem ItemsSource="{Binding RecentProjectsCollection}" Header="Recent files">
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.OpenFileCommand}"/>
+                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                    <Separator />
                     <MenuItem Header="Save" Command="{Binding Source={StaticResource ViewModel}, Path=SaveChangesCommand,  Mode=OneWay}" />
                 </MenuItem>
             </Menu>
