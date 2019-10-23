@@ -197,11 +197,9 @@ namespace DD.DomainGenerator
             }
             var json = _fileService.OpenFile(absolutePath);
             ProjectState = Objectify(json);
-            VirtualProjectState = Objectify(json);
+            RaiseProjectStateChange();
         }
-
       
-
         public void SaveChanges(string path)
         {
             var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
@@ -225,12 +223,12 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
             actionManager.RegisterAction(new AddGithubSetting());
             actionManager.RegisterAction(new DeleteGithubSetting());
-
             actionManager.RegisterAction(new InitializeArchitectureSetup());
             actionManager.RegisterAction(new AddSchemaIntersection());
             actionManager.RegisterAction(new AddUseCase());
             actionManager.RegisterAction(new DeleteUseCase());
             actionManager.RegisterAction(new UpdateProjectReposPath(_fileService));
+            actionManager.RegisterAction(new AddSchemaToDomain());
 
             return actionManager;
         }
@@ -353,6 +351,7 @@ namespace DD.DomainGenerator
         private void RaiseProjectStateChange()
         {
             VirtualProjectState = Objectify(Stringfy(ProjectState));
+            CommitVirtualProjectChanges();
             OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState));
         }
 

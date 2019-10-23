@@ -36,9 +36,11 @@ namespace UIClient.ViewModels
         public ObservableCollection<ActionParameterDefinition> NewActionParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
         
         public Dictionary<string, object> NewActionParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
+        public Dictionary<string, List<string>> NewActionParametersSugestions { get { return GetValue<Dictionary<string, List<string>>>(); } set { SetValue(value); } }
 
         public ActionExecutionModel SelectedAction { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value); } }
         public ActionExecutionModel SelectedActionForModify { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value, ActionForModifyChanged); } }
+
 
         public List<ActionParameterDefinition> SelectedActionForModifyParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { SetValue(value); UpdateListToCollection(value, SelectedActionForModifyParametersDefinitionsCollection); } }
         public ObservableCollection<ActionParameterDefinition> SelectedActionForModifyParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
@@ -46,7 +48,6 @@ namespace UIClient.ViewModels
 
         public List<string> RecentProjects { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, RecentProjectsCollection); } }
         public ObservableCollection<string> RecentProjectsCollection { get; set; } = new ObservableCollection<string>();
-
 
         public IMapper Mapper { get; set; }
         private Window _window;
@@ -84,9 +85,15 @@ namespace UIClient.ViewModels
         private void InitializePorjectManager()
         {
             ProjectManager = new ProjectManager();
+            ProjectManager.OnProjectChanged += ProjectManager_OnProjectChanged;
             NewActions = ProjectManager.ActionManager.Actions
                 .OrderBy(k => k.Name)
                 .ToList();
+        }
+
+        private void ProjectManager_OnProjectChanged(object sender, DD.DomainGenerator.Events.ProjectEventArgs args)
+        {
+            RaiseStateChanged();
         }
 
         private void InitializeMapper()
@@ -107,6 +114,14 @@ namespace UIClient.ViewModels
                         baseAction.ActionParametersDefinition
                         .Where(k => k.Name.ToLower() != "help")
                         .ToList();
+
+                    var itemsSugestions = new Dictionary<string, List<string>>();
+                    foreach (var item in baseAction.ActionParametersDefinition)
+                    {
+                        List<string> sugestions = GetActionParameterSugestions(item);
+                        itemsSugestions.Add(item.Name, sugestions);
+                    }
+                    NewActionParametersSugestions = itemsSugestions;
                 }
             }
             else
@@ -146,12 +161,17 @@ namespace UIClient.ViewModels
             if (action != null)
             {
                 var itemsValues = new Dictionary<string, object>();
+                var itemsSugestions = new Dictionary<string, List<string>>();
+
                 foreach (var item in action.ActionParametersDefinition)
                 {
                     object value = item.DefaultValue;
+                    List<string> sugestions = GetActionParameterSugestions(item);
                     itemsValues.Add(item.Name, value);
+                    itemsSugestions.Add(item.Name, sugestions);
                 }
                 NewActionParametersDefinitionsValues = itemsValues;
+                NewActionParametersSugestions = itemsSugestions;
 
                 NewActionParametersDefinitions =
                    action.ActionParametersDefinition
@@ -162,6 +182,24 @@ namespace UIClient.ViewModels
             {
                 NewActionParametersDefinitions = new List<ActionParameterDefinition>();
                 NewActionParametersDefinitionsValues = new Dictionary<string, object>();
+                NewActionParametersSugestions = new Dictionary<string, List<string>>();
+            }
+        }
+
+
+        private List<string> GetActionParameterSugestions(ActionParameterDefinition action)
+        {
+            if (action.IsDomainSuggestion)
+            {
+                return VirtualState.Domains.Select(k => k.Name).ToList();
+            }
+            else if (action.IsSchemaSuggestion)
+            {
+                return VirtualState.Schemas.Select(k => k.Name).ToList();
+            }
+            else
+            {
+                return action.InputSuggestions;
             }
         }
 
@@ -235,14 +273,12 @@ namespace UIClient.ViewModels
         {
             ProjectManager.NewProject();
             LastFileLoaded = null;
-            RaiseStateChanged();
         }
 
         public void OpenFile(string file)
         {
             ProjectManager.OpenFile(file);
             LastFileLoaded = file;
-            RaiseStateChanged();
         }
 
         private MapperConfiguration ConfigureMappingProfiles()

@@ -58,9 +58,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
 
@@ -92,6 +90,7 @@
                                     <usr:GenericInputControlView 
                                         ParameterDefinition="{Binding Path=.}" 
                                         DefaultValues="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.NewActionParametersDefinitionsValues}"   
+                                        SugestionsDictionary="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.NewActionParametersSugestions}"
                                         ValueChanged="NewActionGenericInputControlView_ValueChanged"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -111,6 +110,7 @@
                                 <DataTemplate>
                                     <usr:GenericInputControlView 
                                         ParameterDefinition="{Binding Path=.}" 
+                                        SugestionsDictionary="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.NewActionParametersSugestions}"
                                         DefaultValues="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.SelectedActionForModifyParametersDefinitionsValues}"   
                                         ValueChanged="ModifyActionGenericInputControlView_ValueChanged"/>
                                 </DataTemplate>
@@ -160,11 +160,61 @@
             </Grid>
             <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
             <Grid Grid.Column="2">
+                <TabControl>
+                    <TabItem Header="Domains/Schemas">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-            </Grid>
-            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="3" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
-            <Grid Grid.Column="4">
-
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Domains"></TextBlock>
+                                <ListView ItemsSource="{Binding VirtualState.DomainsCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:DomainControlView Domain="{Binding Path=.}"></usr:DomainControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Margin="10" Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Domain/Schema"></TextBlock>
+                                <ListView ItemsSource="{Binding VirtualState.SchemaInDomainsCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:SchemaInDomainControlView SchemaInDomain="{Binding Path=.}"></usr:SchemaInDomainControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Schemas"></TextBlock>
+                                <ListView ItemsSource="{Binding VirtualState.SchemasCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:SchemaControlView Schema="{Binding Path=.}"></usr:SchemaControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </Grid>
         </Grid>
     </Grid>

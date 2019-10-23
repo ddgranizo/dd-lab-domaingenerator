@@ -23,6 +23,7 @@
             <usercontrols:StringInputControlView
                 Visibility="{Binding ParameterDefinition.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=String}"
                 DefaultValue="{Binding DefaultStringValue}"
+                Sugestions="{Binding Sugestions}"
                 ValueChanged="StringInputControlView_ValueChanged"/>
 
             <usercontrols:BooleanInputControlView

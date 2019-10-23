@@ -253,7 +253,6 @@ namespace DD.DomainGenerator
                 actionParameter = new ActionParameter(parameterName, d);
             }
             return actionParameter;
-
         }
 
         private static string GetInvalidCastExceptionMessage(ActionBase action, ActionParameterDefinition item, string rawString, string typeString)
@@ -267,6 +266,5 @@ namespace DD.DomainGenerator
                     .AvailableTrueStrings
                     .ToList().IndexOf(value.ToLowerInvariant()) > -1;
         }
-
     }
 }

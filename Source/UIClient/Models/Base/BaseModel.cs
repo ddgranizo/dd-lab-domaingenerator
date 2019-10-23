@@ -38,6 +38,10 @@ namespace UIClient.Models.Base
 
         public void UpdateListToCollection<T>(List<T> listItems, ObservableCollection<T> collection)
         {
+            if (collection == null)
+            {
+                throw new Exception("Tried to set values into null observable collection at UpdateListToCollection");
+            }
             collection.Clear();
             if (listItems != null)
             {

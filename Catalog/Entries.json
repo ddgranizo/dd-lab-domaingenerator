@@ -1,0 +1,137 @@
+{
+  "$id": "1",
+  "Name": null,
+  "Actions": [
+    {
+      "$id": "2",
+      "Id": "06ade996-d734-428a-9ae3-e6e45005a296",
+      "State": 1,
+      "ActionName": "AddDomain",
+      "Parameters": {
+        "$id": "3",
+        "help": false,
+        "name": "Entries"
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "4",
+      "Id": "f844b749-31fe-48a5-8de1-e6f5402942eb",
+      "State": 1,
+      "ActionName": "AddSchema",
+      "Parameters": {
+        "$id": "5",
+        "help": false,
+        "name": "User",
+        "hasid": true,
+        "hasdates": true,
+        "hasstate": true,
+        "hasowner": false,
+        "hasuserrelationship": false,
+        "addcrudusecases": true
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "6",
+      "Id": "d2349346-5d4a-4a2a-b801-f568bdaba54e",
+      "State": 1,
+      "ActionName": "AddSchemaProperty",
+      "Parameters": {
+        "$id": "7",
+        "help": false,
+        "schemaname": "User",
+        "name": "Username",
+        "type": "String",
+        "length": 100,
+        "primarykey": false,
+        "nullable": false,
+        "unique": true,
+        "autoincrement": false
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "8",
+      "Id": "0839ea5a-bb63-4259-a0dd-cab35f0528b6",
+      "State": 1,
+      "ActionName": "AddSchemaProperty",
+      "Parameters": {
+        "$id": "9",
+        "help": false,
+        "schemaname": "User",
+        "name": "Password",
+        "type": "Password",
+        "length": 0,
+        "primarykey": false,
+        "nullable": false,
+        "unique": false,
+        "autoincrement": false
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "10",
+      "Id": "07cbfa02-bc82-4d74-9583-248e5cb5534b",
+      "State": 1,
+      "ActionName": "AddDomain",
+      "Parameters": {
+        "$id": "11",
+        "help": false,
+        "name": "authorizations"
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "12",
+      "Id": "906bcee4-2cfc-4520-b3e9-e9be37387358",
+      "State": 1,
+      "ActionName": "AddSchema",
+      "Parameters": {
+        "$id": "13",
+        "help": false,
+        "name": "Entry",
+        "hasid": true,
+        "hasdates": true,
+        "hasstate": true,
+        "hasowner": false,
+        "hasuserrelationship": true,
+        "addcrudusecases": true
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "14",
+      "Id": "79987a9e-311d-4d46-a5b7-9fa5133c2be3",
+      "State": 1,
+      "ActionName": "AddSchemaToDomain",
+      "Parameters": {
+        "$id": "15",
+        "help": false,
+        "schemaname": "User",
+        "domainname": "Authorizations"
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "16",
+      "Id": "37727b70-cc7b-4b86-9d9b-80f75ebd2fa5",
+      "State": 1,
+      "ActionName": "AddSchemaToDomain",
+      "Parameters": {
+        "$id": "17",
+        "help": false,
+        "schemaname": "Entry",
+        "domainname": "Entries"
+      },
+      "ActionParameters": null
+    }
+  ],
+  "Domains": [],
+  "Schemas": [],
+  "SchemaInDomains": [],
+  "ReposPath": null,
+  "AzurePipelineSettings": [],
+  "GithubSettings": [],
+  "Architecture": null
+}

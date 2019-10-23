@@ -14,11 +14,54 @@
         "namespace": "MyApp.Us"
       },
       "ActionParameters": null
+    },
+    {
+      "$id": "4",
+      "Id": "1ac73c5c-d4e3-4640-a04d-3e1e83ef830e",
+      "State": 1,
+      "ActionName": "AddDomain",
+      "Parameters": {
+        "$id": "5",
+        "help": false,
+        "name": "Pepes"
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "6",
+      "Id": "bcf2499b-bfde-4854-8b06-4b7421e3d79c",
+      "State": 1,
+      "ActionName": "AddSchema",
+      "Parameters": {
+        "$id": "7",
+        "help": false,
+        "name": "Pepe",
+        "hasid": true,
+        "hasdates": false,
+        "hasstate": false,
+        "hasowner": false,
+        "hasuserrelationship": false,
+        "addcrudusecases": true
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "8",
+      "Id": "1261b9ad-91de-4ba8-b470-3b097ef68898",
+      "State": 1,
+      "ActionName": "AddSchemaToDomain",
+      "Parameters": {
+        "$id": "9",
+        "help": false,
+        "schemaname": "Pepe",
+        "domainname": "Pepes"
+      },
+      "ActionParameters": null
     }
   ],
   "Domains": [],
   "Schemas": [],
-  "SchemaInDomain": [],
+  "SchemaInDomains": [],
   "ReposPath": null,
   "AzurePipelineSettings": [],
   "GithubSettings": [],

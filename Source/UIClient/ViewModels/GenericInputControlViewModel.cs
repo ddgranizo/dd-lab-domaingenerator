@@ -16,8 +16,11 @@ namespace UIClient.ViewModels
 {
     public class GenericInputControlViewModel : BaseViewModel
     {
-		public ActionParameterDefinition ParameterDefinition { get { return GetValue<ActionParameterDefinition>(); } set { SetValue(value); } }
+        public ActionParameterDefinition ParameterDefinition { get { return GetValue<ActionParameterDefinition>(); } set { SetValue(value); } }
         public Dictionary<string, object> DefaultValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value, DefaultValuesUpdate); } }
+
+        public Dictionary<string, List<string>> SugestionsDictionary { get { return GetValue<Dictionary<string, List<string>>>(); } set { SetValue(value, SugestionsDictionaryUpdated); } }
+
         public string DefaultStringValue { get { return GetValue<string>(); } set { SetValue(value); } }
         public string DefaultPasswordValue { get { return GetValue<string>(); } set { SetValue(value); } }
         public bool DefaultBoolValue { get { return GetValue<bool>(); } set { SetValue(value); } }
@@ -25,12 +28,24 @@ namespace UIClient.ViewModels
         public decimal DefaultDecimalValue { get { return GetValue<decimal>(); } set { SetValue(value); } }
         public Guid DefaultGuidValue { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
+        public List<string> Sugestions { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, SugestionsCollection); } }
+        public ObservableCollection<string> SugestionsCollection { get; set; } = new ObservableCollection<string>();
+
+
 
         private GenericInputControlView _view;
 
-		public GenericInputControlViewModel()
+        public GenericInputControlViewModel()
         {
-			
+
+        }
+
+        private void SugestionsDictionaryUpdated(Dictionary<string, List<string>> values)
+        {
+            if (values.ContainsKey(ParameterDefinition.Name))
+            {
+                Sugestions = values[ParameterDefinition.Name];
+            }
         }
 
         private void DefaultValuesUpdate(Dictionary<string, object> values)

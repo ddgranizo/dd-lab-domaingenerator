@@ -12,14 +12,14 @@ namespace DD.DomainGenerator
         public List<ActionExecution> Actions { get; set; }
         public List<Domain> Domains { get; set; }
         public List<SchemaModel> Schemas { get; set; }
-        public List<SchemaInDomain> SchemaInDomain { get; set; }
+        public List<SchemaInDomain> SchemaInDomains { get; set; }
         public string ReposPath { get; set; }
         public List<AzurePipelineSetting> AzurePipelineSettings { get; set; }
         public List<GithubSetting> GithubSettings { get; set; }
         public ArchitectureSetup Architecture { get; set; }
         public ProjectState()
         {
-            SchemaInDomain = new List<SchemaInDomain>();
+            SchemaInDomains = new List<SchemaInDomain>();
             Domains = new List<Domain>();
             Actions = new List<ActionExecution>();
             AzurePipelineSettings = new List<AzurePipelineSetting>();

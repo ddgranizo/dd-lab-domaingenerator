@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Text;
 using UIClient.Models;
 

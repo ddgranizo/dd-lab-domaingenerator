@@ -44,6 +44,19 @@ namespace UIClient.UserControls
             RaiseEvent(args);
         }
 
+        public Dictionary<string, List<string>> SugestionsDictionary
+        {
+            get
+            {
+                return (Dictionary<string, List<string>>)GetValue(SugestionsDictionaryProperty);
+            }
+            set
+            {
+                SetValue(SugestionsDictionaryProperty, value);
+            }
+        }
+
+
         public ActionParameterDefinition ParameterDefinition
         {
             get
@@ -86,7 +99,16 @@ namespace UIClient.UserControls
                               BindsTwoWayByDefault = true,
                           });
 
-		private readonly GenericInputControlViewModel _viewModel = null;
+        public static readonly DependencyProperty SugestionsDictionaryProperty =
+                      DependencyProperty.Register(
+                          nameof(SugestionsDictionary),
+                          typeof(Dictionary<string, List<string>>),
+                          typeof(GenericInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
+
+        private readonly GenericInputControlViewModel _viewModel = null;
 
         public GenericInputControlView()
         {
@@ -106,6 +128,10 @@ namespace UIClient.UserControls
             {
                 v.SetDefaultValues((Dictionary<string, object>)e.NewValue);
             }
+            else if (e.Property.Name == nameof(SugestionsDictionary))
+            {
+                v.SetSugestionsDictionary((Dictionary<string, List<string>>)e.NewValue);
+            }
         }
 
 		private void SetParameterDefinition(ActionParameterDefinition data)
@@ -118,6 +144,10 @@ namespace UIClient.UserControls
             _viewModel.DefaultValues = data;
         }
 
+        private void SetSugestionsDictionary(Dictionary<string, List<string>> data)
+        {
+            _viewModel.SugestionsDictionary = data;
+        }
 
         private void StringInputControlView_ValueChanged(object sender, RoutedEventArgs e)
         {

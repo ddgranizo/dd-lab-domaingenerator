@@ -20,7 +20,6 @@ namespace DD.DomainGenerator.Actions.Schemas
         public ActionParameterDefinition HasUserRelationshipParameter { get; set; }
         public ActionParameterDefinition HasOwnerParameter { get; set; }
         public ActionParameterDefinition AddCRUDUseCasesParameter { get; set; }
-        public ActionParameterDefinition NeedsAthorizationParameter { get; set; }
 
         public AddSchema() : base(ActionName)
         {
@@ -46,9 +45,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             AddCRUDUseCasesParameter = new ActionParameterDefinition(
               "addcrudusecases", ActionParameterDefinition.TypeValue.Boolean, "Add CRUD use cases. Default value = yes", "a", true);
 
-            NeedsAthorizationParameter = new ActionParameterDefinition(
-                "authorization", ActionParameterDefinition.TypeValue.Boolean, "Access to this schema needs user-authorization. Default value = false", "a", false);
-
+          
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(HasIdParameter);
             ActionParametersDefinition.Add(HasDatesParameter);
@@ -56,13 +53,13 @@ namespace DD.DomainGenerator.Actions.Schemas
             ActionParametersDefinition.Add(HasOwnerParameter);
             ActionParametersDefinition.Add(HasUserRelationshipParameter);
             ActionParametersDefinition.Add(AddCRUDUseCasesParameter);
-            ActionParametersDefinition.Add(NeedsAthorizationParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {
             return  IsParamOk(parameters, NameParameter);
         }
+
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
@@ -72,7 +69,6 @@ namespace DD.DomainGenerator.Actions.Schemas
             var hasUserRelationship = GetBoolParameterValue(parameters, HasUserRelationshipParameter);
             var hasOwner = GetBoolParameterValue(parameters, HasOwnerParameter);
             var addCrudUseCases = GetBoolParameterValue(parameters, AddCRUDUseCasesParameter);
-            var needsAuthoritation = GetBoolParameterValue(parameters, NeedsAthorizationParameter);
             var schema = new SchemaModel(name);
             if (hasId)
             {
@@ -80,16 +76,14 @@ namespace DD.DomainGenerator.Actions.Schemas
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaModelProperty.PropertyTypes.PrimaryKey)
                 { IsPrimaryKey = true });
             }
+
             if (hasState)
             {
                 schema.HasState = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.State, SchemaModelProperty.PropertyTypes.State));
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Status, SchemaModelProperty.PropertyTypes.Status));
             }
-            if (needsAuthoritation)
-            {
-                schema.NeedsAuthorization = true;
-            }
+            
             if (hasDates)
             {
                 schema.HasDates = true;
@@ -103,7 +97,6 @@ namespace DD.DomainGenerator.Actions.Schemas
                 {
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
                 }
-               
                 schema.HasOwner = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
@@ -115,11 +108,10 @@ namespace DD.DomainGenerator.Actions.Schemas
                 {
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
                 }
-                
                 schema.HasUserRelationship = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)
+                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
             }
             if (addCrudUseCases)
@@ -130,6 +122,7 @@ namespace DD.DomainGenerator.Actions.Schemas
                 schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultiple));
                 schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
             }
+            project.Schemas.Add(schema);
         }
     }
 }

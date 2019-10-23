@@ -17,7 +17,7 @@ namespace DD.DomainGenerator.Actions.Schemas
         public DeleteSchema() : base(ActionName)
         {
             SchemaNameParameter = new ActionParameterDefinition(
-                "domainname", ActionParameterDefinition.TypeValue.String, "Schema name", "d", string.Empty)
+                "schemaname", ActionParameterDefinition.TypeValue.String, "Schema name", "d", string.Empty)
             { IsSchemaSuggestion = true };
             ActionParametersDefinition.Add(SchemaNameParameter);
         }

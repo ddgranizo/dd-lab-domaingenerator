@@ -15,8 +15,8 @@ namespace UIClient.Commands
                 try
                 {
                     vm.ProjectManager.AddQueueAction(vm.SelectedNewAction.Name, vm.NewActionParametersDefinitionsValues);
+                    vm.ProjectManager.CommitVirtualProjectChanges();
                     vm.SelectedNewAction = null;
-                    vm.RaiseStateChanged();
                 }
                 catch (Exception ex)
                 {

@@ -8,7 +8,7 @@ namespace UIClient.Models
 {
     public class SchemaInDomainModel : BaseModel
     {
-        public Domain Domain { get { return GetValue<Domain>(); } set { SetValue(value); } }
-        public SchemaModel Schema { get { return GetValue<SchemaModel>(); } set { SetValue(value); } }
+        public DomainModel Domain { get { return GetValue<DomainModel>(); } set { SetValue(value); } }
+        public SchemaModelModel Schema { get { return GetValue<SchemaModelModel>(); } set { SetValue(value); } }
     }
 }
