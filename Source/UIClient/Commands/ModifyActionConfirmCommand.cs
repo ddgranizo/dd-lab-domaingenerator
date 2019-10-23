@@ -15,6 +15,7 @@ namespace UIClient.Commands
             Initialize((input) => {
                 try
                 {
+                    vm.CleanErrors();
                     vm.ProjectManager.UpdateQueuedAction(
                         vm.Mapper.Map<ActionExecution>(vm.SelectedActionForModify), 
                         vm.SelectedActionForModifyParametersDefinitionsValues);

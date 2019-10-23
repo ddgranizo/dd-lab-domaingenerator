@@ -28,7 +28,7 @@ namespace DD.DomainGenerator
     public class ProjectManager
     {
         public event ProjectHandler OnProjectChanged;
-
+        public event ErrorExecutionActionHandler OnActionError;
         public IRegistryService _registryService { get; set; }
         public ICryptoService _cryptoService { get; set; }
         public enum ProjectInfrastructureAction
@@ -65,9 +65,14 @@ namespace DD.DomainGenerator
 
             ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
+            ActionManager.OnErrorExecution += ActionManager_OnErrorExecution;
             
         }
 
+        private void ActionManager_OnErrorExecution(object sender, ErrorExecutionActionEventArgs args)
+        {
+            OnActionError?.Invoke(sender, args);
+        }
 
         public void PromptMode()
         {

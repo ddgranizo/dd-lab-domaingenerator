@@ -125,6 +125,21 @@
         "domainname": "Entries"
       },
       "ActionParameters": null
+    },
+    {
+      "$id": "18",
+      "Id": "e25231bc-93a9-4b48-8bf1-679af16dd3c3",
+      "State": 1,
+      "ActionName": "AddAzurePipelinesSetting",
+      "Parameters": {
+        "$id": "19",
+        "help": false,
+        "name": "MyName",
+        "projectid": "00000000-0000-0000-0000-000000000000",
+        "organizationuri": "www.google.com",
+        "token": "123"
+      },
+      "ActionParameters": null
     }
   ],
   "Domains": [],

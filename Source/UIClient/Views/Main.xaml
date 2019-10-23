@@ -18,11 +18,13 @@
             <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
             <conv:StringToCollapsedConverter x:Key="StringToCollapsedConverter" />
             <conv:DictionaryItemConverter x:Key="DictionaryItemConverter" />
+            <conv:EnumerableToCollapsedConverter x:Key="EnumerableToCollapsedConverter" />
         </Grid.Resources>
         
         <Grid.RowDefinitions>
             <RowDefinition  Height="auto"/>
             <RowDefinition  Height="*"/>
+            <RowDefinition  Height="auto"/>
             <RowDefinition  Height="auto"/>
         </Grid.RowDefinitions>
         
@@ -50,9 +52,7 @@
             </Menu>
         </DockPanel>
         
-        <StatusBar Grid.Row="2">
-            <Label></Label>
-        </StatusBar>
+        
         
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -214,8 +214,66 @@
                             
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Environments">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Github settings"></TextBlock>
+                                <ListView ItemsSource="{Binding VirtualState.GithubSettingsCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:GithubSettingControlView GithubSetting="{Binding Path=.}"></usr:GithubSettingControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Azure Pipeline settings"></TextBlock>
+                                <ListView ItemsSource="{Binding VirtualState.AzurePipelineSettingsCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:AzurePipelineSettingControlView AzurePipelineSetting="{Binding Path=.}"></usr:AzurePipelineSettingControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
                 </TabControl>
             </Grid>
         </Grid>
+
+        <Grid Visibility="{Binding Errors, Converter={StaticResource EnumerableToCollapsedConverter}}" MaxHeight="100" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Margin="2" Text="Errors"></TextBlock>
+            <ScrollViewer x:Name="ErrorsScrollViewer" Grid.Row="1" >
+                <ListView x:Name="ErrorsList" ItemsSource="{Binding ErrorsCollection}" PreviewMouseWheel="ErrorsList_PreviewMouseWheel">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <usr:ErrorControlView Error="{Binding Path=.}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+           
+        </Grid>
+
+        <StatusBar Grid.Row="3">
+            <Label>StatusBar</Label>
+        </StatusBar>
     </Grid>
 </Window>

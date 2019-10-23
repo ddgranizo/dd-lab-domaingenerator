@@ -22,6 +22,7 @@ namespace UIClient.Commands
                 {
                     try
                     {
+                        vm.CleanErrors();
                         vm.ProjectManager.RemoveQueuedAction(vm.Mapper.Map<ActionExecution>(vm.SelectedAction));
                     }
                     catch (Exception ex)

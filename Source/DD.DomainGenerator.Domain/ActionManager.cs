@@ -14,7 +14,7 @@ using System.Text;
 namespace DD.DomainGenerator
 {
 
-
+    public delegate void ErrorExecutionActionHandler(object sender, ErrorExecutionActionEventArgs args);
     public delegate void ActionHandler(object sender, ActionEventArgs args);
     public class ActionManager
     {
@@ -23,7 +23,7 @@ namespace DD.DomainGenerator
 
         public event OnLogHandler OnLog;
         public event ActionHandler OnQueueAction;
-
+        public event ErrorExecutionActionHandler OnErrorExecution;
         public ActionManager(ICryptoService cryptoService)
         {
             Actions = new List<ActionBase>();
@@ -131,8 +131,9 @@ namespace DD.DomainGenerator
                     action.ExecuteHelp();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                OnErrorExecution?.Invoke(this, new ErrorExecutionActionEventArgs(action, ex));
                 throw;
             }
             finally

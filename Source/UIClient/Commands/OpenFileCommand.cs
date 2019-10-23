@@ -14,6 +14,7 @@ namespace UIClient.Commands
             {
                 try
                 {
+                    vm.CleanErrors();
                     vm.OpenFile((string)data);
                 }
                 catch (Exception ex)

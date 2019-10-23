@@ -41,13 +41,15 @@ namespace UIClient.ViewModels
         public ActionExecutionModel SelectedAction { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value); } }
         public ActionExecutionModel SelectedActionForModify { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value, ActionForModifyChanged); } }
 
-
         public List<ActionParameterDefinition> SelectedActionForModifyParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { SetValue(value); UpdateListToCollection(value, SelectedActionForModifyParametersDefinitionsCollection); } }
         public ObservableCollection<ActionParameterDefinition> SelectedActionForModifyParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
         public Dictionary<string, object> SelectedActionForModifyParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
 
         public List<string> RecentProjects { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, RecentProjectsCollection); } }
         public ObservableCollection<string> RecentProjectsCollection { get; set; } = new ObservableCollection<string>();
+
+        public List<ErrorExecutionActionModel> Errors { get { return GetValue<List<ErrorExecutionActionModel>>(); } set { SetValue(value); UpdateListToCollection(value, ErrorsCollection); } }
+        public ObservableCollection<ErrorExecutionActionModel> ErrorsCollection { get; set; } = new ObservableCollection<ErrorExecutionActionModel>();
 
         public IMapper Mapper { get; set; }
         private Window _window;
@@ -59,7 +61,6 @@ namespace UIClient.ViewModels
         {
             StoredRecentProjectsService = new StoredRecentProjectsService();
             SetRecentProjects();
-
             InitializeCommands();
             InitializePorjectManager();
             InitializeMapper();
@@ -71,7 +72,6 @@ namespace UIClient.ViewModels
             var allRecentProjects = StoredRecentProjectsService.GetStoredData()
                             .Paths;
             allRecentProjects.Reverse();
-
             RecentProjects = allRecentProjects.Count <= 10
                 ? allRecentProjects
                 : allRecentProjects.Take(10).ToList();
@@ -86,9 +86,22 @@ namespace UIClient.ViewModels
         {
             ProjectManager = new ProjectManager();
             ProjectManager.OnProjectChanged += ProjectManager_OnProjectChanged;
+            ProjectManager.OnActionError += ProjectManager_OnActionError;
             NewActions = ProjectManager.ActionManager.Actions
                 .OrderBy(k => k.Name)
                 .ToList();
+        }
+
+        public void CleanErrors()
+        {
+            Errors = new List<ErrorExecutionActionModel>();
+        }
+
+        private void ProjectManager_OnActionError(object sender, DD.DomainGenerator.Events.ErrorExecutionActionEventArgs args)
+        {
+            var currentErrors = Errors;
+            currentErrors.Add(Mapper.Map<ErrorExecutionActionModel>(args));
+            Errors = currentErrors;
         }
 
         private void ProjectManager_OnProjectChanged(object sender, DD.DomainGenerator.Events.ProjectEventArgs args)
@@ -297,6 +310,8 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new ServiceProfile());
                 mc.AddProfile(new UseCaseProfile());
                 mc.AddProfile(new SchemaInDomainProfile());
+                mc.AddProfile(new ErrorExecutionActionProfile());
+                mc.AddProfile(new ActionBaseProfile());
             });
         }
     }

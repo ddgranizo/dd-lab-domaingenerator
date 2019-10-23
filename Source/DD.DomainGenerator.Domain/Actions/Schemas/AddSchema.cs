@@ -45,7 +45,6 @@ namespace DD.DomainGenerator.Actions.Schemas
             AddCRUDUseCasesParameter = new ActionParameterDefinition(
               "addcrudusecases", ActionParameterDefinition.TypeValue.Boolean, "Add CRUD use cases. Default value = yes", "a", true);
 
-          
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(HasIdParameter);
             ActionParametersDefinition.Add(HasDatesParameter);

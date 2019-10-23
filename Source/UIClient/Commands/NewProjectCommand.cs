@@ -13,6 +13,7 @@ namespace UIClient.Commands
             Initialize((input) => {
                 try
                 {
+                    vm.CleanErrors();
                     vm.NewProject();
                 }
                 catch (Exception ex)
