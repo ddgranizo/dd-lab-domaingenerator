@@ -114,6 +114,17 @@ namespace UIClient.ViewModels
             Mapper = new Mapper(ConfigureMappingProfiles());
         }
 
+        public void AddNewRecentFile(string path)
+        {
+            var currentProjectsStored = StoredRecentProjectsService.GetStoredData();
+            var alreadyInList = currentProjectsStored.Paths.FirstOrDefault(k => k == path);
+            if (alreadyInList != null)
+            {
+                currentProjectsStored.Paths.Remove(alreadyInList);
+            }
+            currentProjectsStored.Paths.Add(path);
+            StoredRecentProjectsService.SaveStoredData(currentProjectsStored);
+        }
 
         private void ActionForModifyChanged(ActionExecutionModel action)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UIClient.Commands.Base;
 using UIClient.ViewModels;
@@ -10,7 +11,8 @@ namespace UIClient.Commands
     {
         public SaveChangesCommand(MainViewModel vm)
         {
-            Initialize((input) => {
+            Initialize((input) =>
+            {
                 try
                 {
                     var path =
@@ -18,12 +20,7 @@ namespace UIClient.Commands
                         ? vm.GetInputText("Path for save the file", "Save the file")
                         : vm.LastFileLoaded;
                     vm.ProjectManager.SaveChanges(path);
-                    var currentProjectsStored = vm.StoredRecentProjectsService.GetStoredData();
-                    if (currentProjectsStored.Paths.IndexOf(vm.LastFileLoaded) == -1)
-                    {
-                        currentProjectsStored.Paths.Add(path);
-                        vm.StoredRecentProjectsService.SaveStoredData(currentProjectsStored);
-                    }
+                    vm.AddNewRecentFile(path);
                 }
                 catch (Exception ex)
                 {
@@ -31,5 +28,7 @@ namespace UIClient.Commands
                 }
             });
         }
+
+       
     }
 }

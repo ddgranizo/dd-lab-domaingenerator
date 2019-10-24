@@ -16,6 +16,7 @@ namespace UIClient.Commands
                 {
                     vm.CleanErrors();
                     vm.OpenFile((string)data);
+                    vm.AddNewRecentFile((string)data);
                 }
                 catch (Exception ex)
                 {
