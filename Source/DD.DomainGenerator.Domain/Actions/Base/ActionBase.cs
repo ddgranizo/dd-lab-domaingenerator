@@ -118,10 +118,6 @@ namespace DD.DomainGenerator.Actions.Base
                 {
                     return !string.IsNullOrEmpty(parameter.ValueString);
                 }
-                else if (paremeterDefinition.Type == ActionParameterDefinition.TypeValue.Guid)
-                {
-                    return parameter.ValueGuid != Guid.Empty;
-                }
             }
             return false;
         }

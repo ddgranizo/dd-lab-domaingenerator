@@ -159,10 +159,6 @@ namespace DD.DomainGenerator
                 {
                     value = item.ValueDecimal;
                 }
-                else if (paramDefinition.Type == ActionParameterDefinition.TypeValue.Guid)
-                {
-                    value = item.ValueGuid;
-                }
                 else if (paramDefinition.Type == ActionParameterDefinition.TypeValue.Integer)
                 {
                     value = item.ValueInt;
@@ -242,14 +238,6 @@ namespace DD.DomainGenerator
                 if (!int.TryParse(rawString, out int d))
                 {
                     throw new InvalidCastException(GetInvalidCastExceptionMessage(action, item, rawString, "integer"));
-                }
-                actionParameter = new ActionParameter(parameterName, d);
-            }
-            else if (item.Type == ActionParameterDefinition.TypeValue.Guid)
-            {
-                if (!Guid.TryParse(rawString, out Guid d))
-                {
-                    throw new InvalidCastException(GetInvalidCastExceptionMessage(action, item, rawString, "guid"));
                 }
                 actionParameter = new ActionParameter(parameterName, d);
             }

@@ -73,10 +73,6 @@ namespace UIClient.ViewModels
                 {
                     DefaultPasswordValue = (string)value;
                 }
-                else if (ParameterDefinition.Type == ActionParameterDefinition.TypeValue.Guid)
-                {
-                    DefaultGuidValue = (Guid)value;
-                }
             }
         }
 

@@ -40,10 +40,6 @@
                 Visibility="{Binding ParameterDefinition.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Decimal}"
                 DefaultValue="{Binding DefaultDecimalValue}"
                 ValueChanged="DecimalInputControlView_ValueChanged"/>
-            <usercontrols:GuidInputControlView
-                Visibility="{Binding ParameterDefinition.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Guid}"
-                DefaultValue="{Binding DefaultGuidValue}"
-                ValueChanged="GuidInputControlView_ValueChanged"/>
 
             <usercontrols:PasswordInputControlView
                 Visibility="{Binding ParameterDefinition.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Password}"

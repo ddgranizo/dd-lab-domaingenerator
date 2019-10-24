@@ -173,11 +173,6 @@ namespace UIClient.UserControls
             RaiseValueChangedEvent(ParameterDefinition, myEvent.Value);
         }
 
-        private void GuidInputControlView_ValueChanged(object sender, RoutedEventArgs e)
-        {
-            var myEvent = e as GuidValueChangedEventArgs;
-            RaiseValueChangedEvent(ParameterDefinition, myEvent.Value);
-        }
 
         private void PasswordInputControlView_ValueChanged(object sender, RoutedEventArgs e)
         {

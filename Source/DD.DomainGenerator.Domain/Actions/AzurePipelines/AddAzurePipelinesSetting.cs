@@ -51,7 +51,7 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             var name = GetStringParameterValue(parameters, NameParameter);
             var organizationUri = GetStringParameterValue(parameters, OrganizationUriParameter);
             var token = GetStringParameterValue(parameters, TokenParameter);
-            var projectId = GetGuidParameterValue(parameters, ProjectIdParameter);
+            var projectId = GetStringParameterValue(parameters, ProjectIdParameter);
 
             var repeated = project.AzurePipelineSettings
                 .FirstOrDefault(k => k.Name == name);
@@ -63,7 +63,8 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
                 ?? throw new Exception("Invalid organization uri");
 
             var decriptedToken = CryptoService.Decrypt(token);
-            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), decriptedToken, projectId));
+            var validGuid = Guid.Parse(projectId);
+            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), decriptedToken, validGuid));
         }
     }
 }

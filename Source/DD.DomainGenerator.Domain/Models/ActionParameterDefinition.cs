@@ -11,7 +11,7 @@ namespace DD.DomainGenerator.Models
             Boolean = 1,
             Integer = 2,
             Decimal = 3,
-            Guid = 9, 
+            //Guid = 9, --> deprecated, cannot parse json guid value into generic <string, object> and then deserialize into a guid --> it become string
             String = 10,
             Password = 99,
         }
@@ -55,10 +55,6 @@ namespace DD.DomainGenerator.Models
             else if (type == ActionParameterDefinition.TypeValue.Decimal)
             {
                 value = default(decimal);
-            }
-            else if (type == ActionParameterDefinition.TypeValue.Guid)
-            {
-                value = Guid.Empty;
             }
             else if (type == ActionParameterDefinition.TypeValue.Integer)
             {

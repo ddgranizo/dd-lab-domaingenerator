@@ -25,10 +25,6 @@ namespace DD.DomainGenerator.Extensions
                     {
                         value = item.ValueDecimal;
                     }
-                    else if (definition.Type == ActionParameterDefinition.TypeValue.Guid)
-                    {
-                        value = item.ValueGuid;
-                    }
                     else if (definition.Type == ActionParameterDefinition.TypeValue.Integer)
                     {
                         value = item.ValueInt;
