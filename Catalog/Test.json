@@ -1,0 +1,28 @@
+{
+  "$id": "1",
+  "Name": null,
+  "Actions": [
+    {
+      "$id": "2",
+      "Id": "410537c7-c5bd-4604-ba18-f9470269fb54",
+      "State": 1,
+      "ActionName": "AddAzurePipelinesSetting",
+      "Parameters": {
+        "$id": "3",
+        "help": false,
+        "name": "MyName",
+        "projectid": "94e4b505-b345-43fd-872a-aa91df502f62",
+        "organizationuri": "www.google.com",
+        "token": "N1fCTASRNjYqS86SXx1Wef2oeIrxCAY1a6qdTAOowgo="
+      },
+      "ActionParameters": null
+    }
+  ],
+  "Domains": [],
+  "Schemas": [],
+  "SchemaInDomains": [],
+  "ReposPath": null,
+  "AzurePipelineSettings": [],
+  "GithubSettings": [],
+  "Architecture": null
+}

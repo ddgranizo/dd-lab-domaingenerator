@@ -18,8 +18,9 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
         public ActionParameterDefinition TokenParameter { get; set; }
         public ActionParameterDefinition ProjectIdParameter { get; set; }
         public ActionParameterDefinition NameParameter { get; set; }
+        public ICryptoService CryptoService { get; }
 
-        public AddAzurePipelinesSetting() : base(ActionName)
+        public AddAzurePipelinesSetting(ICryptoService cryptoService) : base(ActionName)
         {
 
             NameParameter = new ActionParameterDefinition(
@@ -29,13 +30,13 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             TokenParameter = new ActionParameterDefinition(
                 "token", ActionParameterDefinition.TypeValue.Password, "Token for access", "t", string.Empty);
             ProjectIdParameter = new ActionParameterDefinition(
-                "projectid", ActionParameterDefinition.TypeValue.Guid, "Azure pipelines project id", "p", Guid.Empty);
+                "projectid", ActionParameterDefinition.TypeValue.String, "Azure pipelines project id", "p", Guid.Empty.ToString());
             
             ActionParametersDefinition.Add(NameParameter);
             ActionParametersDefinition.Add(ProjectIdParameter);
             ActionParametersDefinition.Add(OrganizationUriParameter);
             ActionParametersDefinition.Add(TokenParameter);
-
+            CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -53,12 +54,16 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             var projectId = GetGuidParameterValue(parameters, ProjectIdParameter);
 
             var repeated = project.AzurePipelineSettings
-                .FirstOrDefault(k => k.Name == name) 
-                ?? throw new Exception("Repeated Azure pipeline setting");
+                .FirstOrDefault(k => k.Name == name);
+            if (repeated != null)
+            {
+                throw new Exception("Repeated Azure pipeline setting");
+            }
+            var standardUri = StringFormats.ParseStringUri(organizationUri)
+                ?? throw new Exception("Invalid organization uri");
 
-            var standardUri = StringFormats.ParseStringUri(organizationUri);
-            
-            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), token, projectId));
+            var decriptedToken = CryptoService.Decrypt(token);
+            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), decriptedToken, projectId));
         }
     }
 }

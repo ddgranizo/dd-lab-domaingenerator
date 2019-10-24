@@ -11,7 +11,7 @@ namespace DD.DomainGenerator.Models
             Boolean = 1,
             Integer = 2,
             Decimal = 3,
-            Guid = 9,
+            Guid = 9, 
             String = 10,
             Password = 99,
         }

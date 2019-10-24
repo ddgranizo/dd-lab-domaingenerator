@@ -13,9 +13,9 @@
             
         </Grid.Resources>
         <StackPanel >
-            <TextBlock Text="{Binding AzurePipelineSetting.Name}" />
-            <TextBlock Text="{Binding AzurePipelineSetting.OrganizationUri, StringFormat='({0}})'}" Margin="5,0,0,0"/>
-            <TextBlock Text="{Binding AzurePipelineSetting.ProjectId, StringFormat='ProjectId:{0}'}" Margin="5,0,0,0"/>
+            <TextBlock Text="{Binding AzurePipelineSetting.Name}"/>
+            <TextBlock Text="{Binding Url}" Margin="5,0,0,0"/>
+            <TextBlock Text="{Binding ProjectId, StringFormat='ProjectId: {0}'}" Margin="5,0,0,0"/>
         </StackPanel>
     </Grid>
 </UserControl>

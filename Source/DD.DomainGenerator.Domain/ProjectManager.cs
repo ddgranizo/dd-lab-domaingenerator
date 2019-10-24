@@ -224,9 +224,9 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new AddSchema());
             actionManager.RegisterAction(new ModifySchema());
             actionManager.RegisterAction(new AddSchemaProperty());
-            actionManager.RegisterAction(new AddAzurePipelinesSetting());
+            actionManager.RegisterAction(new AddAzurePipelinesSetting(_cryptoService));
             actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
-            actionManager.RegisterAction(new AddGithubSetting());
+            actionManager.RegisterAction(new AddGithubSetting(_cryptoService));
             actionManager.RegisterAction(new DeleteGithubSetting());
             actionManager.RegisterAction(new InitializeArchitectureSetup());
             actionManager.RegisterAction(new AddSchemaIntersection());

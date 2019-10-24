@@ -146,26 +146,35 @@ namespace UIClient.ViewModels
 
         public void ModifyActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
         {
+            var value = parameter.Type == ActionParameterDefinition.TypeValue.Password
+                && !string.IsNullOrEmpty((string)newValue)
+                    ? ProjectManager._cryptoService.Encrypt((string)newValue)
+                    : newValue;
+
             if (SelectedActionForModifyParametersDefinitionsValues.ContainsKey(parameter.Name))
             {
-                SelectedActionForModifyParametersDefinitionsValues[parameter.Name] = newValue;
+                SelectedActionForModifyParametersDefinitionsValues[parameter.Name] = value;
             }
             else
             {
-                SelectedActionForModifyParametersDefinitionsValues.Add(parameter.Name, newValue);
+                SelectedActionForModifyParametersDefinitionsValues.Add(parameter.Name, value);
             }
         }
 
 
         public void NewActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
         {
+            var value = parameter.Type == ActionParameterDefinition.TypeValue.Password
+                && !string.IsNullOrEmpty((string)newValue)
+                    ? ProjectManager._cryptoService.Encrypt((string)newValue)
+                    : newValue;
             if (NewActionParametersDefinitionsValues.ContainsKey(parameter.Name))
             {
-                NewActionParametersDefinitionsValues[parameter.Name] = newValue;
+                NewActionParametersDefinitionsValues[parameter.Name] = value;
             }
             else
             {
-                NewActionParametersDefinitionsValues.Add(parameter.Name, newValue);
+                NewActionParametersDefinitionsValues.Add(parameter.Name, value);
             }
         }
 

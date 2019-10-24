@@ -16,18 +16,19 @@ namespace UIClient.ViewModels
 {
     public class AzurePipelineSettingControlViewModel : BaseViewModel
     {
-		public AzurePipelineSettingModel AzurePipelineSetting { get { return GetValue<AzurePipelineSettingModel>(); } set { SetValue(value); } }
-        
-		private AzurePipelineSettingControlView _view;
+        public AzurePipelineSettingModel AzurePipelineSetting { get { return GetValue<AzurePipelineSettingModel>(); } set { SetValue(value); RaisePropertyChange(nameof(ProjectId), nameof(Url)); } }
+        public string ProjectId { get { return AzurePipelineSetting?.ProjectId.ToString(); } }
+        public string Url { get { return AzurePipelineSetting?.OrganizationUri; } }
+        private AzurePipelineSettingControlView _view;
 
-		public AzurePipelineSettingControlViewModel()
+        public AzurePipelineSettingControlViewModel()
         {
-			
+
         }
 
         public void Initialize(AzurePipelineSettingControlView v)
         {
-			_view = v;
+            _view = v;
         }
     }
 }

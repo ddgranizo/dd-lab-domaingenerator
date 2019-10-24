@@ -12,7 +12,7 @@ namespace DD.DomainGenerator.Services.Implementations
 
         private const string EntropyKey = "CryptoSalt";
         private const int SaltLength = 32;
-        private string _entropy;
+        private readonly string _entropy;
         public CryptoService(IRegistryService registryService)
         {
             CreateSaltIfFirstTime(registryService);
@@ -68,9 +68,9 @@ namespace DD.DomainGenerator.Services.Implementations
         {
             var fullCipher = Convert.FromBase64String(cipherText);
             var iv = new byte[16];
-            var cipher = new byte[16];
+            var cipher = new byte[fullCipher.Length - iv.Length];
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, iv.Length);
+            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length);
             var key = Encoding.UTF8.GetBytes(keyString);
 
             using (var aesAlg = Aes.Create())

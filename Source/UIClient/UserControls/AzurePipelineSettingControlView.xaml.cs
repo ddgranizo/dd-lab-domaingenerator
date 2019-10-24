@@ -52,7 +52,6 @@ namespace UIClient.UserControls
 			_viewModel.Initialize(this);
         }
 
-
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 			AzurePipelineSettingControlView v = d as AzurePipelineSettingControlView;

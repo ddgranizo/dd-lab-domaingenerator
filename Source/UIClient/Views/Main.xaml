@@ -76,7 +76,6 @@
                         </Grid.ColumnDefinitions>
                         <ComboBox ItemsSource="{Binding NewActionsCollection}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedNewAction}" Grid.Column="0" ></ComboBox>
                         <Button Command="{Binding Source={StaticResource ViewModel}, Path=RemoveSelectedNewActionCommand, Mode=TwoWay}" Grid.Column="1" >Unselect</Button>
-                        
                     </Grid>
 
                     <Grid Grid.Row="1" Visibility="{Binding SelectedNewAction, Converter={StaticResource NullToCollapsedConverter}}">

@@ -128,16 +128,30 @@
     },
     {
       "$id": "18",
-      "Id": "e25231bc-93a9-4b48-8bf1-679af16dd3c3",
+      "Id": "fe04ee73-af96-4bc0-a488-37359847d165",
       "State": 1,
-      "ActionName": "AddAzurePipelinesSetting",
+      "ActionName": "AddGithubSetting",
       "Parameters": {
         "$id": "19",
         "help": false,
-        "name": "MyName",
-        "projectid": "00000000-0000-0000-0000-000000000000",
-        "organizationuri": "www.google.com",
-        "token": "123"
+        "name": "ddgranizo",
+        "oauthtokenkey": "iCkWHU/NAiRQ57QQUSHL6NNPFw1Xm8VzqujS9pkyoOcvFuj6YDpKHttXcuDs/E8OORl1c1Mhi3LH5RJ31dJ6Ew==",
+        "uri": "https://github.com/ddgranizo"
+      },
+      "ActionParameters": null
+    },
+    {
+      "$id": "20",
+      "Id": "cc85060c-3a03-4917-8c4f-ebc7efea4924",
+      "State": 1,
+      "ActionName": "AddAzurePipelinesSetting",
+      "Parameters": {
+        "$id": "21",
+        "help": false,
+        "name": "ddgranizo",
+        "projectid": "94e4b505-b345-43fd-872a-aa91df502f62",
+        "organizationuri": "https://ddgranizo.visualstudio.com/",
+        "token": "IhcqqGDc9lgDyrPowv9Lxkl+3DDFw5AjbRm00o96M/tOdQkfAg4AQGwz6FTqF5G8TTrs3/ONSjY+kz6YTycGjZPRI1gPUUtX/FkJr0BF0J0="
       },
       "ActionParameters": null
     }

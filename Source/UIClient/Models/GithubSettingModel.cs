@@ -9,5 +9,6 @@ namespace UIClient.Models
     {
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public string OauthToken { get { return GetValue<string>(); } set { SetValue(value); } }
+        public string Uri { get { return GetValue<string>(); } set { SetValue(value); } }
     }
 }
