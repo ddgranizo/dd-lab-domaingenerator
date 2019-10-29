@@ -43,7 +43,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             var domain = project.GetDomain(domainName);
             if (domain == null)
             {
-                throw new Exception($"Can't find any domain named '{schemaName}'");
+                throw new Exception($"Can't find any domain named '{domainName}'");
             }
             project.SchemaInDomains.Add(new SchemaInDomain(domain, schema));
         }

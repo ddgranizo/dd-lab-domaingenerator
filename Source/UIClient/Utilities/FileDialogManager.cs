@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,20 +9,20 @@ namespace UIClient.Utilities
     public static class FileDialogManager
     {
 
-        public static Task<string[]> SelectFiles(Window parent, string defaultPath = null)
-        {
-            var file = string.Empty;
+        //public static Task<string[]> SelectFiles(Window parent, string defaultPath = null)
+        //{
+        //    var file = string.Empty;
 
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filters = new List<FileDialogFilter>() { new FileDialogFilter() { Extensions = new List<string>() { "*.json" } } };
-            if (!string.IsNullOrEmpty(defaultPath))
-            {
-                openFileDialog.InitialDirectory = defaultPath;
-            }
-            var files =  openFileDialog.ShowAsync(parent);
-            return openFileDialog.ShowAsync(parent);
+        //    var openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filters = new List<FileDialogFilter>() { new FileDialogFilter() { Extensions = new List<string>() { "*.json" } } };
+        //    if (!string.IsNullOrEmpty(defaultPath))
+        //    {
+        //        openFileDialog.InitialDirectory = defaultPath;
+        //    }
+        //    var files =  openFileDialog.ShowAsync(parent);
+        //    return openFileDialog.ShowAsync(parent);
            
-        }
+        //}
 
         public static string SelectPath(string defaultPath = null)
         {

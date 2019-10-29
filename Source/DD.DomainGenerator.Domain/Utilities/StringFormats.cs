@@ -16,6 +16,13 @@ namespace DD.DomainGenerator.Utilities
             return uriResult;
         }
 
+        public static string ToRepositoryNameFormat(this string s)
+        {
+            return string.Join("-", s.ToNamespacePascalCase()
+                .ToLowerInvariant()
+                .Split(new char[] { '.' }));
+        }
+
         public static string ToNamespacePascalCase(this string s)
         {
             var words = s.Split(new[] { '-', '_', ' ', '.' }, StringSplitOptions.RemoveEmptyEntries)

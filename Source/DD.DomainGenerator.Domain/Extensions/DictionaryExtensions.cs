@@ -25,6 +25,11 @@ namespace DD.DomainGenerator.Extensions
                 {
                     line.ValueInt = (int)value;
                 }
+                else if (value.GetType() == typeof(long))
+                {
+                    long longValue = (long)value;
+                    line.ValueInt = (int)longValue;
+                }
                 else if (value.GetType() == typeof(decimal))
                 {
                     line.ValueDecimal = (decimal)value;

@@ -9,14 +9,19 @@ namespace DD.DomainGenerator
     public class ProjectState
     {
         public string Name { get; set; }
+        public string NameSpace { get; set; }
         public List<ActionExecution> Actions { get; set; }
         public List<Domain> Domains { get; set; }
         public List<SchemaModel> Schemas { get; set; }
         public List<SchemaInDomain> SchemaInDomains { get; set; }
-        public string ReposPath { get; set; }
+        public string ProjectPath { get; set; }
         public List<AzurePipelineSetting> AzurePipelineSettings { get; set; }
         public List<GithubSetting> GithubSettings { get; set; }
-        public ArchitectureSetup Architecture { get; set; }
+        public List<Models.Environment> Environments { get; set; }
+
+        public List<MicroService> MicroServices { get; set; }
+        public List<DomainInMicroService> DomainInMicroServices { get; set; }
+
         public ProjectState()
         {
             SchemaInDomains = new List<SchemaInDomain>();
@@ -25,6 +30,10 @@ namespace DD.DomainGenerator
             AzurePipelineSettings = new List<AzurePipelineSetting>();
             GithubSettings = new List<GithubSetting>();
             Schemas = new List<SchemaModel>();
+            MicroServices = new List<MicroService>();
+            DomainInMicroServices = new List<DomainInMicroService>();
+            Environments = new List<Models.Environment>();
+
         }
 
 
@@ -36,6 +45,11 @@ namespace DD.DomainGenerator
         public List<Domain> GetAllDomains()
         {
             return Domains;
+        }
+
+        public MicroService GetMicroService(string name)
+        {
+            return MicroServices.FirstOrDefault(k => k.Name == name);
         }
 
         public SchemaModel GetSchema(string name)

@@ -9,9 +9,10 @@ namespace DD.DomainGenerator.Models
     {
         public enum ActionExecutionState
         {
-            Queued = 1,
-            Executing = 2,
-            Executed = 3,
+            NoQueued = 1,
+            Queued = 2,
+            Executing = 3,
+            Executed = 4,
         }
 
         public Guid Id { get; set; }
@@ -23,15 +24,9 @@ namespace DD.DomainGenerator.Models
         public ActionExecution(string actionName, Dictionary<string, object> parameters)
         {
             Id = Guid.NewGuid();
-            if (string.IsNullOrEmpty(actionName))
-            {
-                throw new ArgumentException("message", nameof(actionName));
-            }
-            ActionName = actionName;
+            ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
             Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
             State = ActionExecutionState.Queued;
         }
-
-
     }
 }

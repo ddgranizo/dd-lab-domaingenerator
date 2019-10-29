@@ -7,12 +7,13 @@ using UIClient.Models;
 
 namespace UIClient.Profiles
 {
-    public class ServiceProfile : Profile
+
+    public class MicroServiceProfile : Profile
     {
-        public ServiceProfile()
+        public MicroServiceProfile()
         {
-            CreateMap<MicroService, ServiceModel>();
-            CreateMap<ServiceModel, MicroService>();
+            CreateMap<MicroService, MicroServiceModel>();
+            CreateMap<MicroServiceModel, MicroService>();
         }
     }
 }

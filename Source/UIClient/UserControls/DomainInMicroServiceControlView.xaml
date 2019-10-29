@@ -1,4 +1,4 @@
-<UserControl x:Class="UIClient.UserControls.AzurePipelineSettingControlView"
+<UserControl x:Class="UIClient.UserControls.DomainInMicroServiceControlView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,16 +6,17 @@
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-        <vm:AzurePipelineSettingControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
+        <vm:DomainInMicroServiceControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
             
         </Grid.Resources>
-        <StackPanel >
-            <TextBlock Text="{Binding AzurePipelineSetting.Name}"/>
-            <TextBlock Text="{Binding Url}" Margin="10,0,0,0"/>
-            <TextBlock Text="{Binding ProjectId, StringFormat='ProjectId: {0}'}" Margin="10,0,0,0"/>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="{Binding DomainInMicroService.Domain.Name, StringFormat='Domain: {0}'}"/>
+        <TextBlock Grid.Row="1" Text="{Binding DomainInMicroService.MicroService.Name, StringFormat='Microservice: {0}'}"/>
     </Grid>
 </UserControl>

@@ -34,7 +34,6 @@ namespace UIClient.UserControls
             }
         }
 
-
         public static readonly DependencyProperty SchemaInDomainProperty =
                       DependencyProperty.Register(
                           nameof(SchemaInDomain),
@@ -43,7 +42,6 @@ namespace UIClient.UserControls
                           {
                               BindsTwoWayByDefault = true,
                           });
-
 
         private readonly SchemaInDomainViewModel _viewModel = null;
 

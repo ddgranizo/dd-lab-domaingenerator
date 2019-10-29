@@ -29,12 +29,16 @@ namespace UIClient.ViewModels
 
         public ProjectStateModel State { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
         public ProjectStateModel VirtualState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
+        public ProjectStateModel CurrentState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
+        public bool IsActiveVirtualState { get { return GetValue<bool>(); } set { SetValue(value); RaisePropertyChange(nameof(IsActiveRealState)); } }
+        public bool IsActiveRealState { get { return GetValue<bool>(); } set { SetValue(value); } }
+
         public List<ActionBase> NewActions { get { return GetValue<List<ActionBase>>(); } set { SetValue(value); UpdateListToCollection(value, NewActionsCollection); } }
         public ObservableCollection<ActionBase> NewActionsCollection { get; set; } = new ObservableCollection<ActionBase>();
         public ActionBase SelectedNewAction { get { return GetValue<ActionBase>(); } set { SetValue(value, OnNewActionChanged); } }
         public List<ActionParameterDefinition> NewActionParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { SetValue(value); UpdateListToCollection(value, NewActionParametersDefinitionsCollection); } }
         public ObservableCollection<ActionParameterDefinition> NewActionParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
-        
+
         public Dictionary<string, object> NewActionParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
         public Dictionary<string, List<string>> NewActionParametersSugestions { get { return GetValue<Dictionary<string, List<string>>>(); } set { SetValue(value); } }
 
@@ -51,6 +55,9 @@ namespace UIClient.ViewModels
         public List<ErrorExecutionActionModel> Errors { get { return GetValue<List<ErrorExecutionActionModel>>(); } set { SetValue(value); UpdateListToCollection(value, ErrorsCollection); } }
         public ObservableCollection<ErrorExecutionActionModel> ErrorsCollection { get; set; } = new ObservableCollection<ErrorExecutionActionModel>();
 
+        public List<DeployActionUnitModel> DeployActions { get { return GetValue<List<DeployActionUnitModel>>(); } set { SetValue(value); UpdateListToCollection(value, DeployActionsCollection); } }
+        public ObservableCollection<DeployActionUnitModel> DeployActionsCollection { get; set; } = new ObservableCollection<DeployActionUnitModel>();
+
         public IMapper Mapper { get; set; }
         private Window _window;
         public ProjectManager ProjectManager { get; set; }
@@ -59,6 +66,7 @@ namespace UIClient.ViewModels
 
         public MainViewModel()
         {
+            IsActiveVirtualState = true;
             StoredRecentProjectsService = new StoredRecentProjectsService();
             SetRecentProjects();
             InitializeCommands();
@@ -134,7 +142,7 @@ namespace UIClient.ViewModels
                 if (baseAction != null)
                 {
                     SelectedActionForModifyParametersDefinitionsValues = action.Parameters;
-                    SelectedActionForModifyParametersDefinitions = 
+                    SelectedActionForModifyParametersDefinitions =
                         baseAction.ActionParametersDefinition
                         .Where(k => k.Name.ToLower() != "help")
                         .ToList();
@@ -230,6 +238,14 @@ namespace UIClient.ViewModels
             {
                 return VirtualState.Schemas.Select(k => k.Name).ToList();
             }
+            else if (action.IsMicroServiceSuggestion)
+            {
+                return VirtualState.MicroServices.Select(k => k.Name).ToList();
+            }
+            else if (action.IsEnvironmentSuggestion)
+            {
+                return VirtualState.Environments.Select(k => k.Name).ToList();
+            }
             else
             {
                 return action.InputSuggestions;
@@ -240,8 +256,29 @@ namespace UIClient.ViewModels
         {
             State = Mapper.Map<ProjectStateModel>(ProjectManager.ProjectState);
             VirtualState = Mapper.Map<ProjectStateModel>(ProjectManager.VirtualProjectState);
+            CurrentState = IsActiveVirtualState
+                ? VirtualState
+                : State;
+            UpdateDeployActions();
         }
 
+
+
+        private void UpdateDeployActions()
+        {
+            DeployActions = State.Actions.SelectMany(k =>
+            {
+                var deployActions = Mapper.Map<List<DeployActionUnitModel>>(ProjectManager.GetActionBaseByName(k.ActionName).DeployActions);
+                foreach (var item in deployActions)
+                {
+                    item.Parameters = k.Parameters;
+                    item.ActionId = k.Id;
+                }
+                return deployActions;
+            })
+            .OrderBy(k => (int)k.StartFromPhase * 1e4 + k.StartFromLine * 1e2 + k.StartFromPosition)
+            .ToList();
+        }
 
         public ICommand NewProjectCommand { get; set; }
         public ICommand AddActionCommand { get; set; }
@@ -251,7 +288,9 @@ namespace UIClient.ViewModels
         public ICommand ModifyActionRequestCommand { get; set; }
         public ICommand ModifyActionConfirmCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
-
+        public ICommand ExecuteDeployActionUnitCommand { get; set; }
+        public ICommand ChangeCurrentRealVirtualStateCommand { get; set; }
+        public ICommand SetActionStateExecutedCommand { get; set; }
         private void InitializeCommands()
         {
             NewProjectCommand = new NewProjectCommand(this);
@@ -262,6 +301,9 @@ namespace UIClient.ViewModels
             ModifyActionRequestCommand = new ModifyActionRequestCommand(this);
             ModifyActionConfirmCommand = new ModifyActionConfirmCommand(this);
             OpenFileCommand = new OpenFileCommand(this);
+            ExecuteDeployActionUnitCommand = new ExecuteDeployActionUnitCommand(this);
+            ChangeCurrentRealVirtualStateCommand = new ChangeCurrentRealVirtualStateCommand(this);
+            SetActionStateExecutedCommand = new SetActionQueuedCommand(this);
 
             RegisterCommand(NewProjectCommand);
             RegisterCommand(AddActionCommand);
@@ -271,7 +313,9 @@ namespace UIClient.ViewModels
             RegisterCommand(ModifyActionRequestCommand);
             RegisterCommand(ModifyActionConfirmCommand);
             RegisterCommand(OpenFileCommand);
-
+            RegisterCommand(ExecuteDeployActionUnitCommand);
+            RegisterCommand(ChangeCurrentRealVirtualStateCommand);
+            RegisterCommand(SetActionStateExecutedCommand);
 
             RaiseCanExecuteCommandChanged();
         }
@@ -319,7 +363,6 @@ namespace UIClient.ViewModels
             return new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ActionExecutionProfile());
-                mc.AddProfile(new ArchitectureSetupProfile());
                 mc.AddProfile(new AzurePipelineSettingProfile());
                 mc.AddProfile(new DomainProfile());
                 mc.AddProfile(new EnvironmentProfile());
@@ -332,6 +375,9 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new SchemaInDomainProfile());
                 mc.AddProfile(new ErrorExecutionActionProfile());
                 mc.AddProfile(new ActionBaseProfile());
+                mc.AddProfile(new DomainInMicroServiceProfile());
+                mc.AddProfile(new MicroServiceProfile());
+                mc.AddProfile(new DeployActionUnitProfile());
             });
         }
     }

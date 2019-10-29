@@ -6,6 +6,11 @@ namespace DD.DomainGenerator.Models
 {
     public class GithubSetting
     {
+        public GithubSetting()
+        {
+
+        }
+
         public GithubSetting(string name, string uri, string token)
         {
             if (string.IsNullOrEmpty(name))

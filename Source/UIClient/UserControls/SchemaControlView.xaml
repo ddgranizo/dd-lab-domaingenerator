@@ -42,7 +42,7 @@
             <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='Show properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowProperties_PreviewMouseDown"/>
             <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='Hide properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideProperties_PreviewMouseDown"/>
             <Grid Grid.Row="6" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}">
-                <ItemsControl Margin="5,0,0,0" ItemsSource="{Binding Schema.PropertiesCollection}">
+                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.PropertiesCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <usr:PropertyControlView Property="{Binding Path=.}" />
@@ -55,7 +55,7 @@
             <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='Hide case uses ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideUseCases_PreviewMouseDown"/>
 
             <Grid Grid.Row="8"  Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" >
-                <ItemsControl Margin="5,0,0,0" ItemsSource="{Binding Schema.UseCasesCollection}">
+                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.UseCasesCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <usr:UseCaseControlView UseCase="{Binding Path=.}" />

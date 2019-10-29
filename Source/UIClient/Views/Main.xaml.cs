@@ -34,38 +34,6 @@ namespace UIClient.Views
         }
 
 
-        private void NewActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
-        {
-            var myEvent = e as ValueChangedEventArgs;
-            ViewModel.NewActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
-        }
 
-        private void ModifyActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
-        {
-            var myEvent = e as ValueChangedEventArgs;
-            ViewModel.ModifyActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
-        }
-
-
-        private void ActionsVirtualStateListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = ActionsVirtualStateScrollViewer;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-
-        private void ActionsCurrentStateListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = ActionsCurrentStateScrollViewer;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-
-        private void ErrorsList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = ErrorsScrollViewer;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
     }
 }

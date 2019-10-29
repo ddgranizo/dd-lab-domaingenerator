@@ -6,21 +6,22 @@ using System.Text;
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.Models;
+using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
 
-namespace DD.DomainGenerator.Actions.Project
+namespace DD.DomainGenerator.Actions.Environments
 {
-    public class UpdateProjectName : ActionBase
+    public class DeleteEnvironment : ActionBase
     {
-        public const string ActionName = "UpdateProjectName";
-
+        public const string ActionName = "DeleteEnvironment";
+        
         public ActionParameterDefinition NameParameter { get; set; }
 
-        public UpdateProjectName() : base(ActionName)
+        public DeleteEnvironment() : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "New name", "n", string.Empty);
-
+                   "name", ActionParameterDefinition.TypeValue.String, "Evironment name", "n", string.Empty)
+            { IsEnvironmentSuggestion = true};
             ActionParametersDefinition.Add(NameParameter);
         }
 
@@ -31,9 +32,14 @@ namespace DD.DomainGenerator.Actions.Project
 
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
-            var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
-            project.Name = name;
+            var name = GetStringParameterValue(parameters, NameParameter);
+            var exists = project.Environments
+                .FirstOrDefault(k => k.Name == name);
+            if (exists == null)
+            {
+                throw new Exception($"Can't find any environment named '{name}'");
+            }
+            project.Environments.Remove(exists);
         }
-        
     }
 }

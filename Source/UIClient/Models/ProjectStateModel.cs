@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using UIClient.Models.Base;
 
@@ -16,7 +17,7 @@ namespace UIClient.Models
 
         public List<DomainModel> Domains { get { return GetValue<List<DomainModel>>(); } set { DomainsCollection = SetCollection(value); } }
         public ObservableCollection<DomainModel> DomainsCollection { get; set; } = new ObservableCollection<DomainModel>();
-        
+
         public List<SchemaModelModel> Schemas { get { return GetValue<List<SchemaModelModel>>(); } set { SetValue(value); UpdateListToCollection(value, SchemasCollection); } }
         public ObservableCollection<SchemaModelModel> SchemasCollection { get; set; } = new ObservableCollection<SchemaModelModel>();
 
@@ -29,6 +30,16 @@ namespace UIClient.Models
         public List<GithubSettingModel> GithubSettings { get { return GetValue<List<GithubSettingModel>>(); } set { SetValue(value); UpdateListToCollection(value, GithubSettingsCollection); } }
         public ObservableCollection<GithubSettingModel> GithubSettingsCollection { get; set; } = new ObservableCollection<GithubSettingModel>();
 
-        public ArchitectureSetupModel Architecture { get { return GetValue<ArchitectureSetupModel>(); } set { SetValue(value); } }
+        public List<EnvironmentModel> Environments { get { return GetValue<List<EnvironmentModel>>(); } set { SetValue(value); UpdateListToCollection(value, EnvironmentsCollection); } }
+        public ObservableCollection<EnvironmentModel> EnvironmentsCollection { get; set; } = new ObservableCollection<EnvironmentModel>();
+
+
+        public List<MicroServiceModel> MicroServices { get { return GetValue<List<MicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, MicroServicesCollection); } }
+        public ObservableCollection<MicroServiceModel> MicroServicesCollection { get; set; } = new ObservableCollection<MicroServiceModel>();
+
+        public List<DomainInMicroServiceModel> DomainInMicroServices { get { return GetValue<List<DomainInMicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, DomainInMicroServicesCollection); } }
+        public ObservableCollection<DomainInMicroServiceModel> DomainInMicroServicesCollection { get; set; } = new ObservableCollection<DomainInMicroServiceModel>();
+
     }
+
 }

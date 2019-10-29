@@ -1,9 +1,10 @@
 ﻿using DD.DomainGenerator.Actions;
-using DD.DomainGenerator.Actions.Architecture;
 using DD.DomainGenerator.Actions.AzurePipelines;
 using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Actions.Domains;
+using DD.DomainGenerator.Actions.Environments;
 using DD.DomainGenerator.Actions.Github;
+using DD.DomainGenerator.Actions.MicroServices;
 using DD.DomainGenerator.Actions.Project;
 using DD.DomainGenerator.Actions.Schemas;
 using DD.DomainGenerator.Actions.Schemas.UseCases;
@@ -48,12 +49,14 @@ namespace DD.DomainGenerator
         public ProjectState ProjectState { get; set; }
         public ProjectState VirtualProjectState { get; set; }
         public ActionManager ActionManager { get; }
+        public DeployManager DeployManager { get; set; }
 
         private readonly IFileService _fileService;
 
         public string LastFilePath { get; set; }
 
         public ReadLineAutocompleteHandler ReadLineSuggestionHandler { get; set; }
+
         public ProjectManager()
         {
             ProjectState = new ProjectState();
@@ -62,6 +65,7 @@ namespace DD.DomainGenerator
             _registryService = new RegistryService();
             _cryptoService = new CryptoService(_registryService);
             ActionManager = GetActionManager();
+            DeployManager = new DeployManager();
 
             ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
@@ -216,8 +220,7 @@ namespace DD.DomainGenerator
         {
             var actionManager = new ActionManager(_cryptoService);
 
-            actionManager.RegisterAction(new InitializeRootDomain());
-            actionManager.RegisterAction(new UpdateProjectName());
+            actionManager.RegisterAction(new InitializeProject(_fileService));
             actionManager.RegisterAction(new AddDomain());
             actionManager.RegisterAction(new DeleteDomain());
             actionManager.RegisterAction(new DeleteSchema());
@@ -228,12 +231,14 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new DeleteAzurePipelinesSetting());
             actionManager.RegisterAction(new AddGithubSetting(_cryptoService));
             actionManager.RegisterAction(new DeleteGithubSetting());
-            actionManager.RegisterAction(new InitializeArchitectureSetup());
             actionManager.RegisterAction(new AddSchemaIntersection());
             actionManager.RegisterAction(new AddUseCase());
             actionManager.RegisterAction(new DeleteUseCase());
-            actionManager.RegisterAction(new UpdateProjectReposPath(_fileService));
             actionManager.RegisterAction(new AddSchemaToDomain());
+            actionManager.RegisterAction(new AddDomainInMicroService());
+            actionManager.RegisterAction(new AddMicroService());
+            actionManager.RegisterAction(new AddEnvironment());
+            actionManager.RegisterAction(new DeleteEnvironment());
 
             return actionManager;
         }
@@ -246,6 +251,7 @@ namespace DD.DomainGenerator
 
         public void CommitVirtualProjectChanges()
         {
+           
             ExecuteChanges(VirtualProjectState, true);
         }
 
@@ -262,6 +268,18 @@ namespace DD.DomainGenerator
             {
                 ProjectState.Actions.Remove(lastQueuedAction);
             }
+            RaiseProjectStateChange();
+        }
+
+
+        public void QueueAction(ActionExecution action)
+        {
+            var firstActionNotQueued = ProjectState.Actions.First(k => k.State == ActionExecution.ActionExecutionState.NoQueued);
+            if (firstActionNotQueued.Id != action.Id )
+            {
+                throw new Exception("Only can be queued first action not queued");
+            }
+            firstActionNotQueued.State = ActionExecution.ActionExecutionState.Queued;
             RaiseProjectStateChange();
         }
 
@@ -306,12 +324,16 @@ namespace DD.DomainGenerator
             //}
         }
 
-        public void AddQueueAction(string actionName, Dictionary<string, object> parameters)
+        public void AddNotQueuedAction(ActionBase action, Dictionary<string, object> parameters)
         {
-            ProjectState.Actions.Add(new ActionExecution(actionName, parameters));
+            ProjectState.Actions.Add(new ActionExecution(action.Name, parameters));
             RaiseProjectStateChange();
         }
 
+        public ActionBase GetActionBaseByName(string name)
+        {
+            return ActionManager.Actions.First(k => k.Name == name);
+        }
 
         public void UpdateQueuedAction(ActionExecution action, Dictionary<string, object> values)
         {
@@ -350,12 +372,17 @@ namespace DD.DomainGenerator
 
         private void ActionManager_OnQueuedAction(object sender, ActionEventArgs args)
         {
-            AddQueueAction(args.Action.Name, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition));
+            AddNotQueuedAction(args.Action, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition));
         }
 
         private void RaiseProjectStateChange()
         {
             VirtualProjectState = Objectify(Stringfy(ProjectState));
+            CommitProjectChanges();
+            foreach (var item in VirtualProjectState.Actions.Where(k=>k.State == ActionExecution.ActionExecutionState.NoQueued))
+            {
+                item.State = ActionExecution.ActionExecutionState.Queued;
+            }
             CommitVirtualProjectChanges();
             OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState));
         }

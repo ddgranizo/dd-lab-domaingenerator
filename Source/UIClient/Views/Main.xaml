@@ -8,7 +8,7 @@
         xmlns:usr="clr-namespace:UIClient.UserControls"
         xmlns:vm="clr-namespace:UIClient.ViewModels"
         mc:Ignorable="d"
-        Title="Main" Height="450" Width="800">
+        Title="Main" Height="450" Width="1200">
     <Window.Resources>
         <vm:MainViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </Window.Resources>
@@ -19,6 +19,7 @@
             <conv:StringToCollapsedConverter x:Key="StringToCollapsedConverter" />
             <conv:DictionaryItemConverter x:Key="DictionaryItemConverter" />
             <conv:EnumerableToCollapsedConverter x:Key="EnumerableToCollapsedConverter" />
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
         
         <Grid.RowDefinitions>
@@ -49,6 +50,10 @@
                     <Separator />
                     <MenuItem Header="Save" Command="{Binding Source={StaticResource ViewModel}, Path=SaveChangesCommand,  Mode=OneWay}" />
                 </MenuItem>
+                <MenuItem Header="Project">
+                    <MenuItem Header="Change Real/Virtual" Command="{Binding Source={StaticResource ViewModel}, Path=ChangeCurrentRealVirtualStateCommand, Mode=OneWay}">
+                    </MenuItem>
+                </MenuItem>
             </Menu>
         </DockPanel>
         
@@ -58,7 +63,9 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
 
@@ -122,12 +129,14 @@
                     
                     <TabControl Grid.Row="2">
                         <TabItem Header="Current state">
-                            <ScrollViewer x:Name="ActionsCurrentStateScrollViewer">
-                                <ListView x:Name="ActionsCurrentStateListView" ItemsSource="{Binding State.ActionsCollection}" SelectedItem="{Binding SelectedAction}" PreviewMouseWheel="ActionsCurrentStateListView_PreviewMouseWheel">
+                                <ListView ItemsSource="{Binding CurrentState.ActionsCollection}" SelectedItem="{Binding SelectedAction}" >
                                     <ListView.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Modify"
                                                 Command="{Binding Source={StaticResource ViewModel}, Path=ModifyActionRequestCommand, Mode=OneWay}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                                            <MenuItem Header="Set state Ready"
+                                                Command="{Binding Source={StaticResource ViewModel}, Path=SetActionStateExecutedCommand, Mode=OneWay}"
                                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                                             <MenuItem Header="Remove"
                                                 Command="{Binding Source={StaticResource ViewModel}, Path=RemoveActionCommand, Mode=OneWay}"
@@ -140,19 +149,8 @@
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
-                            </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="Virtual state">
-                            <ScrollViewer x:Name="ActionsVirtualStateScrollViewer">
-                                <ListView x:Name="ActionsVirtualStateListView" ItemsSource="{Binding VirtualState.ActionsCollection}" PreviewMouseWheel="ActionsVirtualStateListView_PreviewMouseWheel">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:ActionControlView Action="{Binding Path=.}"></usr:ActionControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </ScrollViewer>
-                        </TabItem>
+                        
                     </TabControl>
 
                 </Grid>
@@ -174,7 +172,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="2" Text="Domains"></TextBlock>
-                                <ListView ItemsSource="{Binding VirtualState.DomainsCollection}" Grid.Row="1">
+                                <ListView ItemsSource="{Binding CurrentState.DomainsCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <usr:DomainControlView Domain="{Binding Path=.}"></usr:DomainControlView>
@@ -188,7 +186,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="2" Text="Domain/Schema"></TextBlock>
-                                <ListView ItemsSource="{Binding VirtualState.SchemaInDomainsCollection}" Grid.Row="1">
+                                <ListView ItemsSource="{Binding CurrentState.SchemaInDomainsCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <usr:SchemaInDomainControlView SchemaInDomain="{Binding Path=.}"></usr:SchemaInDomainControlView>
@@ -202,7 +200,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="2" Text="Schemas"></TextBlock>
-                                <ListView ItemsSource="{Binding VirtualState.SchemasCollection}" Grid.Row="1">
+                                <ListView ItemsSource="{Binding CurrentState.SchemasCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <usr:SchemaControlView Schema="{Binding Path=.}"></usr:SchemaControlView>
@@ -221,28 +219,101 @@
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Github settings"></TextBlock>
-                                <ListView ItemsSource="{Binding VirtualState.GithubSettingsCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:GithubSettingControlView GithubSetting="{Binding Path=.}"></usr:GithubSettingControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Margin="2" Text="Github settings"></TextBlock>
+                                    <ListView ItemsSource="{Binding CurrentState.GithubSettingsCollection}" Grid.Row="1">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <usr:GithubSettingControlView GithubSetting="{Binding Path=.}"></usr:GithubSettingControlView>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Margin="2" Text="Azure Pipeline settings"></TextBlock>
+                                    <ListView ItemsSource="{Binding CurrentState.AzurePipelineSettingsCollection}" Grid.Row="1">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <usr:AzurePipelineSettingControlView AzurePipelineSetting="{Binding Path=.}"></usr:AzurePipelineSettingControlView>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Azure Pipeline settings"></TextBlock>
-                                <ListView ItemsSource="{Binding VirtualState.AzurePipelineSettingsCollection}" Grid.Row="1">
+                                <TextBlock Margin="2" Text="Environments"></TextBlock>
+                                <ListView ItemsSource="{Binding CurrentState.EnvironmentsCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <usr:AzurePipelineSettingControlView AzurePipelineSetting="{Binding Path=.}"></usr:AzurePipelineSettingControlView>
+                                            <usr:EnvironmentControlView Environment="{Binding Path=.}"></usr:EnvironmentControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Microservices">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Domains"></TextBlock>
+                                <ListView ItemsSource="{Binding CurrentState.DomainsCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:DomainControlView Domain="{Binding Path=.}"></usr:DomainControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Margin="10" Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Microservice/Domain"></TextBlock>
+                                <ListView ItemsSource="{Binding CurrentState.DomainInMicroServicesCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:DomainInMicroServiceControlView DomainInMicroService="{Binding Path=.}"></usr:DomainInMicroServiceControlView>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="2" Text="Microservices"></TextBlock>
+                                <ListView ItemsSource="{Binding CurrentState.MicroServicesCollection}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <usr:MicroServiceControlView  MicroService="{Binding Path=.}"></usr:MicroServiceControlView>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -250,6 +321,30 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
+            </Grid>
+            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="3" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
+            <Grid Grid.Column="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="2" Text="Deploy actions"></TextBlock>
+                    <ListView ItemsSource="{Binding DeployActionsCollection}" Grid.Row="1">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Execute"
+                                                Command="{Binding Source={StaticResource ViewModel}, Path=ExecuteDeployActionUnitCommand, Mode=OneWay}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <usr:DeployActionUnitControlView DeployActionUnit="{Binding Path=.}"></usr:DeployActionUnitControlView>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </Grid>
         </Grid>
 
@@ -259,20 +354,19 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Margin="2" Text="Errors"></TextBlock>
-            <ScrollViewer x:Name="ErrorsScrollViewer" Grid.Row="1" >
-                <ListView x:Name="ErrorsList" ItemsSource="{Binding ErrorsCollection}" PreviewMouseWheel="ErrorsList_PreviewMouseWheel">
+                <ListView x:Name="ErrorsList" ItemsSource="{Binding ErrorsCollection}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <usr:ErrorControlView Error="{Binding Path=.}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </ScrollViewer>
            
         </Grid>
 
         <StatusBar Grid.Row="3">
-            <Label>StatusBar</Label>
+            <TextBlock Visibility="{Binding IsActiveVirtualState, Converter={StaticResource BoolToCollapsedConverter}}">Current state: Virtual</TextBlock>
+            <TextBlock Visibility="{Binding IsActiveVirtualState, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">Current state: Real</TextBlock>
         </StatusBar>
     </Grid>
 </Window>

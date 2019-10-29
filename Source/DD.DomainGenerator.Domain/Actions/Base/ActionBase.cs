@@ -20,6 +20,7 @@ namespace DD.DomainGenerator.Actions.Base
         public string Name { get; set; }
         public string Description { get; set; }
         public List<ActionParameterDefinition> ActionParametersDefinition { get; set; }
+        public List<DeployActionUnit> DeployActions { get; set; }
         public IConsoleService ConsoleService { get; set; }
 
         public ActionBase(string name)
@@ -30,7 +31,13 @@ namespace DD.DomainGenerator.Actions.Base
             }
             Name = name;
             ActionParametersDefinition = new List<ActionParameterDefinition>();
+            DeployActions = new List<DeployActionUnit>();
             ImplementHelpCommand();
+        }
+
+        public void RegisterDeployActionUnit(DeployActionUnit action)
+        {
+            this.DeployActions.Add(action);
         }
 
         public void RegisterActionParameter(ActionParameterDefinition parameter)

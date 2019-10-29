@@ -1,4 +1,5 @@
 ﻿using DD.DomainGenerator.Actions.Base;
+using DD.DomainGenerator.GitHub;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
@@ -30,7 +31,11 @@ namespace DD.DomainGenerator.Actions.Github
             ActionParametersDefinition.Add(OAuthTokenKeyParameter);
             ActionParametersDefinition.Add(UriParameter);
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
+
+            RegisterDeployActions();
         }
+
+
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {
@@ -57,6 +62,12 @@ namespace DD.DomainGenerator.Actions.Github
             var decriptedToken = CryptoService.Decrypt(token);
 
             project.GithubSettings.Add(new GithubSetting(name, standardUri.ToString(), decriptedToken));
+        }
+
+
+        private void RegisterDeployActions()
+        {
+           
         }
     }
 }
