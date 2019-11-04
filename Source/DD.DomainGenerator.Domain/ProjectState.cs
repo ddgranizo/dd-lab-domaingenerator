@@ -18,9 +18,10 @@ namespace DD.DomainGenerator
         public List<AzurePipelineSetting> AzurePipelineSettings { get; set; }
         public List<GithubSetting> GithubSettings { get; set; }
         public List<Models.Environment> Environments { get; set; }
-
         public List<MicroService> MicroServices { get; set; }
         public List<DomainInMicroService> DomainInMicroServices { get; set; }
+
+        public List<Setting> Settings { get; set; }
 
         public ProjectState()
         {
@@ -33,7 +34,7 @@ namespace DD.DomainGenerator
             MicroServices = new List<MicroService>();
             DomainInMicroServices = new List<DomainInMicroService>();
             Environments = new List<Models.Environment>();
-
+            Settings = new List<Setting>();
         }
 
 

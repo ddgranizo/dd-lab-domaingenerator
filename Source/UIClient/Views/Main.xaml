@@ -211,6 +211,32 @@
                             
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Settings">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Margin="2" Text="Settings"></TextBlock>
+                                    <ListView ItemsSource="{Binding CurrentState.SettingsCollection}" Grid.Row="1">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <usr:SettingControlView Setting="{Binding Path=.}"></usr:SettingControlView>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
                     <TabItem Header="Environments">
                         <Grid>
                             <Grid.ColumnDefinitions>

@@ -372,6 +372,7 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new DomainInMicroServiceProfile());
                 mc.AddProfile(new MicroServiceProfile());
                 mc.AddProfile(new DeployActionUnitProfile());
+                mc.AddProfile(new SettingProfile());
             });
         }
 

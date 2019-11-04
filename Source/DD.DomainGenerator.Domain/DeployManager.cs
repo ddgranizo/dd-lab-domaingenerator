@@ -24,52 +24,5 @@ namespace DD.DomainGenerator
 
         }
 
-
-        //public void ExecuteDeployAction(DeployActionUnit action, ProjectState projectState)
-        //{
-        //    if (action.State == DeployActionUnit.DeployState.QueuedForExecution)
-        //    {
-        //        action.State = DeployActionUnit.DeployState.Executing;
-        //        action.SetResponseException(null);
-        //        action.SetResponseParameters(null);
-
-        //        var response = action.ExecuteDeploy(projectState);
-        //        if (!response.IsError)
-        //        {
-                    
-        //            action.SetResponseParameters(response.Parameters);
-        //            action.State = DeployActionUnit.DeployState.Completed;
-        //        }
-        //        else
-        //        {
-        //            action.SetResponseException(response.Exception);
-        //            action.State = DeployActionUnit.DeployState.Error;
-        //            throw response.Exception;
-        //        }
-        //    }
-        //}
-
-
-        //public void CheckDeployAction(DeployActionUnit action, ProjectState projectState)
-        //{
-        //    if (action.State == DeployActionUnit.DeployState.NotInitiated)
-        //    {
-        //        action.State = DeployActionUnit.DeployState.CheckingCurrentState;
-        //        action.SetResponseException(null);
-        //        action.SetResponseParameters(null);
-
-        //        var response = action.ExecuteCheck(projectState);
-        //        if (!response.IsError)
-        //        {
-        //            action.SetResponseParameters(response.Parameters);
-        //            action.State = DeployActionUnit.DeployState.Completed;
-        //        }
-        //        else
-        //        {
-        //            action.State = DeployActionUnit.DeployState.QueuedForExecution;
-        //            //throw response.Exception;
-        //        }
-        //    }
-        //}
     }
 }

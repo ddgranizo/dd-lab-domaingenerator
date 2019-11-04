@@ -12,6 +12,9 @@ namespace UIClient.Models
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public string ReposPath { get { return GetValue<string>(); } set { SetValue(value); } }
 
+        public List<SettingModel> Settings { get { return GetValue<List<SettingModel>>(); } set { SetValue(value); UpdateListToCollection(value, SettingsCollection); } }
+        public ObservableCollection<SettingModel> SettingsCollection { get; set; } = new ObservableCollection<SettingModel>();
+
         public List<ActionExecutionModel> Actions { get { return GetValue<List<ActionExecutionModel>>(); } set { SetValue(value); UpdateListToCollection(value, ActionsCollection); } }
         public ObservableCollection<ActionExecutionModel> ActionsCollection { get; set; } = new ObservableCollection<ActionExecutionModel>();
 
@@ -40,8 +43,5 @@ namespace UIClient.Models
         public List<DomainInMicroServiceModel> DomainInMicroServices { get { return GetValue<List<DomainInMicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, DomainInMicroServicesCollection); } }
         public ObservableCollection<DomainInMicroServiceModel> DomainInMicroServicesCollection { get; set; } = new ObservableCollection<DomainInMicroServiceModel>();
 
-       
-
     }
-
 }

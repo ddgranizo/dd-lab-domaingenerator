@@ -11,18 +11,18 @@ namespace DD.DomainGenerator.GitHub.Extensions
         {
             Dictionary<string, object> values = new Dictionary<string, object>();
 
-            values[nameof(repository.CloneUrl)] = repository.CloneUrl;
-            values[nameof(repository.CreatedAt)] = repository.CreatedAt;
-            values[nameof(repository.FullName)] = repository.FullName;
-            values[nameof(repository.GitUrl)] = repository.GitUrl;
-            values[nameof(repository.HtmlUrl)] = repository.HtmlUrl;
-            values[nameof(repository.Name)] = repository.Name;
-            values[$"{nameof(repository.Owner)}.Id"] = repository.Owner.Id;
-            values[$"{nameof(repository.Owner)}.Login"] = repository.Owner.Login;
-            values[nameof(repository.Private)] = repository.Private;
-            values[nameof(repository.SshUrl)] = repository.SshUrl;
-            values[nameof(repository.SvnUrl)] = repository.SvnUrl;
-            values[nameof(repository.Url)] = repository.Url;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.CloneUrl] = repository.CloneUrl;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.CreatedAt] = repository.CreatedAt;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.FullName] = repository.FullName;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.GitUrl] = repository.GitUrl;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.HtmlUrl] = repository.HtmlUrl;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.Name] = repository.Name;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.OwnerId] = repository.Owner.Id;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.OwnerLogin] = repository.Owner.Login;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.Private] = repository.Private;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.SshUrl] = repository.SshUrl;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.SvnUrl] = repository.SvnUrl;
+            values[Definitions.DeployResponseParametersDefinitions.CreateGithubRepositoryFromMicroService.Url] = repository.Url;
             
             return values;
 

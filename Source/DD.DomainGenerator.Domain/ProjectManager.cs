@@ -8,6 +8,7 @@ using DD.DomainGenerator.Actions.MicroServices;
 using DD.DomainGenerator.Actions.Project;
 using DD.DomainGenerator.Actions.Schemas;
 using DD.DomainGenerator.Actions.Schemas.UseCases;
+using DD.DomainGenerator.Actions.Settings;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.GitHub.Services;
@@ -222,7 +223,8 @@ namespace DD.DomainGenerator
         private ActionManager GetActionManager()
         {
             IGithubClientService githubClientService = new GithubClientService();
-
+            IProcessService processService = new ProcessService();
+            IGitClientService gitClientService = new GitClientService(processService);
 
             var actionManager = new ActionManager(_cryptoService);
 
@@ -242,9 +244,10 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new DeleteUseCase());
             actionManager.RegisterAction(new AddSchemaToDomain());
             actionManager.RegisterAction(new AddDomainInMicroService());
-            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService));
+            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService, gitClientService));
             actionManager.RegisterAction(new AddEnvironment());
             actionManager.RegisterAction(new DeleteEnvironment());
+            actionManager.RegisterAction(new AddSetting());
 
             return actionManager;
         }

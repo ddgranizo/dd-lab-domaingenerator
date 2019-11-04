@@ -102,5 +102,15 @@ namespace DD.DomainGenerator.Models
             }
             return dependency.First();
         }
+
+        internal string GetSetting(ProjectState projectState, string settingName)
+        {
+            var setting = projectState.Settings.FirstOrDefault(k=>k.Name == settingName);
+            if (setting == null)
+            {
+                throw new Exception($"Can't find setting '{settingName}'. Add this setting first.");
+            }
+            return setting.Value;
+        }
     }
 }

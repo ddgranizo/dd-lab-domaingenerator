@@ -14,6 +14,19 @@ namespace DD.DomainGenerator
             }
         }
 
+        public struct DeployResponseParametersDefinitions
+        {
+            public struct CreateRepositoriesFolderFromMicroService
+            {
+                public const string Path = "Path";
+            }
+        }
+
+        public struct DeployDefinitions
+        {
+            public const string RepositoriesFolderName = "Repositories";
+        }
+
         public struct DefaultEnvironmentNames
         {
             public struct Production
@@ -61,5 +74,15 @@ namespace DD.DomainGenerator
             public const string Owner = "Owner";
         }
 
+        public struct SettingsDefinitions
+        {
+            public const string GitExePath = "GitExePath";
+        }
+
+        public static string[] Settings = new string[]
+        {
+            SettingsDefinitions.GitExePath,
+        };
+        
     }
 }

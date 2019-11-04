@@ -19,8 +19,9 @@ namespace DD.DomainGenerator.Actions.MicroServices
         public ActionParameterDefinition NameParameter { get; set; }
         public IFileService FileService { get; }
         public IGithubClientService GithubClientService { get; }
+        public IGitClientService GitClientService { get; }
 
-        public AddMicroService(IFileService fileService, IGithubClientService githubClientService) : base(ActionName)
+        public AddMicroService(IFileService fileService, IGithubClientService githubClientService, IGitClientService gitClientService) : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
                 Definitions.ActionsParametersDefinitions.AddMicroService.Name,
@@ -29,6 +30,7 @@ namespace DD.DomainGenerator.Actions.MicroServices
             ActionParametersDefinition.Add(NameParameter);
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
+            GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -59,7 +61,8 @@ namespace DD.DomainGenerator.Actions.MicroServices
             return new List<DeployActionUnit>()
             {
                 new CreateGithubRepositoryFromMicroService(actionExecution, GithubClientService),
-                new CreateRepositoryFolderFromMicroService(actionExecution, FileService),
+                new CreateRepositoriesFolderFromMicroService(actionExecution, FileService),
+                new CloneGitRepositoryFromMicroService(actionExecution, GitClientService, FileService),
             };
         }
 
