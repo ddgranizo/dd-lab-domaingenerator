@@ -22,7 +22,6 @@ namespace DD.DomainGenerator.GitHub.Extensions
             values[nameof(repository.Private)] = repository.Private;
             values[nameof(repository.SshUrl)] = repository.SshUrl;
             values[nameof(repository.SvnUrl)] = repository.SvnUrl;
-            values[nameof(repository.UpdatedAt)] = repository.UpdatedAt;
             values[nameof(repository.Url)] = repository.Url;
             
             return values;

@@ -16,7 +16,7 @@ namespace UIClient.Commands
                 {
                     vm.CleanErrors();
                     vm.ProjectManager.AddNotQueuedAction(vm.SelectedNewAction, vm.NewActionParametersDefinitionsValues);
-                    vm.ProjectManager.CommitVirtualProjectChanges();
+                    //vm.ProjectManager.CommitVirtualProjectChanges();
                     vm.SelectedNewAction = null;
                 }
                 catch (Exception ex)

@@ -34,7 +34,7 @@ namespace UIClient.ViewModels
 
         private void UpdatedAction(DeployActionUnitModel action)
         {
-            ActionParameters = string.Join(Environment.NewLine, action.Parameters
+            ActionParameters = string.Join(Environment.NewLine, action.ActionExecution.Parameters
                  .Where(k => k.Key != "help")
                 .Select(k => $"{k.Key}={k.Value}"));
 

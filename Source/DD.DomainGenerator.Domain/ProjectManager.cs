@@ -10,6 +10,8 @@ using DD.DomainGenerator.Actions.Schemas;
 using DD.DomainGenerator.Actions.Schemas.UseCases;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
+using DD.DomainGenerator.GitHub.Services;
+using DD.DomainGenerator.GitHub.Services.Implementations;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Services.Implementations;
@@ -50,7 +52,7 @@ namespace DD.DomainGenerator
         public ProjectState VirtualProjectState { get; set; }
         public ActionManager ActionManager { get; }
         public DeployManager DeployManager { get; set; }
-
+        public List<DeployActionUnit> DeployActions { get; set; }
         private readonly IFileService _fileService;
 
         public string LastFilePath { get; set; }
@@ -66,11 +68,12 @@ namespace DD.DomainGenerator
             _cryptoService = new CryptoService(_registryService);
             ActionManager = GetActionManager();
             DeployManager = new DeployManager();
+            DeployActions = new List<DeployActionUnit>();
 
             ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
             ActionManager.OnErrorExecution += ActionManager_OnErrorExecution;
-            
+
         }
 
         private void ActionManager_OnErrorExecution(object sender, ErrorExecutionActionEventArgs args)
@@ -208,7 +211,7 @@ namespace DD.DomainGenerator
             ProjectState = Objectify(json);
             RaiseProjectStateChange();
         }
-      
+
         public void SaveChanges(string path)
         {
             var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
@@ -216,8 +219,11 @@ namespace DD.DomainGenerator
             _fileService.SaveFile(absolutePath, json);
         }
 
-        private  ActionManager GetActionManager()
+        private ActionManager GetActionManager()
         {
+            IGithubClientService githubClientService = new GithubClientService();
+
+
             var actionManager = new ActionManager(_cryptoService);
 
             actionManager.RegisterAction(new InitializeProject(_fileService));
@@ -236,7 +242,7 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new DeleteUseCase());
             actionManager.RegisterAction(new AddSchemaToDomain());
             actionManager.RegisterAction(new AddDomainInMicroService());
-            actionManager.RegisterAction(new AddMicroService());
+            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService));
             actionManager.RegisterAction(new AddEnvironment());
             actionManager.RegisterAction(new DeleteEnvironment());
 
@@ -251,7 +257,7 @@ namespace DD.DomainGenerator
 
         public void CommitVirtualProjectChanges()
         {
-           
+
             ExecuteChanges(VirtualProjectState, true);
         }
 
@@ -274,8 +280,13 @@ namespace DD.DomainGenerator
 
         public void QueueAction(ActionExecution action)
         {
-            var firstActionNotQueued = ProjectState.Actions.First(k => k.State == ActionExecution.ActionExecutionState.NoQueued);
-            if (firstActionNotQueued.Id != action.Id )
+            var firstActionNotQueued = ProjectState.Actions.FirstOrDefault
+                (k => k.State == ActionExecution.ActionExecutionState.NoQueued);
+            if (firstActionNotQueued == null)
+            {
+                throw new Exception("Cannot find any action with state 'NoQueued'");
+            }
+            if (firstActionNotQueued.Id != action.Id)
             {
                 throw new Exception("Only can be queued first action not queued");
             }
@@ -379,19 +390,114 @@ namespace DD.DomainGenerator
         {
             VirtualProjectState = Objectify(Stringfy(ProjectState));
             CommitProjectChanges();
-            foreach (var item in VirtualProjectState.Actions.Where(k=>k.State == ActionExecution.ActionExecutionState.NoQueued))
+            foreach (var item in VirtualProjectState.Actions.Where(k => k.State == ActionExecution.ActionExecutionState.NoQueued))
             {
                 item.State = ActionExecution.ActionExecutionState.Queued;
             }
             CommitVirtualProjectChanges();
-            OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState));
+            DeployActions = GetMergedDeployActions(ProjectState);
+            OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState, DeployActions));
+        }
+
+
+        public void ExecuteDeployActionUnitExecution(DeployActionUnit deployActionUnit)
+        {
+            var deployActionFromSource = SearchActionUnit(DeployActions, deployActionUnit);
+            if (deployActionFromSource.State != DeployActionUnit.DeployState.QueuedForExecution
+                && deployActionFromSource.State != DeployActionUnit.DeployState.Error)
+            {
+                throw new Exception("Only deploy actions in state 'QueuedForExecution' and 'Error' can be executed");
+            }
+            deployActionFromSource.State = DeployActionUnit.DeployState.Executing;
+            var response = deployActionFromSource.ExecuteDeploy(ProjectState, deployActionUnit.ActionExecution, DeployActions);
+            if (!response.IsError)
+            {
+                deployActionFromSource.SetResponseParameters(response.Parameters);
+                deployActionFromSource.State = DeployActionUnit.DeployState.Completed;
+            }
+            else
+            {
+                deployActionFromSource.SetResponseException(response.Exception);
+                deployActionFromSource.State = DeployActionUnit.DeployState.Error;
+            }
+            RaiseProjectStateChange();
+        }
+
+
+        public void ExecuteDeployActionUnitCheck(DeployActionUnit deployActionUnit)
+        {
+            var deployActionFromSource = SearchActionUnit(DeployActions, deployActionUnit);
+            if (deployActionFromSource.State != DeployActionUnit.DeployState.NotInitiated
+                && deployActionFromSource.State != DeployActionUnit.DeployState.Error)
+            {
+                throw new Exception("Only deploy actions in state 'NotInitiated' and 'Error' can be checked");
+            }
+            deployActionFromSource.State = DeployActionUnit.DeployState.CheckingCurrentState;
+            var response = deployActionFromSource.ExecuteCheck(ProjectState, deployActionUnit.ActionExecution, DeployActions);
+            if (!response.IsError)
+            {
+                if (response.ResponseType == DeployActionUnitResponse.DeployActionResponseType.AlreadyCompletedJob)
+                {
+                    deployActionFromSource.SetResponseParameters(response.Parameters);
+                    deployActionFromSource.State = DeployActionUnit.DeployState.Completed;
+                }
+                else if (response.ResponseType == DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob)
+                {
+                    deployActionFromSource.State = DeployActionUnit.DeployState.QueuedForExecution;
+                }
+            }
+            else
+            {
+                deployActionFromSource.SetResponseException(response.Exception);
+                deployActionFromSource.State = DeployActionUnit.DeployState.Error;
+            }
+            RaiseProjectStateChange();
+        }
+
+        private List<DeployActionUnit> GetMergedDeployActions(ProjectState projectState)
+        {
+            var resultsDeployActions = new List<DeployActionUnit>();
+            var currentDeployActions = DeployActions;
+            var newDeployActions = GetDeployActions(projectState);
+            foreach (var item in newDeployActions)
+            {
+                var alreadyLoaded = SearchActionUnit(currentDeployActions, item);
+                resultsDeployActions.Add(alreadyLoaded ?? item);
+            }
+            return resultsDeployActions;
+        }
+
+        private DeployActionUnit SearchActionUnit(List<DeployActionUnit> haystack, DeployActionUnit needle)
+        {
+            return haystack.FirstOrDefault(
+                k => k.ActionExecution.Id == needle.ActionExecution.Id
+                && k.StartFromLine == needle.StartFromLine
+                && k.StartFromPhase == needle.StartFromPhase
+                && k.StartFromPosition == needle.StartFromPosition);
+        }
+
+        private List<DeployActionUnit> GetDeployActions(ProjectState projectState)
+        {
+            var allDeployActions = new List<DeployActionUnit>();
+            foreach (var execution in projectState.Actions)
+            {
+                var action = ActionManager.Actions.First(k => k.Name == execution.ActionName);
+                allDeployActions.AddRange(action.GetDeployActionUnits(execution));
+            }
+            return allDeployActions
+                .OrderBy(k => CalculateDeployActionPosition(k))
+                .ToList();
+        }
+
+        private static double CalculateDeployActionPosition(DeployActionUnit k)
+        {
+            return (int)k.StartFromPhase * 1e4 + k.StartFromLine * 1e2 + k.StartFromPosition;
         }
 
         private static void ActionManager_OnLog(object sender, LogEventArgs e)
         {
             Console.WriteLine(e.Log);
         }
-
 
         private static string GetHelpString(List<ActionBase> actions)
         {

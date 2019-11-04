@@ -26,7 +26,7 @@ namespace DD.DomainGenerator.Models
             Id = Guid.NewGuid();
             ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
             Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
-            State = ActionExecutionState.Queued;
+            State = ActionExecutionState.NoQueued;
         }
     }
 }

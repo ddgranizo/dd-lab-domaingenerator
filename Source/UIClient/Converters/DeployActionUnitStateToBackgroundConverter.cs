@@ -11,13 +11,14 @@ namespace UIClient.Converters
     {
         public DeployActionUnitStateToBackgroundConverter()
         {
+
         }
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var state = (DeployActionUnit.DeployState)value;
             string color = "#FFFFFF";
-            if (state == DeployActionUnit.DeployState.Queued)
+            if (state == DeployActionUnit.DeployState.QueuedForExecution)
             {
                 color = "#FFFF84";
             }
@@ -25,12 +26,16 @@ namespace UIClient.Converters
             {
                 color = "#FFFFFF";
             }
+            else if (state == DeployActionUnit.DeployState.Error)
+            {
+                color = "#FF0000";
+            }
             else if (state == DeployActionUnit.DeployState.Completed)
             {
                 color = "#aaff80";
             }
             var brush = (SolidColorBrush)(new BrushConverter().ConvertFrom(color));
-            return color;
+            return brush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

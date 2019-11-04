@@ -1,4 +1,5 @@
-﻿using DD.DomainGenerator.Events;
+﻿using DD.DomainGenerator.DeployActions;
+using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
@@ -174,6 +175,12 @@ namespace DD.DomainGenerator.Actions.Base
         public virtual void ExecuteThirdParties(ProjectState project, List<ActionParameter> parameters)
         {
             //Do nothing
+        }
+
+        public virtual List<DeployActionUnit> GetDeployActionUnits(ActionExecution actionExecution)
+        {
+            return new List<DeployActionUnit>();
+            
         }
     }
 }

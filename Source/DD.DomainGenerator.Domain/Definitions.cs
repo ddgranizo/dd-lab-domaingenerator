@@ -6,11 +6,17 @@ namespace DD.DomainGenerator
 {
     public class Definitions
     {
-
+        public struct ActionsParametersDefinitions
+        {
+            public struct AddMicroService
+            {
+                public const string Name = "name";
+            }
+        }
 
         public struct DefaultEnvironmentNames
         {
-            public  struct Production
+            public struct Production
             {
                 public const string Name = "Production";
                 public const string Shortname = "pro";
@@ -32,13 +38,11 @@ namespace DD.DomainGenerator
             }
         }
 
-
         public static string[] AvailableTrueStrings = new string[] {
                 "true",
                 "yes",
                 "1",
                 "si" };
-
 
         public struct DefaultBasicDomainNames
         {
@@ -56,5 +60,6 @@ namespace DD.DomainGenerator
             public const string ModifiedOn = "ModifiedOn";
             public const string Owner = "Owner";
         }
+
     }
 }

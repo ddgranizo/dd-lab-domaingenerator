@@ -40,6 +40,8 @@ namespace UIClient.Models
         public List<DomainInMicroServiceModel> DomainInMicroServices { get { return GetValue<List<DomainInMicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, DomainInMicroServicesCollection); } }
         public ObservableCollection<DomainInMicroServiceModel> DomainInMicroServicesCollection { get; set; } = new ObservableCollection<DomainInMicroServiceModel>();
 
+       
+
     }
 
 }

@@ -1,28 +1,32 @@
 ﻿using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UIClient.Commands.Base;
+using UIClient.Models;
 using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    public class SetActionQueuedCommand : RelayCommand
+
+    public class CheckDeployActionUnitCommand : RelayCommand
     {
-        public SetActionQueuedCommand(MainViewModel vm)
+        public CheckDeployActionUnitCommand(MainViewModel vm)
         {
-            Initialize((input) =>
+            Initialize(data =>
             {
                 try
                 {
-                    var currentAction = vm.Mapper.Map<ActionExecution>(vm.SelectedAction);
-                    vm.ProjectManager.QueueAction(currentAction);
+                    var deployActionModel = (DeployActionUnitModel)data;
+                    vm.ProjectManager.ExecuteDeployActionUnitCheck(vm.Mapper.Map<DeployActionUnit>(deployActionModel));
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
-            }, k => !vm.IsActiveVirtualState && vm.SelectedAction!=null);
+
+            });
         }
     }
 }

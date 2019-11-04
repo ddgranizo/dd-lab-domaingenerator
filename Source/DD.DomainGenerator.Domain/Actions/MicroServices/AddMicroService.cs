@@ -1,7 +1,10 @@
 ﻿using DD.DomainGenerator.Actions.Base;
+using DD.DomainGenerator.DeployActions;
 using DD.DomainGenerator.GitHub;
 using DD.DomainGenerator.GitHub.Extensions;
+using DD.DomainGenerator.GitHub.Services;
 using DD.DomainGenerator.Models;
+using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,15 +17,18 @@ namespace DD.DomainGenerator.Actions.MicroServices
     {
         public const string ActionName = "AddMicroService";
         public ActionParameterDefinition NameParameter { get; set; }
+        public IFileService FileService { get; }
+        public IGithubClientService GithubClientService { get; }
 
-        public AddMicroService() : base(ActionName)
+        public AddMicroService(IFileService fileService, IGithubClientService githubClientService) : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
-                "name", ActionParameterDefinition.TypeValue.String, "Micro service name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty);
+                Definitions.ActionsParametersDefinitions.AddMicroService.Name,
+                ActionParameterDefinition.TypeValue.String, "Micro service name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty);
 
             ActionParametersDefinition.Add(NameParameter);
-
-            RegisterDeployActions();
+            FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+            GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -32,7 +38,7 @@ namespace DD.DomainGenerator.Actions.MicroServices
 
         public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
         {
-            var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
+            string name = GetServiceName(parameters);
             bool isRepeated = project.MicroServices.FirstOrDefault(k => k.Name == name) != null;
             if (isRepeated)
             {
@@ -42,25 +48,20 @@ namespace DD.DomainGenerator.Actions.MicroServices
             project.MicroServices.Add(microService);
         }
 
-        private void RegisterDeployActions()
+        private string GetServiceName(List<ActionParameter> parameters)
         {
-            var actionCreateRepo = new DeployActionUnit(
-                "GenerateMicroserviceGithubRepository",
-                DeployManager.Phases.EmptyProject, 1, 1,
-                "Create Github microservice repository",
-                (ActionExecution action, ProjectState state) =>
-                {
-                    var microserviceName = ((string)action.Parameters[NameParameter.Name]).ToNamespacePascalCase();
-                    var githubSetting = state.GithubSettings.First();
-                    var githubManager = new GithubManager(githubSetting.OauthToken);
-                    var microService = state.MicroServices.First(k => k.Name == microserviceName);
-                    var completeName = string.Format("{0}.{1}.{2}", state.NameSpace, state.Name, microserviceName)
-                                        .ToRepositoryNameFormat();
-                    var repository = githubManager.CreateNewRepository(completeName);
-                    return new DeployActionUnitResponse().Ok(repository.ToDictionary());
-                });
-
-            RegisterDeployActionUnit(actionCreateRepo);
+            return GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
         }
+
+
+        public override List<DeployActionUnit> GetDeployActionUnits(ActionExecution actionExecution)
+        {
+            return new List<DeployActionUnit>()
+            {
+                new CreateGithubRepositoryFromMicroService(actionExecution, GithubClientService),
+                new CreateRepositoryFolderFromMicroService(actionExecution, FileService),
+            };
+        }
+
     }
 }

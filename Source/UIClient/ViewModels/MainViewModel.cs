@@ -259,26 +259,15 @@ namespace UIClient.ViewModels
             CurrentState = IsActiveVirtualState
                 ? VirtualState
                 : State;
-            UpdateDeployActions();
+            DeployActions = Mapper.Map<List<DeployActionUnitModel>>(ProjectManager.DeployActions);
         }
 
+        
+        //private bool AreTheSameDeployAction(DeployActionUnit deployActionUnit1, DeployActionUnit deployActionUnit2)
+        //{
+        //    var parametersFirst = string.Join(",", deployActionUnit1.act)
+        //}
 
-
-        private void UpdateDeployActions()
-        {
-            DeployActions = State.Actions.SelectMany(k =>
-            {
-                var deployActions = Mapper.Map<List<DeployActionUnitModel>>(ProjectManager.GetActionBaseByName(k.ActionName).DeployActions);
-                foreach (var item in deployActions)
-                {
-                    item.Parameters = k.Parameters;
-                    item.ActionId = k.Id;
-                }
-                return deployActions;
-            })
-            .OrderBy(k => (int)k.StartFromPhase * 1e4 + k.StartFromLine * 1e2 + k.StartFromPosition)
-            .ToList();
-        }
 
         public ICommand NewProjectCommand { get; set; }
         public ICommand AddActionCommand { get; set; }
@@ -291,6 +280,8 @@ namespace UIClient.ViewModels
         public ICommand ExecuteDeployActionUnitCommand { get; set; }
         public ICommand ChangeCurrentRealVirtualStateCommand { get; set; }
         public ICommand SetActionStateExecutedCommand { get; set; }
+        public ICommand CheckDeployActionUnitCommand { get; set; }
+
         private void InitializeCommands()
         {
             NewProjectCommand = new NewProjectCommand(this);
@@ -304,6 +295,7 @@ namespace UIClient.ViewModels
             ExecuteDeployActionUnitCommand = new ExecuteDeployActionUnitCommand(this);
             ChangeCurrentRealVirtualStateCommand = new ChangeCurrentRealVirtualStateCommand(this);
             SetActionStateExecutedCommand = new SetActionQueuedCommand(this);
+            CheckDeployActionUnitCommand = new CheckDeployActionUnitCommand(this);
 
             RegisterCommand(NewProjectCommand);
             RegisterCommand(AddActionCommand);
@@ -316,6 +308,8 @@ namespace UIClient.ViewModels
             RegisterCommand(ExecuteDeployActionUnitCommand);
             RegisterCommand(ChangeCurrentRealVirtualStateCommand);
             RegisterCommand(SetActionStateExecutedCommand);
+            RegisterCommand(CheckDeployActionUnitCommand);
+
 
             RaiseCanExecuteCommandChanged();
         }
@@ -380,5 +374,8 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new DeployActionUnitProfile());
             });
         }
+
+
+        
     }
 }

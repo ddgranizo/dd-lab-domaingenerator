@@ -34,6 +34,16 @@ namespace UIClient.Views
         }
 
 
+        private void NewActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as ValueChangedEventArgs;
+            ViewModel.NewActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
+        }
 
+        private void ModifyActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as ValueChangedEventArgs;
+            ViewModel.ModifyActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
+        }
     }
 }

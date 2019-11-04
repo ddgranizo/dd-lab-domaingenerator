@@ -1,5 +1,6 @@
 ﻿using Octokit;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DD.DomainGenerator.GitHub
@@ -19,17 +20,26 @@ namespace DD.DomainGenerator.GitHub
 
             Token = token;
             CurrentCredentials = new Credentials(Token);
-        }
-
-
-        public Repository CreateNewRepository(string repoName)
-        {
-            var github = new GitHubClient(new ProductHeaderValue("DomainGenerator"))
+            Client = new GitHubClient(new ProductHeaderValue("DomainGenerator"))
             {
                 Credentials = CurrentCredentials
             };
 
-            var createdRepository = github.Repository.Create(new NewRepository(repoName)
+        }
+
+
+        public Repository SearchRepository(string repoName)
+        {
+            var createdRepository = Client.Search.SearchRepo(new SearchRepositoriesRequest(repoName));
+            var response = createdRepository.Result;
+            var repo = response.Items.OfType<Repository>().FirstOrDefault();
+            return repo;
+        }
+
+
+        public Repository CreateRepository(string repoName)
+        {
+            var createdRepository = Client.Repository.Create(new NewRepository(repoName)
             {
                 Private = true
             });

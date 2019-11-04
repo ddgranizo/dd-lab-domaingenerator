@@ -9,6 +9,7 @@
 	<UserControl.Resources>
         <vm:DeployActionUnitControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
         <conv:DeployActionUnitStateToBackgroundConverter x:Key="DeployActionUnitStateToBackgroundConverter" />
+        <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}" Background="{Binding DeployActionUnit.State, Converter={StaticResource DeployActionUnitStateToBackgroundConverter}}">
         <Grid.Resources>
@@ -18,9 +19,14 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding DeployActionUnit.Description}"></TextBlock>
-        <TextBlock Grid.Row="1" Margin="10,0,0,0" Text="{Binding ActionParameters}"></TextBlock>
-        <TextBlock Grid.Row="2" Background="Beige" Margin="10,0,0,0" Text="{Binding ResponseParameters}"></TextBlock>
+        <TextBlock Grid.Row="1" Margin="10,0,0,0" Text="{Binding DeployActionUnit.ActionExecution.ActionName, StringFormat='Source Action: {0}'}"></TextBlock>
+        <TextBlock Grid.Row="2" Margin="10,0,0,0" Text="{Binding DeployActionUnit.State, StringFormat='State: {0}'}"></TextBlock>
+        <TextBlock Grid.Row="3" Margin="10,0,0,0" Text="{Binding ActionParameters}"></TextBlock>
+        <TextBlock Grid.Row="4" Background="White" Margin="10,0,0,0" Text="{Binding ResponseParameters}"></TextBlock>
+        <TextBlock Visibility="{Binding DeployActionUnit.Exception, Converter={StaticResource NullToCollapsedConverter}}" Grid.Row="4" Background="White" Margin="10,0,0,0" Text="{Binding DeployActionUnit.Exception.Message}" ToolTip="{Binding DeployActionUnit.Exception}"></TextBlock>
     </Grid>
 </UserControl>

@@ -333,6 +333,9 @@
                     <ListView ItemsSource="{Binding DeployActionsCollection}" Grid.Row="1">
                         <ListView.ContextMenu>
                             <ContextMenu>
+                                <MenuItem Header="Check"
+                                                Command="{Binding Source={StaticResource ViewModel}, Path=CheckDeployActionUnitCommand, Mode=OneWay}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                                 <MenuItem Header="Execute"
                                                 Command="{Binding Source={StaticResource ViewModel}, Path=ExecuteDeployActionUnitCommand, Mode=OneWay}"
                                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
