@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using UIClient.Events;
 using UIClient.Models;
 using UIClient.ViewModels;
-using static DD.DomainGenerator.Models.DeployActionUnit;
+using static DD.DomainGenerator.DeployActions.Base.DeployActionUnit;
 
 namespace UIClient.UserControls
 {

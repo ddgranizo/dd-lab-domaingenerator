@@ -1,23 +1,23 @@
-﻿using DD.DomainGenerator.GitHub;
-using DD.DomainGenerator.GitHub.Extensions;
-using DD.DomainGenerator.GitHub.Services;
+﻿using DD.DomainGenerator.DeployActions.Base;
+using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.Models;
+using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DD.DomainGenerator.DeployActions
+namespace DD.DomainGenerator.DeployActions.Microservices
 {
-    public class CreateGithubRepositoryFromMicroService : DeployActionUnit
+    public class CreateGithubRepository : DeployActionUnit
     {
-        public const string ActionName = "CreateGithubRepositoryFromMicroService";
+        public const string ActionName = "CreateGithubRepository";
         public const string ActionDescription = "Create Github microservice repository";
 
         public IGithubClientService GithubClientService { get; }
 
-        public CreateGithubRepositoryFromMicroService(
+        public CreateGithubRepository(
             ActionExecution actionExecution,
             IGithubClientService githubClientService)
             : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject)
@@ -32,7 +32,7 @@ namespace DD.DomainGenerator.DeployActions
         {
             try
             {
-                var microServiceName = ActionExecution.Parameters[Definitions.ActionsParametersDefinitions.AddMicroService.Name] as string;
+                var microServiceName = ActionExecution.InputParameters[Definitions.ActionsParametersDefinitions.AddMicroService.Name] as string;
                 var githubSetting = GetCurrentGithubSetting(projectState);
                 GithubClientService.InitializeClientWithToken(githubSetting.OauthToken);
                 var completeName = GetRepositoryName(projectState, microServiceName);
@@ -59,7 +59,7 @@ namespace DD.DomainGenerator.DeployActions
         {
             try
             {
-                var microServiceName = ActionExecution.Parameters[Definitions.ActionsParametersDefinitions.AddMicroService.Name] as string;
+                var microServiceName = ActionExecution.InputParameters[Definitions.ActionsParametersDefinitions.AddMicroService.Name] as string;
                 GithubSetting githubSetting = GetCurrentGithubSetting(projectState);
                 GithubClientService.InitializeClientWithToken(githubSetting.OauthToken);
                 var completeName = GetRepositoryName(projectState, microServiceName);
@@ -85,9 +85,5 @@ namespace DD.DomainGenerator.DeployActions
             return state.GithubSettings.First();
         }
 
-        private static string GetMicroserviceName(ActionExecution action, string parameterKeyName)
-        {
-            return ((string)action.Parameters[parameterKeyName]).ToNamespacePascalCase();
-        }
     }
 }

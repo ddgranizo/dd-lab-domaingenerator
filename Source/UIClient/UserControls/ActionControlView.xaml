@@ -9,6 +9,8 @@
 	<UserControl.Resources>
         <vm:ActionControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
         <conv:ActionStateToBackgroundConverter x:Key="ActionStateToBackgroundConverter"/>
+        <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
+
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}" Background="{Binding Action.State, Converter={StaticResource ActionStateToBackgroundConverter}}">
         <Grid.Resources>
@@ -17,8 +19,31 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <!--<RowDefinition />
+            <RowDefinition />
+            <RowDefinition />-->
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{Binding Action.ActionName}"></TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding ActionParameters}" FontSize="12" Margin="12,0,0,0"></TextBlock>
+        <Grid Grid.Row="1" Visibility="{Binding InOutAreSame, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Input parameters" />
+            <TextBlock Grid.Row="1" Text="{Binding ActionInputParameters}" FontSize="12" Margin="12,0,0,0"></TextBlock>
+            <TextBlock Grid.Row="2" Text="Output parameters" />
+            <TextBlock Grid.Row="3" Text="{Binding ActionOutputParameters}" FontSize="12" Margin="12,0,0,0"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding InOutAreSame, Converter={StaticResource BoolToCollapsedConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Input/Output parameters" />
+            <TextBlock Grid.Row="1" Text="{Binding ActionOutputParameters}" FontSize="12" Margin="12,0,0,0"></TextBlock>
+        </Grid>
+        
     </Grid>
 </UserControl>

@@ -27,7 +27,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             return IsParamOk(parameters, SchemaNameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
             var schema = project.GetSchema(name);
@@ -36,6 +36,7 @@ namespace DD.DomainGenerator.Actions.Schemas
                 throw new Exception($"Can't find any schema named '{name}'");
             }
             project.Schemas.Remove(schema);
+            OverrideOutputParameter(SchemaNameParameter.Name, name);
         }
 
     }

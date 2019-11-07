@@ -60,7 +60,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             return IsParamOk(parameters, SchemaNameParameter) && IsParamOk(parameters, NameParameter) && IsParamOk(parameters, TypeParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
@@ -88,6 +88,8 @@ namespace DD.DomainGenerator.Actions.Schemas
             };
 
             schema.AddProperty(property);
+            OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
+            OverrideOutputParameter(NameParameter.Name, name);
         }
     }
 }

@@ -322,7 +322,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="2" Text="Microservice/Domain"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.DomainInMicroServicesCollection}" Grid.Row="1">
+                                <ListView ItemsSource="{Binding CurrentState.DomainInMicroservicesCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <usr:DomainInMicroServiceControlView DomainInMicroService="{Binding Path=.}"></usr:DomainInMicroServiceControlView>
@@ -336,7 +336,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="2" Text="Microservices"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.MicroServicesCollection}" Grid.Row="1">
+                                <ListView ItemsSource="{Binding CurrentState.MicroservicesCollection}" Grid.Row="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <usr:MicroServiceControlView  MicroService="{Binding Path=.}"></usr:MicroServiceControlView>
@@ -364,6 +364,10 @@
                                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                                 <MenuItem Header="Execute"
                                                 Command="{Binding Source={StaticResource ViewModel}, Path=ExecuteDeployActionUnitCommand, Mode=OneWay}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                                <Separator />
+                                <MenuItem Header="Check and Execute above and this"
+                                                Command="{Binding Source={StaticResource ViewModel}, Path=CheckAndExecuteAboveAndThisDeployActionUnitCommand, Mode=OneWay}"
                                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                             </ContextMenu>
                         </ListView.ContextMenu>

@@ -16,7 +16,7 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
         public const string ActionName = "AddAzurePipelinesSetting";
         public ActionParameterDefinition OrganizationUriParameter { get; set; }
         public ActionParameterDefinition TokenParameter { get; set; }
-        public ActionParameterDefinition ProjectIdParameter { get; set; }
+        //public ActionParameterDefinition ProjectIdParameter { get; set; }
         public ActionParameterDefinition NameParameter { get; set; }
         public ICryptoService CryptoService { get; }
 
@@ -29,11 +29,11 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
                 "organizationuri", ActionParameterDefinition.TypeValue.String, "Organization URI. Use https://xxxxx.visualstudio.com/", "o", string.Empty);
             TokenParameter = new ActionParameterDefinition(
                 "token", ActionParameterDefinition.TypeValue.Password, "Token for access", "t", string.Empty);
-            ProjectIdParameter = new ActionParameterDefinition(
-                "projectid", ActionParameterDefinition.TypeValue.String, "Azure pipelines project id", "p", Guid.Empty.ToString());
+            //ProjectIdParameter = new ActionParameterDefinition(
+            //    "projectid", ActionParameterDefinition.TypeValue.String, "Azure pipelines project id", "p", Guid.Empty.ToString());
             
             ActionParametersDefinition.Add(NameParameter);
-            ActionParametersDefinition.Add(ProjectIdParameter);
+            //ActionParametersDefinition.Add(ProjectIdParameter);
             ActionParametersDefinition.Add(OrganizationUriParameter);
             ActionParametersDefinition.Add(TokenParameter);
             CryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
@@ -46,12 +46,12 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
                 IsParamOk(parameters, TokenParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var organizationUri = GetStringParameterValue(parameters, OrganizationUriParameter);
             var token = GetStringParameterValue(parameters, TokenParameter);
-            var projectId = GetStringParameterValue(parameters, ProjectIdParameter);
+            //var projectId = GetStringParameterValue(parameters, ProjectIdParameter);
 
             var repeated = project.AzurePipelineSettings
                 .FirstOrDefault(k => k.Name == name);
@@ -63,8 +63,8 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
                 ?? throw new Exception("Invalid organization uri");
 
             var decriptedToken = CryptoService.Decrypt(token);
-            var validGuid = Guid.Parse(projectId);
-            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), decriptedToken, validGuid));
+            //var validGuid = Guid.Parse(projectId);
+            project.AzurePipelineSettings.Add(new AzurePipelineSetting(name, standardUri.ToString(), decriptedToken));
         }
     }
 }

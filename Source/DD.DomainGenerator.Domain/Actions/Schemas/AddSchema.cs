@@ -59,7 +59,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             return  IsParamOk(parameters, NameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
             var hasId = GetBoolParameterValue(parameters, HasIdParameter);
@@ -122,6 +122,8 @@ namespace DD.DomainGenerator.Actions.Schemas
                 schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
             }
             project.Schemas.Add(schema);
+            OverrideOutputParameter(NameParameter.Name, name);
+
         }
     }
 }

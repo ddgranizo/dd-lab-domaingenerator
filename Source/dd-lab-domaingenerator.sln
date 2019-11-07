@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PromptClient", "PromptClien
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIClient", "UIClient\UIClient.csproj", "{37220458-0B93-4981-84DF-F50F2160D5D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.DomainGenerator.GitHub", "DD.DomainGenerator.GitHub\DD.DomainGenerator.GitHub.csproj", "{06116135-7646-4900-8F6B-F76AA303D8B1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{37220458-0B93-4981-84DF-F50F2160D5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37220458-0B93-4981-84DF-F50F2160D5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37220458-0B93-4981-84DF-F50F2160D5D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06116135-7646-4900-8F6B-F76AA303D8B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06116135-7646-4900-8F6B-F76AA303D8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06116135-7646-4900-8F6B-F76AA303D8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06116135-7646-4900-8F6B-F76AA303D8B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

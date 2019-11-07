@@ -110,8 +110,9 @@ namespace DD.DomainGenerator
             }
         }
 
-        public void ExecuteAction(ProjectState projectState, ActionBase action, List<ActionParameter> actionParameters, bool executeVirtual = false, List<string> consoleInputs = null)
+        public Dictionary<string, object> ExecuteAction(ProjectState projectState, ActionBase action, List<ActionParameter> actionParameters, bool executeVirtual = false, List<string> consoleInputs = null)
         {
+            var outputParameters = new Dictionary<string, object>();
             try
             {
                 action.OnLog += Action_OnLog;
@@ -119,11 +120,7 @@ namespace DD.DomainGenerator
                 {
                     var timer = new Stopwatch(); timer.Start();
                     action.ConsoleService = new ConsoleService(consoleInputs);
-                    action.ExecuteStateChange(projectState, actionParameters);
-                    if (!executeVirtual)
-                    {
-                        action.ExecuteThirdParties(projectState, actionParameters);
-                    }
+                    outputParameters = action.PrepareExecution(projectState, actionParameters);
                     var time = StringFormats.MillisecondsToHumanTime(timer.ElapsedMilliseconds);
                 }
                 else
@@ -140,6 +137,7 @@ namespace DD.DomainGenerator
             {
                 action.OnLog -= Action_OnLog;
             }
+            return outputParameters;
         }
 
 

@@ -1,4 +1,4 @@
-﻿using DD.DomainGenerator.Models;
+﻿using DD.DomainGenerator.DeployActions.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;

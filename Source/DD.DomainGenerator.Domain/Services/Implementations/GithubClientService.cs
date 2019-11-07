@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Octokit;
 
-namespace DD.DomainGenerator.GitHub.Services.Implementations
+namespace DD.DomainGenerator.Services.Implementations
 {
     public class GithubClientService : IGithubClientService
     {

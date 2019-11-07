@@ -31,7 +31,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             return IsParamOk(parameters, SchemaNameParameter) && IsParamOk(parameters, DomainNameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
             var schema = project.GetSchema(schemaName);
@@ -46,6 +46,8 @@ namespace DD.DomainGenerator.Actions.Schemas
                 throw new Exception($"Can't find any domain named '{domainName}'");
             }
             project.SchemaInDomains.Add(new SchemaInDomain(domain, schema));
+            OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
+            OverrideOutputParameter(DomainNameParameter.Name, domainName);
         }
 
     }

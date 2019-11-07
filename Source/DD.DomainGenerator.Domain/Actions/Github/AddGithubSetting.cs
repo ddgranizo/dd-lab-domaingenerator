@@ -1,5 +1,4 @@
 ﻿using DD.DomainGenerator.Actions.Base;
-using DD.DomainGenerator.GitHub;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
@@ -44,7 +43,7 @@ namespace DD.DomainGenerator.Actions.Github
                 && IsParamOk(parameters, UriParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var token = GetStringParameterValue(parameters, OAuthTokenKeyParameter);

@@ -12,6 +12,7 @@ namespace UIClient.Models
         public Guid Id { get { return GetValue<Guid>(); } set { SetValue(value); } }
         public string ActionName { get { return GetValue<string>(); } set { SetValue(value); } }
         public ActionExecutionState State { get { return GetValue<ActionExecutionState>(); } set { SetValue(value); } }
-        public Dictionary<string, object> Parameters { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
+        public Dictionary<string, object> InputParameters { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
+        public Dictionary<string, object> OutputParameters { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
     }
 }

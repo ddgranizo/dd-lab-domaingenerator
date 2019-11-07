@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
-using static DD.DomainGenerator.Models.DeployActionUnit;
+using static DD.DomainGenerator.DeployActions.Base.DeployActionUnit;
 
 namespace UIClient.Events
 {

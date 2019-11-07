@@ -1,8 +1,7 @@
 ﻿using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.DeployActions;
-using DD.DomainGenerator.GitHub;
-using DD.DomainGenerator.GitHub.Extensions;
-using DD.DomainGenerator.GitHub.Services;
+using DD.DomainGenerator.DeployActions.Base;
+using DD.DomainGenerator.DeployActions.Microservices;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DD.DomainGenerator.Actions.MicroServices
+namespace DD.DomainGenerator.Actions.Microservices
 {
     public class AddMicroService : ActionBase
     {
@@ -20,8 +19,13 @@ namespace DD.DomainGenerator.Actions.MicroServices
         public IFileService FileService { get; }
         public IGithubClientService GithubClientService { get; }
         public IGitClientService GitClientService { get; }
+        public IDotnetService DotnetService { get; }
 
-        public AddMicroService(IFileService fileService, IGithubClientService githubClientService, IGitClientService gitClientService) : base(ActionName)
+        public AddMicroService(
+            IFileService fileService,
+            IGithubClientService githubClientService,
+            IGitClientService gitClientService,
+            IDotnetService dotnetService) : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
                 Definitions.ActionsParametersDefinitions.AddMicroService.Name,
@@ -31,6 +35,7 @@ namespace DD.DomainGenerator.Actions.MicroServices
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
             GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
+            DotnetService = dotnetService ?? throw new ArgumentNullException(nameof(dotnetService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -38,16 +43,19 @@ namespace DD.DomainGenerator.Actions.MicroServices
             return IsParamOk(parameters, NameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             string name = GetServiceName(parameters);
-            bool isRepeated = project.MicroServices.FirstOrDefault(k => k.Name == name) != null;
+            OverrideOutputParameter(NameParameter.Name, name);
+            bool isRepeated = project.Microservices.FirstOrDefault(k => k.Name == name) != null;
             if (isRepeated)
             {
                 throw new Exception("Found repeated microservice name. Microservice name must be unique");
             }
             MicroService microService = new MicroService(name);
-            project.MicroServices.Add(microService);
+            project.Microservices.Add(microService);
+            OverrideOutputParameter(NameParameter.Name, name);
+
         }
 
         private string GetServiceName(List<ActionParameter> parameters)
@@ -60,9 +68,13 @@ namespace DD.DomainGenerator.Actions.MicroServices
         {
             return new List<DeployActionUnit>()
             {
-                new CreateGithubRepositoryFromMicroService(actionExecution, GithubClientService),
-                new CreateRepositoriesFolderFromMicroService(actionExecution, FileService),
-                new CloneGitRepositoryFromMicroService(actionExecution, GitClientService, FileService),
+                new CreateGithubRepository(actionExecution, GithubClientService),
+                new CreateRepositoriesFolder(actionExecution, FileService),
+                new CloneGitRepository(actionExecution, GitClientService, FileService),
+                new CheckOutMasterRepository(actionExecution, GitClientService, FileService),
+                new CleanRepositoryFolder(actionExecution, FileService),
+                new CreateRepositoryFolderStructure(actionExecution, FileService),
+                new CreateSolutionFile(actionExecution, DotnetService, FileService),
             };
         }
 

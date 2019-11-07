@@ -37,11 +37,11 @@ namespace UIClient.Models
         public ObservableCollection<EnvironmentModel> EnvironmentsCollection { get; set; } = new ObservableCollection<EnvironmentModel>();
 
 
-        public List<MicroServiceModel> MicroServices { get { return GetValue<List<MicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, MicroServicesCollection); } }
-        public ObservableCollection<MicroServiceModel> MicroServicesCollection { get; set; } = new ObservableCollection<MicroServiceModel>();
+        public List<MicroServiceModel> Microservices { get { return GetValue<List<MicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, MicroservicesCollection); } }
+        public ObservableCollection<MicroServiceModel> MicroservicesCollection { get; set; } = new ObservableCollection<MicroServiceModel>();
 
-        public List<DomainInMicroServiceModel> DomainInMicroServices { get { return GetValue<List<DomainInMicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, DomainInMicroServicesCollection); } }
-        public ObservableCollection<DomainInMicroServiceModel> DomainInMicroServicesCollection { get; set; } = new ObservableCollection<DomainInMicroServiceModel>();
+        public List<DomainInMicroServiceModel> DomainInMicroservices { get { return GetValue<List<DomainInMicroServiceModel>>(); } set { SetValue(value); UpdateListToCollection(value, DomainInMicroservicesCollection); } }
+        public ObservableCollection<DomainInMicroServiceModel> DomainInMicroservicesCollection { get; set; } = new ObservableCollection<DomainInMicroServiceModel>();
 
     }
 }

@@ -6,7 +6,7 @@ namespace DD.DomainGenerator.Models
 {
     public class AzurePipelineSetting
     {
-        public AzurePipelineSetting(string name, string organizationUri, string token, Guid projectId)
+        public AzurePipelineSetting(string name, string organizationUri, string token)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -26,12 +26,10 @@ namespace DD.DomainGenerator.Models
             Name = name;
             OrganizationUri = organizationUri;
             Token = token;
-            ProjectId = projectId;
         }
 
         public string Name { get; set; }
         public string OrganizationUri { get; set; }
         public string Token { get; set; }
-        public Guid ProjectId { get; set; }
     }
 }

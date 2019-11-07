@@ -18,14 +18,21 @@ namespace DD.DomainGenerator.Models
         public Guid Id { get; set; }
         public ActionExecutionState State { get; set; }
         public string ActionName { get; set; }
-        public Dictionary<string, object> Parameters { get; set; }
+        public Dictionary<string, object> InputParameters { get; set; }
+        public Dictionary<string, object> OutputParameters { get; set; }
         public List<ActionParameter> ActionParameters { get; set; }
+
+        public ActionExecution()
+        {
+
+        }
 
         public ActionExecution(string actionName, Dictionary<string, object> parameters)
         {
             Id = Guid.NewGuid();
             ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
-            Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+            InputParameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+            OutputParameters = new Dictionary<string, object>();
             State = ActionExecutionState.NoQueued;
         }
     }

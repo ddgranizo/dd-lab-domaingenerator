@@ -1,5 +1,4 @@
-﻿using DD.DomainGenerator.GitHub;
-using DD.DomainGenerator.GitHub.Extensions;
+﻿using DD.DomainGenerator.DeployActions.Base;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Utilities;
@@ -7,15 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static DD.DomainGenerator.Definitions;
 
-namespace DD.DomainGenerator.DeployActions
+namespace DD.DomainGenerator.DeployActions.Microservices
 {
-    public class CreateRepositoriesFolderFromMicroService : DeployActionUnit
+    public class CreateRepositoriesFolder : DeployActionUnit
     {
         
-        public const string ActionName = "CreateRepositoriesFolderFromMicroService";
+        public const string ActionName = "CreateRepositoriesFolder";
         public const string ActionDescription = "Create repositories folder for checkout microservice repository";
-        public CreateRepositoriesFolderFromMicroService(ActionExecution actionExecution, IFileService fileService)
+        public CreateRepositoriesFolder(ActionExecution actionExecution, IFileService fileService)
             : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Second)
         {
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -57,7 +57,7 @@ namespace DD.DomainGenerator.DeployActions
         {
             return new Dictionary<string, object>()
             {
-                { Definitions.DeployResponseParametersDefinitions.CreateRepositoriesFolderFromMicroService.Path, path }
+                { DeployResponseParametersDefinitions.MicroServices.CreateRepositoriesFolder.Path, path }
             };
         }
 

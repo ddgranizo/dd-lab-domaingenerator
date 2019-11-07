@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DD.DomainGenerator.GitHub
+namespace DD.DomainGenerator
 {
     public class GithubManager
     {

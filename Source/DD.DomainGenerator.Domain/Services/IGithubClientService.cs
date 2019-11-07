@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DD.DomainGenerator.GitHub.Services
+namespace DD.DomainGenerator.Services
 {
     public interface IGithubClientService
     {

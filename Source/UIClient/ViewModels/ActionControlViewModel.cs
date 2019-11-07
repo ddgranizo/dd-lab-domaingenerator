@@ -18,9 +18,9 @@ namespace UIClient.ViewModels
     public class ActionControlViewModel : BaseViewModel
     {
 		public ActionExecutionModel Action { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value, UpdatedAction); } }
-        public string ActionParameters { get { return GetValue<string>(); } set { SetValue(value); } }
-
-
+        public string ActionInputParameters { get { return GetValue<string>(); } set { SetValue(value); } }
+        public string ActionOutputParameters { get { return GetValue<string>(); } set { SetValue(value); } }
+        public bool InOutAreSame { get { return GetValue<bool>(); } set { SetValue(value); } }
         private ActionControlView _view;
 
 		public ActionControlViewModel()
@@ -35,9 +35,13 @@ namespace UIClient.ViewModels
 
 		private void UpdatedAction(ActionExecutionModel action)
         {
-            ActionParameters = string.Join(Environment.NewLine, action.Parameters
+            ActionInputParameters = string.Join(Environment.NewLine, action.InputParameters
                 .Where(k=>k.Key != "help")
                 .Select(k => $"{k.Key}={k.Value}"));
+            ActionOutputParameters = string.Join(Environment.NewLine, action.OutputParameters
+                .Where(k => k.Key != "help")
+                .Select(k => $"{k.Key}={k.Value}"));
+            InOutAreSame = ActionInputParameters == ActionOutputParameters;
         }
 
     }

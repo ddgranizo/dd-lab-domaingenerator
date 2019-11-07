@@ -26,7 +26,7 @@ namespace DD.DomainGenerator.Actions.AzurePipelines
             return IsParamOk(parameters, NameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var setting = project.AzurePipelineSettings

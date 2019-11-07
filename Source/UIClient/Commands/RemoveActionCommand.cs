@@ -13,7 +13,7 @@ namespace UIClient.Commands
         {
             Initialize(data =>
             {
-                if (vm.SelectedAction.State != ActionExecution.ActionExecutionState.Queued)
+                if (vm.SelectedAction.State != ActionExecution.ActionExecutionState.NoQueued)
                 {
                     vm.RaiseError("This action cannot be deleted. Only 'queued' actions can be deleted");
                     return;

@@ -1,4 +1,5 @@
 ﻿using DD.DomainGenerator.DeployActions;
+using DD.DomainGenerator.DeployActions.Base;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
 using DD.DomainGenerator.Models;
@@ -23,7 +24,7 @@ namespace DD.DomainGenerator.Actions.Base
         public List<ActionParameterDefinition> ActionParametersDefinition { get; set; }
         public List<DeployActionUnit> DeployActions { get; set; }
         public IConsoleService ConsoleService { get; set; }
-
+        public Dictionary<string, object> OutputParameters { get; set; }
         public ActionBase(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -167,12 +168,18 @@ namespace DD.DomainGenerator.Actions.Base
             return true;
         }
 
-        public virtual void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public Dictionary<string, object> PrepareExecution(ProjectState project, List<ActionParameter> parameters)
         {
-            //Do nothing
+            OutputParameters = parameters.ToDictionary(ActionParametersDefinition);
+            if (OutputParameters.ContainsKey("help"))
+            {
+                OutputParameters.Remove("help");
+            }
+            Execute(project, parameters);
+            return OutputParameters;
         }
 
-        public virtual void ExecuteThirdParties(ProjectState project, List<ActionParameter> parameters)
+        public virtual void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             //Do nothing
         }
@@ -180,7 +187,16 @@ namespace DD.DomainGenerator.Actions.Base
         public virtual List<DeployActionUnit> GetDeployActionUnits(ActionExecution actionExecution)
         {
             return new List<DeployActionUnit>();
-            
+        }
+        
+        public void OverrideOutputParameter(string parameter, object value)
+        {
+            OutputParameters[parameter] = value;
+        }
+
+        public void AddOutputParameter(string parameter, object value)
+        {
+            OutputParameters.Add(parameter, value);
         }
     }
 }

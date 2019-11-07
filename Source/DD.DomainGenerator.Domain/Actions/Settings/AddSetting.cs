@@ -35,7 +35,7 @@ namespace DD.DomainGenerator.Actions.Settings
                 && IsParamOk(parameters, ValueParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var value = GetStringParameterValue(parameters, ValueParameter);

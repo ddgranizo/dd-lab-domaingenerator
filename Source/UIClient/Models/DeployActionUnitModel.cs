@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UIClient.Models.Base;
-using static DD.DomainGenerator.Models.DeployActionUnit;
+using static DD.DomainGenerator.DeployActions.Base.DeployActionUnit;
 
 namespace UIClient.Models
 {

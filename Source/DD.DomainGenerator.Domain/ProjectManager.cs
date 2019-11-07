@@ -4,15 +4,14 @@ using DD.DomainGenerator.Actions.Base;
 using DD.DomainGenerator.Actions.Domains;
 using DD.DomainGenerator.Actions.Environments;
 using DD.DomainGenerator.Actions.Github;
-using DD.DomainGenerator.Actions.MicroServices;
+using DD.DomainGenerator.Actions.Microservices;
 using DD.DomainGenerator.Actions.Project;
 using DD.DomainGenerator.Actions.Schemas;
 using DD.DomainGenerator.Actions.Schemas.UseCases;
 using DD.DomainGenerator.Actions.Settings;
+using DD.DomainGenerator.DeployActions.Base;
 using DD.DomainGenerator.Events;
 using DD.DomainGenerator.Extensions;
-using DD.DomainGenerator.GitHub.Services;
-using DD.DomainGenerator.GitHub.Services.Implementations;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using DD.DomainGenerator.Services.Implementations;
@@ -225,6 +224,7 @@ namespace DD.DomainGenerator
             IGithubClientService githubClientService = new GithubClientService();
             IProcessService processService = new ProcessService();
             IGitClientService gitClientService = new GitClientService(processService);
+            IDotnetService dotnetService = new DotnetService(processService);
 
             var actionManager = new ActionManager(_cryptoService);
 
@@ -243,8 +243,8 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new AddUseCase());
             actionManager.RegisterAction(new DeleteUseCase());
             actionManager.RegisterAction(new AddSchemaToDomain());
-            actionManager.RegisterAction(new AddDomainInMicroService());
-            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService, gitClientService));
+            actionManager.RegisterAction(new AddDomainInMicroService(_fileService, dotnetService));
+            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService, gitClientService, dotnetService));
             actionManager.RegisterAction(new AddEnvironment());
             actionManager.RegisterAction(new DeleteEnvironment());
             actionManager.RegisterAction(new AddSetting());
@@ -314,7 +314,8 @@ namespace DD.DomainGenerator
             {
                 actionExecution.State = ActionExecution.ActionExecutionState.Executing;
                 var action = ActionManager.Actions.First(k => k.Name == actionExecution.ActionName);
-                ActionManager.ExecuteAction(projectState, action, actionExecution.Parameters.ToActionParametersList(), isVirtual, null);
+                var outputParameters = ActionManager.ExecuteAction(projectState, action, actionExecution.InputParameters.ToActionParametersList(), isVirtual, null);
+                actionExecution.OutputParameters = outputParameters;
                 actionExecution.State = ActionExecution.ActionExecutionState.Executed;
             }
             catch (Exception ex)
@@ -366,7 +367,7 @@ namespace DD.DomainGenerator
                     && !string.IsNullOrEmpty((string)item.Value)
                     || parameter.Type != ActionParameterDefinition.TypeValue.Password)
                 {
-                    myAction.Parameters[parameter.Name] = item.Value;
+                    myAction.InputParameters[parameter.Name] = item.Value;
                 }
             }
             RaiseProjectStateChange();
@@ -470,7 +471,7 @@ namespace DD.DomainGenerator
             return resultsDeployActions;
         }
 
-        private DeployActionUnit SearchActionUnit(List<DeployActionUnit> haystack, DeployActionUnit needle)
+        public DeployActionUnit SearchActionUnit(List<DeployActionUnit> haystack, DeployActionUnit needle)
         {
             return haystack.FirstOrDefault(
                 k => k.ActionExecution.Id == needle.ActionExecution.Id

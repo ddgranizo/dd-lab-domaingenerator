@@ -141,7 +141,7 @@ namespace UIClient.ViewModels
                 var baseAction = NewActions.FirstOrDefault(k => k.Name == action.ActionName);
                 if (baseAction != null)
                 {
-                    SelectedActionForModifyParametersDefinitionsValues = action.Parameters;
+                    SelectedActionForModifyParametersDefinitionsValues = action.OutputParameters;
                     SelectedActionForModifyParametersDefinitions =
                         baseAction.ActionParametersDefinition
                         .Where(k => k.Name.ToLower() != "help")
@@ -240,7 +240,7 @@ namespace UIClient.ViewModels
             }
             else if (action.IsMicroServiceSuggestion)
             {
-                return VirtualState.MicroServices.Select(k => k.Name).ToList();
+                return VirtualState.Microservices.Select(k => k.Name).ToList();
             }
             else if (action.IsEnvironmentSuggestion)
             {
@@ -281,6 +281,7 @@ namespace UIClient.ViewModels
         public ICommand ChangeCurrentRealVirtualStateCommand { get; set; }
         public ICommand SetActionStateExecutedCommand { get; set; }
         public ICommand CheckDeployActionUnitCommand { get; set; }
+        public ICommand CheckAndExecuteAboveAndThisDeployActionUnitCommand { get; set; }
 
         private void InitializeCommands()
         {
@@ -296,6 +297,7 @@ namespace UIClient.ViewModels
             ChangeCurrentRealVirtualStateCommand = new ChangeCurrentRealVirtualStateCommand(this);
             SetActionStateExecutedCommand = new SetActionQueuedCommand(this);
             CheckDeployActionUnitCommand = new CheckDeployActionUnitCommand(this);
+            CheckAndExecuteAboveAndThisDeployActionUnitCommand = new CheckAndExecuteAboveAndThisDeployActionUnitCommand(this);
 
             RegisterCommand(NewProjectCommand);
             RegisterCommand(AddActionCommand);
@@ -309,7 +311,7 @@ namespace UIClient.ViewModels
             RegisterCommand(ChangeCurrentRealVirtualStateCommand);
             RegisterCommand(SetActionStateExecutedCommand);
             RegisterCommand(CheckDeployActionUnitCommand);
-
+            RegisterCommand(CheckAndExecuteAboveAndThisDeployActionUnitCommand);
 
             RaiseCanExecuteCommandChanged();
         }

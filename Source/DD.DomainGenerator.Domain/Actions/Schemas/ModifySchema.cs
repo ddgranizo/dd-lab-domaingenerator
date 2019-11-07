@@ -52,7 +52,8 @@ namespace DD.DomainGenerator.Actions.Schemas
         {
             return IsParamOk(parameters, SchemaNameParameter);
         }
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
 
@@ -61,7 +62,6 @@ namespace DD.DomainGenerator.Actions.Schemas
             var addDates = GetBoolParameterValue(parameters, AddDatesParameter);
             var addUserRelationship = GetBoolParameterValue(parameters, AddUserRelationshipParameter);
             var addOwner = GetBoolParameterValue(parameters, AddOwnerParameter);
-
             var schema = project.GetSchema(schemaName);
             if (schema == null)
             {
@@ -110,6 +110,8 @@ namespace DD.DomainGenerator.Actions.Schemas
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
             }
+
+            OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
         }
 
     }

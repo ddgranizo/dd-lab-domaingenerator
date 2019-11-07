@@ -40,7 +40,7 @@ namespace DD.DomainGenerator.Actions.Environments
                 && IsParamOk(parameters, OrderParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter);
             var shortName = GetStringParameterValue(parameters, ShortNameParameter).ToLowerInvariant();

@@ -10,6 +10,5 @@ namespace UIClient.Models
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public string OrganizationUri { get { return GetValue<string>(); } set { SetValue(value); } }
         public string Token { get { return GetValue<string>(); } set { SetValue(value); } }
-        public Guid ProjectId { get { return GetValue<Guid>(); } set { SetValue(value); } }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DD.DomainGenerator.Models
+namespace DD.DomainGenerator.DeployActions.Base
 {
     public class DeployActionUnit
     {
@@ -25,6 +25,12 @@ namespace DD.DomainGenerator.Models
             public const int Second = 2;
             public const int Third = 3;
             public const int Forth = 4;
+            public const int Fifth = 5;
+            public const int Sixth = 6;
+            public const int Seventh = 7;
+            public const int Eighth = 8;
+            public const int Ninth = 9;
+            public const int Tenth = 10;
             public const int BeforeLast = 99;
             public const int Last = 100;
         }
@@ -90,7 +96,7 @@ namespace DD.DomainGenerator.Models
         }
 
 
-        internal T GetDependency<T>(ActionExecution sourceActionExecution, List<DeployActionUnit> currentExecutionDeployActions)
+        internal T GetDependencyFromSameSource<T>(ActionExecution sourceActionExecution, List<DeployActionUnit> currentExecutionDeployActions)
         {
             var sameSourceDeployActions = currentExecutionDeployActions
                     .Where(k => k.ActionExecution.Id == sourceActionExecution.Id && k.State == DeployState.Completed);
@@ -99,6 +105,24 @@ namespace DD.DomainGenerator.Models
             if (dependency.Count() == 0)
             {
                 throw new Exception($"Can't find any '{typeof(T).Name}' deploy action required before this action");
+            }
+            return dependency.First();
+        }
+
+        internal T GetDependency<T>(ActionExecution sourceActionExecution, List<DeployActionUnit> currentExecutionDeployActions, Func<T, bool> condition)
+        {
+            var sameSourceDeployActions = currentExecutionDeployActions
+                    .Where(k => k.State == DeployState.Completed)
+                    .OfType<T>();
+            var dependency = sameSourceDeployActions
+                .Where(condition);
+            if (dependency.Count() == 0)
+            {
+                throw new Exception($"Can't find any '{typeof(T).Name}' deploy action before this action");
+            }
+            else if (dependency.Count() > 1)
+            {
+                throw new Exception($"Found more than one '{typeof(T).Name}' deploy actions before this action");
             }
             return dependency.First();
         }

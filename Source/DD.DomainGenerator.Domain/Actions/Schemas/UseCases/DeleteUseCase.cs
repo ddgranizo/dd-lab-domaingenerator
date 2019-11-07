@@ -38,7 +38,7 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
                 && IsParamOk(parameters, SchemaNameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
             var schema = project.GetSchema(schemaName)
@@ -55,6 +55,7 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
                 intersectionSchemaModel = intersectionSchema;
             }
             schema.DeleteUseCase(type, intersectionSchemaModel);
+            OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
         }
     }
 }

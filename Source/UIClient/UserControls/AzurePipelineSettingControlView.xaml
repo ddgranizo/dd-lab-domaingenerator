@@ -15,7 +15,6 @@
         <StackPanel >
             <TextBlock Text="{Binding AzurePipelineSetting.Name}"/>
             <TextBlock Text="{Binding Url}" Margin="10,0,0,0"/>
-            <TextBlock Text="{Binding ProjectId, StringFormat='ProjectId: {0}'}" Margin="10,0,0,0"/>
         </StackPanel>
     </Grid>
 </UserControl>

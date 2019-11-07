@@ -8,6 +8,19 @@ namespace DD.DomainGenerator.Services.Implementations
 {
     public class FileService : IFileService
     {
+        public void CleanFolder(string path)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+        }
+
         public string ConcatDirectoryAndFileOrFolder(string folder, string fileName)
         {
             var folderCopy = folder;
@@ -23,9 +36,25 @@ namespace DD.DomainGenerator.Services.Implementations
             Directory.CreateDirectory(path);
         }
 
+        public void DeleteFolder(string path)
+        {
+            Directory.Delete(path, true);
+        }
+
+        public bool ExistsFile(string path)
+        {
+            return File.Exists(path);
+        }
+
         public bool ExistsFolder(string path)
         {
             return Directory.Exists(path);
+        }
+
+        public bool FolderIsEmpty(string path)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            return di.GetFiles().Length == 0 && di.GetDirectories().Length == 0;
         }
 
         public string GetAbsoluteCurrentPath(string absoluteRelativePath)

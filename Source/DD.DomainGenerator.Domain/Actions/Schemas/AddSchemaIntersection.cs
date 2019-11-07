@@ -42,7 +42,7 @@ namespace DD.DomainGenerator.Actions.Schemas
                 && IsParamOk(parameters, FirstSchemaNameParameter)
                 && IsParamOk(parameters, SecondSchemaNameParameter);
         }
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
             var firstSchemaName = GetStringParameterValue(parameters, FirstSchemaNameParameter).ToWordPascalCase();
@@ -75,6 +75,9 @@ namespace DD.DomainGenerator.Actions.Schemas
 
             firstSchema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
             secondDomain.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
+            OverrideOutputParameter(NameParameter.Name, schemaName);
+            OverrideOutputParameter(FirstSchemaNameParameter.Name, firstSchemaName);
+            OverrideOutputParameter(SecondSchemaNameParameter.Name, secondSchemaName);
         }
     }
 }

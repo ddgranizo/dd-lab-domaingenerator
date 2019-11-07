@@ -28,7 +28,7 @@ namespace DD.DomainGenerator.Actions.Domains
             return IsParamOk(parameters, NameParameter);
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
             var domain = project.Domains.FirstOrDefault(k => k.Name == name);
@@ -37,6 +37,7 @@ namespace DD.DomainGenerator.Actions.Domains
                 throw new Exception($"Domain with name {name} not found");
             }
             project.Domains.Remove(domain);
+            OverrideOutputParameter(NameParameter.Name, name);
         }
     }
 }

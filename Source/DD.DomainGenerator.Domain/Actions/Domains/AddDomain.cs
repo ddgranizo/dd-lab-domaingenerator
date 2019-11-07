@@ -28,7 +28,7 @@ namespace DD.DomainGenerator.Actions.Domains
             return IsParamOk(parameters, NameParameter) ;
         }
 
-        public override void ExecuteStateChange(ProjectState project, List<ActionParameter> parameters)
+        public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
             bool isRepeated = project.Domains.FirstOrDefault(k => k.Name == name) != null;
@@ -38,6 +38,7 @@ namespace DD.DomainGenerator.Actions.Domains
             }
             Domain domain = new Domain(name);
             project.Domains.Add(domain);
+            OverrideOutputParameter(NameParameter.Name, name);
         }
     }
 }

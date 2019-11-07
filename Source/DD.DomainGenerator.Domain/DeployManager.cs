@@ -12,7 +12,8 @@ namespace DD.DomainGenerator
         public enum Phases
         {
             EmptyProject = 1,
-            AvailableGithubRepositories = 10,
+            AvailableSolutionFile = 10,
+            AvailableGithubRepositories = 11,
             AvailableApis = 20,
             AvailableAzurePipeline = 30,
         }

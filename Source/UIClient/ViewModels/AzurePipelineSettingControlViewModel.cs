@@ -16,8 +16,7 @@ namespace UIClient.ViewModels
 {
     public class AzurePipelineSettingControlViewModel : BaseViewModel
     {
-        public AzurePipelineSettingModel AzurePipelineSetting { get { return GetValue<AzurePipelineSettingModel>(); } set { SetValue(value); RaisePropertyChange(nameof(ProjectId), nameof(Url)); } }
-        public string ProjectId { get { return AzurePipelineSetting?.ProjectId.ToString(); } }
+        public AzurePipelineSettingModel AzurePipelineSetting { get { return GetValue<AzurePipelineSettingModel>(); } set { SetValue(value); RaisePropertyChange(nameof(Url)); } }
         public string Url { get { return AzurePipelineSetting?.OrganizationUri; } }
         private AzurePipelineSettingControlView _view;
 
