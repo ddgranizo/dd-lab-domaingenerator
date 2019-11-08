@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using static DD.DomainGenerator.Definitions;
 
-namespace DD.DomainGenerator.DeployActions.Microservices
+namespace DD.DomainGenerator.DeployActions.Project
 {
     public class CreateRepositoriesFolder : DeployActionUnit
     {
@@ -16,7 +16,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         public const string ActionName = "CreateRepositoriesFolder";
         public const string ActionDescription = "Create repositories folder for checkout microservice repository";
         public CreateRepositoriesFolder(ActionExecution actionExecution, IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Second)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Second)
         {
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
@@ -57,7 +57,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         {
             return new Dictionary<string, object>()
             {
-                { DeployResponseParametersDefinitions.MicroServices.CreateRepositoriesFolder.Path, path }
+                { DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path, path }
             };
         }
 

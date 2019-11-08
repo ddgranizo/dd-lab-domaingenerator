@@ -228,7 +228,7 @@ namespace DD.DomainGenerator
 
             var actionManager = new ActionManager(_cryptoService);
 
-            actionManager.RegisterAction(new InitializeProject(_fileService));
+            actionManager.RegisterAction(new InitializeProject(_fileService, githubClientService, gitClientService));
             actionManager.RegisterAction(new AddDomain());
             actionManager.RegisterAction(new DeleteDomain());
             actionManager.RegisterAction(new DeleteSchema());

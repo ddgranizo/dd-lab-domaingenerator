@@ -6,21 +6,22 @@ using System.Collections.Generic;
 using System.Text;
 using static DD.DomainGenerator.Definitions;
 
-namespace DD.DomainGenerator.DeployActions.Microservices
+namespace DD.DomainGenerator.DeployActions.Project
 {
+   
 
-    public class CleanRepositoryFolder : DeployActionUnit
+    public class CleanDomainRepositoryFolder : DeployActionUnit
     {
 
-        public const string ActionName = "CleanRepositoryFolder";
-        public const string ActionDescription = "Clean repository folder";
+        public const string ActionName = "CleanDomainRepositoryFolder";
+        public const string ActionDescription = "Clean domain repository folder";
 
         public IFileService FileService { get; }
 
-        public CleanRepositoryFolder(
+        public CleanDomainRepositoryFolder(
             ActionExecution actionExecution,
             IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Fifth)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Fifth)
         {
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
@@ -32,8 +33,8 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         {
             try
             {
-                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
+                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
+                var pathParameter = DeployResponseParametersDefinitions.Project.CloneDomainGithubRepository.Path;
                 var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
 
                 var folderIsEmpty = FileService.FolderIsEmpty(repositoryPath);
@@ -59,8 +60,8 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         {
             try
             {
-                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
+                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
+                var pathParameter = DeployResponseParametersDefinitions.Project.CloneDomainGithubRepository.Path;
                 var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
 
                 var folderIsEmpty = FileService.FolderIsEmpty(repositoryPath);

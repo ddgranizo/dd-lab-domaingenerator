@@ -21,12 +21,35 @@ namespace DD.DomainGenerator
 
         public struct DeployResponseParametersDefinitions
         {
-            public struct MicroServices
+            public struct Project
             {
                 public struct CreateRepositoriesFolder
                 {
                     public const string Path = "Path";
                 }
+                public struct CreateDomainGithubRepository
+                {
+                    public const string CloneUrl = "CloneUrl";
+                    public const string CreatedAt = "CreatedAt";
+                    public const string FullName = "FullName";
+                    public const string GitUrl = "GitUrl";
+                    public const string HtmlUrl = "HtmlUrl";
+                    public const string Name = "Name";
+                    public const string OwnerId = "Owner.Id";
+                    public const string OwnerLogin = "Owner.Login";
+                    public const string Private = "Private";
+                    public const string SshUrl = "SshUrl";
+                    public const string SvnUrl = "SvnUrl";
+                    public const string Url = "Url";
+                }
+                public struct CloneDomainGithubRepository
+                {
+                    public const string Path = "Path";
+                }
+            }
+            public struct MicroServices
+            {
+                
                 public struct CloneGitRepository
                 {
                     public const string Path = "Path";

@@ -1,4 +1,6 @@
 ﻿using DD.DomainGenerator.Actions.Base;
+using DD.DomainGenerator.DeployActions.Base;
+using DD.DomainGenerator.DeployActions.Project;
 using DD.DomainGenerator.Models;
 using DD.DomainGenerator.Services;
 using System;
@@ -16,8 +18,13 @@ namespace DD.DomainGenerator.Actions.Project
         public ActionParameterDefinition NamespaceParameter { get; set; }
         public ActionParameterDefinition ProjectPathParameter { get; set; }
         public IFileService FileService { get; }
+        public IGithubClientService GithubClientService { get; }
+        public IGitClientService GitClientService { get; }
 
-        public InitializeProject(IFileService fileService) : base(ActionName)
+        public InitializeProject(
+            IFileService fileService,
+            IGithubClientService githubClientService,
+            IGitClientService gitClientService) : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty);
@@ -30,6 +37,8 @@ namespace DD.DomainGenerator.Actions.Project
             ActionParametersDefinition.Add(NamespaceParameter);
             ActionParametersDefinition.Add(ProjectPathParameter);
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+            GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
+            GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -48,6 +57,16 @@ namespace DD.DomainGenerator.Actions.Project
             project.ProjectPath = absolutePath;
             project.Name = name;
             project.NameSpace = nameSpace;
+        }
+
+        public override List<DeployActionUnit> GetDeployActionUnits(ActionExecution actionExecution)
+        {
+            return new List<DeployActionUnit>()
+            {
+                new CreateDomainGithubRepository(actionExecution, GithubClientService),
+                new CreateRepositoriesFolder(actionExecution, FileService),
+                new CloneDomainGithubRepository(actionExecution, GitClientService, FileService),
+            };
         }
     }
 }

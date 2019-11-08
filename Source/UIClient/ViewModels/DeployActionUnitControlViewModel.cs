@@ -19,7 +19,7 @@ namespace UIClient.ViewModels
 		public DeployActionUnitModel DeployActionUnit { get { return GetValue<DeployActionUnitModel>(); } set { SetValue(value, UpdatedAction); } }
         public string ActionParameters { get { return GetValue<string>(); } set { SetValue(value); } }
         public string ResponseParameters { get { return GetValue<string>(); } set { SetValue(value); } }
-
+        public int Weight { get { return GetValue<int>(); } set { SetValue(value); } }
         private DeployActionUnitControlView _view;
 
 		public DeployActionUnitControlViewModel()

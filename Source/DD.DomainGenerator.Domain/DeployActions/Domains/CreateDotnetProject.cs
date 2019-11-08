@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static DD.DomainGenerator.Definitions.ActionsParametersDefinitions;
+using static DD.DomainGenerator.Definitions;
 
 namespace DD.DomainGenerator.DeployActions.Domains
 {
@@ -38,8 +38,8 @@ namespace DD.DomainGenerator.DeployActions.Domains
         {
             try
             {
-                var domainName = sourceActionExecution.InputParameters[AddDomainInMicroservice.DomainName] as string;
-                var microserviceName = sourceActionExecution.InputParameters[AddDomainInMicroservice.MicroserviceName] as string;
+                var domainName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.DomainName] as string;
+                var microserviceName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.MicroserviceName] as string;
 
                 var domain = projectState.Domains.First(k => k.Name == domainName);
                 var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
@@ -47,30 +47,20 @@ namespace DD.DomainGenerator.DeployActions.Domains
                 var solutionDependency = GetDependency<CreateSolutionFile>
                     (sourceActionExecution, currentExecutionDeployActions, 
                         k => 
-                            k.ActionExecution.OutputParameters.ContainsKey(AddMicroService.Name) 
-                            && k.ActionExecution.OutputParameters[AddMicroService.Name] as string == microserviceName);
+                            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name) 
+                            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
+
+                var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
+                var projectFileName = GetDomainProjectName(projectState,  domainName);
+                var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
+                var existsFolder = FileService.ExistsFolder(projectFolder);
+                if (!existsFolder)
+                {
+                    return new DeployActionUnitResponse()
+                        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
+                }
 
 
-                //var domain = projectState.DomainInMicroServices.FirstOrDefault(k=>k.Domain.Name == )
-                //var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                //var pathParameter = Definitions.DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
-                //var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
-
-                //var settingGit = GetSetting(projectState, Definitions.SettingsDefinitions.GitExePath);
-                //GitClientService.Initialize(settingGit);
-
-                //var existsFolder = FileService.ExistsFolder(repositoryPath);
-                //if (!existsFolder)
-                //{
-                //    return new DeployActionUnitResponse()
-                //        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
-                //}
-                //var existsRepoInPath = GitClientService.ExistsRepositoryInFolder(repositoryPath);
-                //if (!existsRepoInPath)
-                //{
-                //    return new DeployActionUnitResponse()
-                //        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
-                //}
                 //var currentBranch = GitClientService.GetCurrentBranchRepository(repositoryPath);
                 //if (currentBranch != BranchDefinitions.Master)
                 //{
@@ -95,33 +85,29 @@ namespace DD.DomainGenerator.DeployActions.Domains
         {
             try
             {
-                //var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                //var pathParameter = Definitions.DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
-                //var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
+                var domainName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.DomainName] as string;
+                var microserviceName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.MicroserviceName] as string;
 
-                //var settingGit = GetSetting(projectState, Definitions.SettingsDefinitions.GitExePath);
-                //GitClientService.Initialize(settingGit);
+                var domain = projectState.Domains.First(k => k.Name == domainName);
+                var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
 
-                //var existsFolder = FileService.ExistsFolder(repositoryPath);
-                //if (!existsFolder)
-                //{
-                //    return new DeployActionUnitResponse()
-                //        .Error($"Folder {existsFolder} doesn't exists");
-                //}
-                //var existsRepoInPath = GitClientService.ExistsRepositoryInFolder(repositoryPath);
-                //if (!existsRepoInPath)
-                //{
-                //    return new DeployActionUnitResponse()
-                //        .Error($"Folder {existsFolder} doesn't contain git repository");
-                //}
-                //var currentBranch = GitClientService.GetCurrentBranchRepository(repositoryPath);
-                //if (currentBranch != BranchDefinitions.Master)
-                //{
-                //    GitClientService.CheckoutBranch(repositoryPath, BranchDefinitions.Master);
-                //}
-                //return new DeployActionUnitResponse()
-                //    .Ok(GetParameters(BranchDefinitions.Master), DeployActionUnitResponse.DeployActionResponseType.AlreadyCompletedJob);
+                var solutionDependency = GetDependency<CreateSolutionFile>
+                    (sourceActionExecution, currentExecutionDeployActions,
+                        k =>
+                            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name)
+                            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
+
+                var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
+                var projectFileName = GetDomainProjectName(projectState, domainName);
+                var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
+                var existsFolder = FileService.ExistsFolder(projectFolder);
+                if (!existsFolder)
+                {
+                    FileService.CreateFolder(projectFolder);
+                }
+
                 return null;
+
             }
             catch (Exception ex)
             {
@@ -130,6 +116,11 @@ namespace DD.DomainGenerator.DeployActions.Domains
             }
         }
 
+
+        private static string GetDomainProjectName(ProjectState state,  string domainName)
+        {
+            return string.Format("{0}.{1}.Domain.{2}", state.NameSpace, state.Name, domainName);
+        }
 
         private static Dictionary<string, object> GetParameters(string branch)
         {

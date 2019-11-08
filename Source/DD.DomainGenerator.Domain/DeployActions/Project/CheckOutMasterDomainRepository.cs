@@ -6,20 +6,19 @@ using System.Collections.Generic;
 using System.Text;
 using static DD.DomainGenerator.Definitions;
 
-namespace DD.DomainGenerator.DeployActions.Microservices
+namespace DD.DomainGenerator.DeployActions.Project
 {
 
-
-    public class CheckOutMasterRepository : DeployActionUnit
+    public class CheckOutMasterDomainRepository : DeployActionUnit
     {
-        
-        public const string ActionName = "CheckOutMasterRepository";
-        public const string ActionDescription = "Checkout master repository";
+
+        public const string ActionName = "CheckOutMasterDomainRepository";
+        public const string ActionDescription = "Checkout master domain repository";
 
         public IGitClientService GitClientService { get; }
         public IFileService FileService { get; }
 
-        public CheckOutMasterRepository(
+        public CheckOutMasterDomainRepository(
             ActionExecution actionExecution,
             IGitClientService gitClientService,
             IFileService fileService)
@@ -36,11 +35,11 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         {
             try
             {
-                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = Definitions.DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
+                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
+                var pathParameter = DeployResponseParametersDefinitions.Project.CloneDomainGithubRepository.Path;
                 var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
 
-                var settingGit = GetSetting(projectState, Definitions.SettingsDefinitions.GitExePath);
+                var settingGit = GetSetting(projectState, SettingsDefinitions.GitExePath);
                 GitClientService.Initialize(settingGit);
 
                 var existsFolder = FileService.ExistsFolder(repositoryPath);
@@ -78,8 +77,8 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         {
             try
             {
-                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneGitRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = Definitions.DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path;
+                var cloneRepositoryFolderDependency = GetDependencyFromSameSource<CloneDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
+                var pathParameter = DeployResponseParametersDefinitions.Project.CloneDomainGithubRepository.Path;
                 var repositoryPath = cloneRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
 
                 var settingGit = GetSetting(projectState, Definitions.SettingsDefinitions.GitExePath);

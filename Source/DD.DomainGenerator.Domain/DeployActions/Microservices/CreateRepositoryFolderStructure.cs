@@ -16,7 +16,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         public const string ActionName = "CreateRepositoryFolderStructure";
         public const string ActionDescription = "Create repository folder structure";
         public CreateRepositoryFolderStructure(ActionExecution actionExecution, IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Sixth)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Sixth)
         {
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }

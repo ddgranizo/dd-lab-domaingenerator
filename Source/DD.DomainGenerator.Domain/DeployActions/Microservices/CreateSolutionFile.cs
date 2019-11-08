@@ -22,7 +22,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
             ActionExecution actionExecution,
             IDotnetService dotnetService,
             IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.Second, Positions.First)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.Second, Positions.First)
         {
             DotnetService = dotnetService ?? throw new ArgumentNullException(nameof(dotnetService));
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));

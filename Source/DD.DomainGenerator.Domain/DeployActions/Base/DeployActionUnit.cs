@@ -109,13 +109,15 @@ namespace DD.DomainGenerator.DeployActions.Base
             return dependency.First();
         }
 
-        internal T GetDependency<T>(ActionExecution sourceActionExecution, List<DeployActionUnit> currentExecutionDeployActions, Func<T, bool> condition)
+        internal T GetDependency<T>(ActionExecution sourceActionExecution, List<DeployActionUnit> currentExecutionDeployActions, Func<T, bool> condition = null)
         {
             var sameSourceDeployActions = currentExecutionDeployActions
                     .Where(k => k.State == DeployState.Completed)
                     .OfType<T>();
-            var dependency = sameSourceDeployActions
-                .Where(condition);
+            var dependency = condition == null 
+                ? sameSourceDeployActions
+                : sameSourceDeployActions.Where(condition);
+
             if (dependency.Count() == 0)
             {
                 throw new Exception($"Can't find any '{typeof(T).Name}' deploy action before this action");
