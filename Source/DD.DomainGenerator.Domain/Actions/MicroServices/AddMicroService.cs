@@ -68,13 +68,13 @@ namespace DD.DomainGenerator.Actions.Microservices
         {
             return new List<DeployActionUnit>()
             {
-                new CreateGithubRepository(actionExecution, GithubClientService),
-                //new CreateRepositoriesFolder(actionExecution, FileService),
-                new CloneGitRepository(actionExecution, GitClientService, FileService),
-                new CheckOutMasterRepository(actionExecution, GitClientService, FileService),
-                new CleanRepositoryFolder(actionExecution, FileService),
-                new CreateRepositoryFolderStructure(actionExecution, FileService),
-                new CreateSolutionFile(actionExecution, DotnetService, FileService),
+                //new CreateGithubRepository(actionExecution, GithubClientService),
+                ////new CreateRepositoriesFolder(actionExecution, FileService),
+                //new CloneGitRepository(actionExecution, GitClientService, FileService),
+                //new CheckOutMasterRepository(actionExecution, GitClientService, FileService),
+                //new CleanRepositoryFolder(actionExecution, FileService),
+                //new CreateRepositoryFolderStructure(actionExecution, FileService),
+                //new CreateSolutionFile(actionExecution, DotnetService, FileService),
             };
         }
 

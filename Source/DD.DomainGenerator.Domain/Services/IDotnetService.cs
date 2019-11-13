@@ -8,5 +8,6 @@ namespace DD.DomainGenerator.Services
     {
         void Initialize(string dotnetPath);
         void CreateSolutionFile(string path, string solutionName);
+        void AddProjectToSolutionFile(string solutionDirectoryPath, string solutionFile, string relativePathToProject);
     }
 }

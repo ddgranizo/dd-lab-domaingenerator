@@ -22,7 +22,7 @@ namespace DD.DomainGenerator.DeployActions.Project
             ActionExecution actionExecution,
             IGitClientService gitClientService,
             IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Forth)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Forth)
         {
             GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -117,7 +117,7 @@ namespace DD.DomainGenerator.DeployActions.Project
         {
             return new Dictionary<string, object>()
             {
-                {Definitions.DeployResponseParametersDefinitions.MicroServices.CheckOutMasterRepository.Branch, branch }
+                {Definitions.DeployResponseParametersDefinitions.Project.CheckOutMasterDomainRepository.Branch, branch }
             };
         }
     }

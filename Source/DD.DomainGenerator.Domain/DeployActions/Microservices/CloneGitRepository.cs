@@ -39,7 +39,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
 
                 var createRepositoryFolderDependency = GetDependency<CreateRepositoriesFolder>(sourceActionExecution, currentExecutionDeployActions);
                 var createGithubRepositoryDependency = GetDependencyFromSameSource<CreateGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path;
+                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.RepositoryPath;
                 var repositoriesPath = createRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
                 var repositoryNameParameter = DeployResponseParametersDefinitions.MicroServices.CreateGithubRepository.Name;
                 var repositoryName = createGithubRepositoryDependency.ResponseParameters[repositoryNameParameter] as string;
@@ -79,7 +79,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
             {
                 var createRepositoryFolderDependency = GetDependencyFromSameSource<CreateRepositoriesFolder>(sourceActionExecution, currentExecutionDeployActions);
                 var createGithubRepositoryDependency = GetDependencyFromSameSource<CreateGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path;
+                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.RepositoryPath;
                 var repositoriesPath = createRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
                 var repositorySvnUrl = DeployResponseParametersDefinitions.MicroServices.CreateGithubRepository.SvnUrl;
                 var repositoryNameParameter = DeployResponseParametersDefinitions.MicroServices.CreateGithubRepository.Name;

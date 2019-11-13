@@ -23,5 +23,8 @@ namespace UIClient.Models
         public ObservableCollection<UseCaseModel> UseCasesCollection { get; set; } = new ObservableCollection<UseCaseModel>();
 
         public bool NeedsAuthorization { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public List<SchemaViewModel> Views { get { return GetValue<List<SchemaViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, ViewsCollection); } }
+        public ObservableCollection<SchemaViewModel> ViewsCollection { get; set; } = new ObservableCollection<SchemaViewModel>();
     }
 }

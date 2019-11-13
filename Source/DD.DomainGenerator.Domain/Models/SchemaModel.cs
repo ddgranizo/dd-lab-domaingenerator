@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static DD.DomainGenerator.Definitions;
 
 namespace DD.DomainGenerator.Models
 {
@@ -17,7 +18,7 @@ namespace DD.DomainGenerator.Models
         public bool IsIntersection { get; set; }
         public bool NeedsAuthorization { get; set; }
         public List<SchemaModelProperty> Properties { get; set; }
-
+        public List<SchemaView> Views { get; set; }
 
         public SchemaModel(string name)
         {
@@ -28,7 +29,9 @@ namespace DD.DomainGenerator.Models
             }
 
             Properties = new List<SchemaModelProperty>();
+            Views = new List<SchemaView>();
             Name = name;
+            AddView(new SchemaView(DefaultViewNames.All, false).AddColumnSet());
         }
 
         public void AddProperty(SchemaModelProperty property)
@@ -40,6 +43,14 @@ namespace DD.DomainGenerator.Models
             Properties.Add(property);
         }
 
+        public void AddView(SchemaView view)
+        {
+            if (Views.FirstOrDefault(k => k.Name == view.Name) != null)
+            {
+                throw new Exception("View name repeated in schema");
+            }
+            Views.Add(view);
+        }
 
         public void DeleteUseCase(UseCase.UseCaseTypes type, SchemaModel intersectionDomain = null)
         {

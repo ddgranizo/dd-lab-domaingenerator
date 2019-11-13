@@ -85,7 +85,7 @@ namespace DD.DomainGenerator.DeployActions.Project
         {
             return new Dictionary<string, object>()
             {
-                {DeployResponseParametersDefinitions.MicroServices.CleanRepositoryFolder.Path, path }
+                {DeployResponseParametersDefinitions.Project.CleanDomainRepositoryFolder.Path, path }
             };
         }
     }

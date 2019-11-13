@@ -20,7 +20,7 @@ namespace DD.DomainGenerator.DeployActions.Microservices
         public CreateGithubRepository(
             ActionExecution actionExecution,
             IGithubClientService githubClientService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.First)
         {
             GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
         }

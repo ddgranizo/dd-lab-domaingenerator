@@ -8,6 +8,7 @@ namespace DD.DomainGenerator.Utilities
 {
     public static class StringFormats
     {
+        public static char[] Delimiters = new char[] { '-', '_', ' ', '.' };
         public static Uri ParseStringUri(string uri)
         {
             Uri uriResult;
@@ -25,7 +26,7 @@ namespace DD.DomainGenerator.Utilities
 
         public static string ToNamespacePascalCase(this string s)
         {
-            var words = s.Split(new[] { '-', '_', ' ', '.' }, StringSplitOptions.RemoveEmptyEntries)
+            var words = s.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries)
                          .Select(word => word.Substring(0, 1).ToUpper() +
                                          word.Substring(1).ToLower()).ToList();
             for (int i = 0; i < words.Count; i++)
@@ -42,8 +43,23 @@ namespace DD.DomainGenerator.Utilities
 
         public static string ToWordPascalCase(this string s)
         {
-            var words = s.Split(new[] { '-', '_', ' ', '.' }, StringSplitOptions.RemoveEmptyEntries)
-                         .Select(word => word.Substring(0, 1).ToUpper() +
+            if (string.IsNullOrEmpty(s))
+            {
+                throw new Exception("Null or empty string cannot be converted to WordPascalCase");
+            }
+            var splitted = s.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (splitted.Length == 1)
+            {
+                var firstCharacter = s.Substring(0, 1);
+                var capitalized = firstCharacter.ToUpper();
+                var otherPart = string.Empty;
+                if (s.Length > 1)
+                {
+                    otherPart = s.Substring(1, s.Length -1);
+                }
+                return $"{capitalized}{otherPart}";
+            }
+            var words = splitted.Select(word => word.Substring(0, 1).ToUpper() +
                                          word.Substring(1).ToLower()).ToList();
             var result = string.Concat(words);
             return result;

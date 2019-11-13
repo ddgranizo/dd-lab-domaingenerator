@@ -64,7 +64,7 @@ namespace DD.DomainGenerator.Actions.Domains
         {
             return new List<DeployActionUnit>()
             {
-                new CreateDotnetProject(actionExecution, DotnetService, FileService),
+                //new CreateDotnetProject(actionExecution, DotnetService, FileService),
             };
         }
 

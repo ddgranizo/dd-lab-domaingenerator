@@ -31,6 +31,8 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="Has Id" Visibility="{Binding Schema.HasId, Converter={StaticResource BoolToCollapsedConverter}}"/>
             <TextBlock Grid.Row="1" Text="Has State" Visibility="{Binding Schema.HasState, Converter={StaticResource BoolToCollapsedConverter}}"/>
@@ -39,8 +41,8 @@
             <TextBlock Grid.Row="4" Text="Has Dates" Visibility="{Binding Schema.HasDates, Converter={StaticResource BoolToCollapsedConverter}}"/>
 
 
-            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='Show properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowProperties_PreviewMouseDown"/>
-            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='Hide properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideProperties_PreviewMouseDown"/>
+            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='+ Properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowProperties_PreviewMouseDown"/>
+            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='- Properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideProperties_PreviewMouseDown"/>
             <Grid Grid.Row="6" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}">
                 <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.PropertiesCollection}">
                     <ItemsControl.ItemTemplate>
@@ -51,14 +53,29 @@
                 </ItemsControl>
             </Grid>
 
-            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='Show case uses ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowUseCases_PreviewMouseDown"/>
-            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='Hide case uses ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideUseCases_PreviewMouseDown"/>
+            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='+ Use cases ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowUseCases_PreviewMouseDown"/>
+            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='- Use cases ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideUseCases_PreviewMouseDown"/>
 
             <Grid Grid.Row="8"  Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" >
                 <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.UseCasesCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <usr:UseCaseControlView UseCase="{Binding Path=.}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+
+
+
+            <TextBlock Grid.Row="9" Text="{Binding Schema.Views.Count, StringFormat='+ Views ({0})'}" Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowViews_PreviewMouseDown"/>
+            <TextBlock Grid.Row="9" Text="{Binding Schema.Views.Count, StringFormat='- Views ({0})'}" Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideViews_PreviewMouseDown"/>
+
+            <Grid Grid.Row="10"  Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}}" >
+                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.ViewsCollection}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <usr:SchemaViewControlView SchemaView="{Binding Path=.}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

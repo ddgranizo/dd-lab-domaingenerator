@@ -21,7 +21,7 @@ namespace DD.DomainGenerator.DeployActions.Project
             ActionExecution actionExecution,
             IGitClientService gitClientService,
             IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Third)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Third)
         {
             GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
@@ -34,32 +34,9 @@ namespace DD.DomainGenerator.DeployActions.Project
         {
             try
             {
-
-                var createRepositoryFolderDependency = GetDependency<CreateRepositoriesFolder>(sourceActionExecution, currentExecutionDeployActions);
-                var createGithubRepositoryDependency = GetDependencyFromSameSource<CreateDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path;
-                var repositoriesPath = createRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
-                var repositoryNameParameter = DeployResponseParametersDefinitions.Project.CreateDomainGithubRepository.Name;
-                var repositoryName = createGithubRepositoryDependency.ResponseParameters[repositoryNameParameter] as string;
-                var path = FileService.ConcatDirectoryAndFileOrFolder(repositoriesPath, repositoryName);
-
-                var settingGit = GetSetting(projectState, SettingsDefinitions.GitExePath);
-                GitClientService.Initialize(settingGit);
-
-                var existsFolder = FileService.ExistsFolder(path);
-                if (!existsFolder)
-                {
-                    return new DeployActionUnitResponse()
-                        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
-                }
-                var existsRepoInPath = GitClientService.ExistsRepositoryInFolder(path);
-                if (existsRepoInPath)
-                {
-                    return new DeployActionUnitResponse()
-                        .Ok(GetParameters(path), DeployActionUnitResponse.DeployActionResponseType.AlreadyCompletedJob);
-                }
-                return new DeployActionUnitResponse()
+                return new  DeployActionUnitResponse()
                     .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
+              
             }
             catch (Exception ex)
             {
@@ -77,11 +54,15 @@ namespace DD.DomainGenerator.DeployActions.Project
             {
                 var createRepositoryFolderDependency = GetDependency<CreateRepositoriesFolder>(sourceActionExecution, currentExecutionDeployActions);
                 var createGithubRepositoryDependency = GetDependencyFromSameSource<CreateDomainGithubRepository>(sourceActionExecution, currentExecutionDeployActions);
-                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path;
+                var tempPathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.TempPath;
+                var pathParameter = DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.RepositoryPath;
                 var repositoriesPath = createRepositoryFolderDependency.ResponseParameters[pathParameter] as string;
+                var tempPath = createRepositoryFolderDependency.ResponseParameters[tempPathParameter] as string;
+
                 var repositoryNameParameter = DeployResponseParametersDefinitions.Project.CreateDomainGithubRepository.Name;
                 var repositoryName = createGithubRepositoryDependency.ResponseParameters[repositoryNameParameter] as string;
                 var path = FileService.ConcatDirectoryAndFileOrFolder(repositoriesPath, repositoryName);
+                var completeTempPath = FileService.ConcatDirectoryAndFileOrFolder(tempPath, repositoryName);
 
                 var repositorySvnUrl = DeployResponseParametersDefinitions.MicroServices.CreateGithubRepository.SvnUrl;
                 var repositoryUrl = createGithubRepositoryDependency.ResponseParameters[repositorySvnUrl] as string;
@@ -94,8 +75,13 @@ namespace DD.DomainGenerator.DeployActions.Project
                     FileService.DeleteFolder(repositoryPath);
                 }
                 GitClientService.CloneRepository(repositoriesPath, repositoryUrl);
+                if (FileService.ExistsFolder(completeTempPath))
+                {
+                    FileService.DeleteFolder(completeTempPath);
+                }
+                FileService.CopyFolder(repositoryPath, completeTempPath);
                 return new DeployActionUnitResponse()
-                    .Ok(GetParameters(path));
+                    .Ok(GetParameters(path, completeTempPath));
             }
             catch (Exception ex)
             {
@@ -105,11 +91,12 @@ namespace DD.DomainGenerator.DeployActions.Project
         }
 
 
-        private static Dictionary<string, object> GetParameters(string repoPath)
+        private static Dictionary<string, object> GetParameters(string repoPath, string tempPath)
         {
             return new Dictionary<string, object>()
             {
-                {Definitions.DeployResponseParametersDefinitions.MicroServices.CloneGitRepository.Path, repoPath }
+                {DeployResponseParametersDefinitions.Project.CloneDomainGitRepository.Path, repoPath },
+                {DeployResponseParametersDefinitions.Project.CloneDomainGitRepository.TempPath, tempPath },
             };
         }
     }

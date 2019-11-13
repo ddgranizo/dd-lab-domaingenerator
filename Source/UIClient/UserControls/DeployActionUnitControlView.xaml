@@ -22,7 +22,11 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding DeployActionUnit.Description}"></TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Weight, StringFormat='({0})'}"></TextBlock>
+            <TextBlock Text="{Binding DeployActionUnit.Description}"></TextBlock>
+        </StackPanel>
+        
         <TextBlock Grid.Row="1" Margin="10,0,0,0" Text="{Binding DeployActionUnit.ActionExecution.ActionName, StringFormat='Source Action: {0}'}"></TextBlock>
         <TextBlock Grid.Row="2" Margin="10,0,0,0" Text="{Binding DeployActionUnit.State, StringFormat='State: {0}'}"></TextBlock>
         <TextBlock Grid.Row="3" Margin="10,0,0,0" Text="{Binding ActionParameters}"></TextBlock>

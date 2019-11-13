@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using UIClient.Models;
 using UIClient.UserControls;
+using UIClient.Utilities;
 using UIClient.ViewModels.Base;
 
 namespace UIClient.ViewModels
@@ -19,7 +20,7 @@ namespace UIClient.ViewModels
 		public DeployActionUnitModel DeployActionUnit { get { return GetValue<DeployActionUnitModel>(); } set { SetValue(value, UpdatedAction); } }
         public string ActionParameters { get { return GetValue<string>(); } set { SetValue(value); } }
         public string ResponseParameters { get { return GetValue<string>(); } set { SetValue(value); } }
-        public int Weight { get { return GetValue<int>(); } set { SetValue(value); } }
+        public double Weight { get { return GetValue<double>(); } set { SetValue(value); } }
         private DeployActionUnitControlView _view;
 
 		public DeployActionUnitControlViewModel()
@@ -40,6 +41,7 @@ namespace UIClient.ViewModels
 
             ResponseParameters = string.Join(Environment.NewLine, action.ResponseParameters
                .Select(k => $"{k.Key}={k.Value}"));
+            Weight = SortUtility.CalculateDeployActionPosition(action);
         }
     }
 }

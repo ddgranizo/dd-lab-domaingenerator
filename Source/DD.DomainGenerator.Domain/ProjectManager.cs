@@ -225,10 +225,16 @@ namespace DD.DomainGenerator
             IProcessService processService = new ProcessService();
             IGitClientService gitClientService = new GitClientService(processService);
             IDotnetService dotnetService = new DotnetService(processService);
+            IDDService dDService = new DDService(processService);
 
             var actionManager = new ActionManager(_cryptoService);
 
-            actionManager.RegisterAction(new InitializeProject(_fileService, githubClientService, gitClientService));
+            actionManager.RegisterAction(new InitializeProject(
+                _fileService,
+                githubClientService,
+                gitClientService,
+                dotnetService,
+                dDService));
             actionManager.RegisterAction(new AddDomain());
             actionManager.RegisterAction(new DeleteDomain());
             actionManager.RegisterAction(new DeleteSchema());
@@ -248,6 +254,7 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new AddEnvironment());
             actionManager.RegisterAction(new DeleteEnvironment());
             actionManager.RegisterAction(new AddSetting());
+            actionManager.RegisterAction(new AddSchemaView());
 
             return actionManager;
         }
@@ -489,14 +496,11 @@ namespace DD.DomainGenerator
                 allDeployActions.AddRange(action.GetDeployActionUnits(execution));
             }
             return allDeployActions
-                .OrderBy(k => CalculateDeployActionPosition(k))
+                .OrderBy(k => SortUtility.CalculateDeployActionPosition(k))
                 .ToList();
         }
 
-        private static double CalculateDeployActionPosition(DeployActionUnit k)
-        {
-            return (int)k.StartFromPhase * 1e4 + k.StartFromLine * 1e2 + k.StartFromPosition;
-        }
+        
 
         private static void ActionManager_OnLog(object sender, LogEventArgs e)
         {

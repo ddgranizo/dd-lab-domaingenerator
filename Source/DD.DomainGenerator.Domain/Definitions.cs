@@ -23,9 +23,14 @@ namespace DD.DomainGenerator
         {
             public struct Project
             {
-                public struct CreateRepositoriesFolder
+                public struct CreateDomainProjectFolder
                 {
                     public const string Path = "Path";
+                }
+                public struct CreateRepositoriesFolder
+                {
+                    public const string RepositoryPath = "RepositoryPath";
+                    public const string TempPath = "TempPath";
                 }
                 public struct CreateDomainGithubRepository
                 {
@@ -46,6 +51,45 @@ namespace DD.DomainGenerator
                 {
                     public const string Path = "Path";
                 }
+
+                public struct CreateDomainSolutionFile
+                {
+                    public const string Path = "Path";
+                    public const string SolutionFileName = "SolutionFileName";
+                    public const string SolutionFilePath = "SolutionFilePath";
+                }
+
+                public struct CreateDomainRepositoryFolderStructure
+                {
+                    public const string Source = "Source";
+                    public const string Doc = "Doc";
+                }
+
+                public struct CreateDomainProject
+                {
+                    public const string ProjectFileName = "ProjectFileName";
+                    public const string ProjectFilePath = "ProjectFilePath";
+                    public const string Path = "Path";
+                }
+                public struct CloneDomainGitRepository
+                {
+                    public const string Path = "Path";
+                    public const string TempPath = "TempPath";
+                }
+                public struct CleanDomainRepositoryFolder
+                {
+                    public const string Path = "Path";
+                }
+                public struct CheckOutMasterDomainRepository
+                {
+                    public const string Branch = "branch";
+                }
+                public struct AddDomainProjectToDomainSolution
+                {
+                    public const string DomainSolutionFolder = "DomainSolutionFolder";
+                    public const string DomainSolutionName = "DomainSolutionName";
+                    public const string RelativePath = "RelativePath";
+                }
             }
             public struct MicroServices
             {
@@ -53,6 +97,7 @@ namespace DD.DomainGenerator
                 public struct CloneGitRepository
                 {
                     public const string Path = "Path";
+                    public const string TempPath = "TempPath";
                 }
                 public struct CheckOutMasterRepository
                 {
@@ -88,12 +133,14 @@ namespace DD.DomainGenerator
                     public const string SolutionFileName = "SolutionFileName";
                     public const string SolutionFilePath = "SolutionFilePath";
                 }
+               
             }
         }
 
         public struct DeployDefinitions
         {
             public const string RepositoriesFolderName = "Repositories";
+            public const string TempFolderName = "Temp";
             public const string SourceFolderName = "Source";
             public const string DocFolderName = "Doc";
         }
@@ -133,6 +180,36 @@ namespace DD.DomainGenerator
             public const string User = "User";
         }
 
+        public struct DefaultViewNames
+        {
+            public const string All = "GetAll";
+            public const string Active = "GetActive";
+            public const string Inactive = "GetInactive";
+            public const string CreatedOnAtYear = "GetByCreatedOnAtYear";
+            public const string CreatedOnAtMonth = "GetByCreatedOnAtMonth";
+            public const string CreatedOnAtDay = "GetByCreatedOnAtDay";
+            public const string CreatedOnAtDayAndHour = "GetByCreatedOnAtDayAndHour";
+            public const string CreatedOnAtDayAndHourAndMinute = "GetByCreatedOnAtDayAndHourAndMinute";
+            public const string CreatedOnAtDayAndHourAndMinuteSecond = "GetByCreatedOnAtDayAndHourAndMinuteSecond";
+            public const string CreatedOnBetween = "GetByCreatedOnBetween";
+            public const string CreatedOnBefore = "GetByCreatedOnBefore";
+            public const string CreatedOnAfter = "GetByCreatedOnAfter";
+            public const string ModifiedOnAtYear = "GetByModifiedOnAtYear";
+            public const string ModifiedOnAtMonth = "GetByModifiedOnAtMonth";
+            public const string ModifiedOnAtDay = "GetByModifiedOnAtDay";
+            public const string ModifiedOnAtDayAndHour = "GetByModifiedOnAtDayAndHour";
+            public const string ModifiedOnAtDayAndHourAndMinute = "GetByModifiedOnAtDayAndHourAndMinute";
+            public const string ModifiedOnAtDayAndHourAndMinuteSecond = "GetByModifiedOnAtDayAndHourAndMinuteSecond";
+            public const string ModifiedOnBetween = "GetByModifiedOnBetween";
+            public const string ModifiedOnBefore = "GetByModifiedOnBefore";
+            public const string ModifiedOnAfter = "GetByModifiedOnAfter";
+
+            public const string CreatedBy = "GetByCreatedBy";
+            public const string ModifiedBy = "GetByModifiedBy";
+            public const string Owner = "GetByOwner";
+        }
+
+
         public struct DefaultAttributesSchemaNames
         {
             public const string Id = "Id";
@@ -150,6 +227,7 @@ namespace DD.DomainGenerator
             public const string GitExePath = "GitExePath";
             public const string DotNetExePath = "DotNetExePath";
             public const string DDCliExePath = "DDCliExePath";
+            public const string DDCliDomainProjectTemplatePath = "DDCliDomainProjectTemplatePath";
         }
 
         public static string[] Settings = new string[]
@@ -157,6 +235,7 @@ namespace DD.DomainGenerator
             SettingsDefinitions.GitExePath,
             SettingsDefinitions.DotNetExePath,
             SettingsDefinitions.DDCliExePath,
+            SettingsDefinitions.DDCliDomainProjectTemplatePath,
         };
 
         public struct BranchDefinitions
@@ -164,5 +243,17 @@ namespace DD.DomainGenerator
             public const string Master = "master";
         }
         
+
+        public struct ProjectTemplates
+        {
+            public struct DomainProject
+            {
+                public struct TemplateParameters
+                {
+                    public const string Namespace = "MYNAMESPACE";
+                    public const string App = "MYAPP";
+                }
+            }
+        }
     }
 }

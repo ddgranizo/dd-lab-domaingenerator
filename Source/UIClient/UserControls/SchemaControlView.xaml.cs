@@ -88,5 +88,15 @@ namespace UIClient.UserControls
         {
             _viewModel.ShowUseCases = false;
         }
+
+        private void ShowViews_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _viewModel.ShowViews = true;
+        }
+
+        private void HideViews_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _viewModel.ShowViews = false;
+        }
     }
 }

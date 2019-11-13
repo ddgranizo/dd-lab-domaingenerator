@@ -7,5 +7,6 @@ namespace DD.DomainGenerator.Services
     public interface IProcessService
     {
         string RunCommand(string command, string filename = null, string workingDirectory = null);
+        string RunCommand(string command, string filename = null, string workingDirectory = null, params string[] inputs);
     }
 }

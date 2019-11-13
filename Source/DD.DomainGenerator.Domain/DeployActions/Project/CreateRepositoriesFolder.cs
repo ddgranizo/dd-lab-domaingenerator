@@ -12,11 +12,11 @@ namespace DD.DomainGenerator.DeployActions.Project
 {
     public class CreateRepositoriesFolder : DeployActionUnit
     {
-        
+
         public const string ActionName = "CreateRepositoriesFolder";
         public const string ActionDescription = "Create repositories folder for checkout microservice repository";
         public CreateRepositoriesFolder(ActionExecution actionExecution, IFileService fileService)
-            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.AvailableInfrastructure, Positions.First, Positions.Second)
+            : base(actionExecution, ActionName, ActionDescription, DeployManager.Phases.EmptyProject, Positions.First, Positions.Second)
         {
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
@@ -36,12 +36,14 @@ namespace DD.DomainGenerator.DeployActions.Project
                     throw new Exception("Project path folder undefined");
                 }
 
-                var completeName = $"{projectState.Name}\\{Definitions.DeployDefinitions.RepositoriesFolderName}";
-                var repositoriesFolder = FileService.ConcatDirectoryAndFileOrFolder(baseFolder, completeName);
-                var existsRepositoriesFolder = FileService.ExistsFolder(repositoriesFolder);
+                var completeRepositoriesName = $"{projectState.Name}\\{Definitions.DeployDefinitions.RepositoriesFolderName}";
+                var repositoriesFolder = FileService.ConcatDirectoryAndFileOrFolder(baseFolder, completeRepositoriesName);
+                var completeTempName = $"{projectState.Name}\\{Definitions.DeployDefinitions.TempFolderName}";
+                var tempFolder = FileService.ConcatDirectoryAndFileOrFolder(baseFolder, completeTempName);
+                var existsRepositoriesFolder = FileService.ExistsFolder(repositoriesFolder) && FileService.ExistsFolder(tempFolder);
                 return existsRepositoriesFolder
                     ? new DeployActionUnitResponse()
-                        .Ok(GetResponseParameters(repositoriesFolder), DeployActionUnitResponse.DeployActionResponseType.AlreadyCompletedJob)
+                        .Ok(GetResponseParameters(repositoriesFolder, tempFolder), DeployActionUnitResponse.DeployActionResponseType.AlreadyCompletedJob)
                     : new DeployActionUnitResponse()
                         .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
             }
@@ -53,11 +55,12 @@ namespace DD.DomainGenerator.DeployActions.Project
         }
 
 
-        private Dictionary<string, object> GetResponseParameters(string path)
+        private Dictionary<string, object> GetResponseParameters(string repositoriesPath, string tempPath)
         {
             return new Dictionary<string, object>()
             {
-                { DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.Path, path }
+                { DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.RepositoryPath, repositoriesPath },
+                { DeployResponseParametersDefinitions.Project.CreateRepositoriesFolder.TempPath, tempPath },
             };
         }
 
@@ -75,13 +78,21 @@ namespace DD.DomainGenerator.DeployActions.Project
                 }
                 var completeName = $"{projectState.Name}\\{Definitions.DeployDefinitions.RepositoriesFolderName}";
                 var repositoriesFolder = FileService.ConcatDirectoryAndFileOrFolder(baseFolder, completeName);
+                var completeTempName = $"{projectState.Name}\\{Definitions.DeployDefinitions.TempFolderName}";
+                var tempFolder = FileService.ConcatDirectoryAndFileOrFolder(baseFolder, completeTempName);
+
                 var existsRepositoriesFolder = FileService.ExistsFolder(repositoriesFolder);
                 if (!existsRepositoriesFolder)
                 {
                     FileService.CreateFolder(repositoriesFolder);
                 }
+                var existsTempFolder = FileService.ExistsFolder(tempFolder);
+                if (!existsTempFolder)
+                {
+                    FileService.CreateFolder(tempFolder);
+                }
                 return new DeployActionUnitResponse()
-                        .Ok(GetResponseParameters(repositoriesFolder));
+                        .Ok(GetResponseParameters(repositoriesFolder, tempFolder));
             }
             catch (Exception ex)
             {
@@ -90,6 +101,6 @@ namespace DD.DomainGenerator.DeployActions.Project
             }
         }
 
-     
+
     }
 }

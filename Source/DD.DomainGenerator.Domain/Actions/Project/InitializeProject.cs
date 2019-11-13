@@ -20,11 +20,15 @@ namespace DD.DomainGenerator.Actions.Project
         public IFileService FileService { get; }
         public IGithubClientService GithubClientService { get; }
         public IGitClientService GitClientService { get; }
+        public IDotnetService DotnetService { get; }
+        public IDDService DDService { get; }
 
         public InitializeProject(
             IFileService fileService,
             IGithubClientService githubClientService,
-            IGitClientService gitClientService) : base(ActionName)
+            IGitClientService gitClientService,
+            IDotnetService dotnetService,
+            IDDService dDService) : base(ActionName)
         {
             NameParameter = new ActionParameterDefinition(
                "name", ActionParameterDefinition.TypeValue.String, "Domain name. Must be unique. Is mandatory to use PascalCase for the name. Otherwise the name will be converterd", "n", string.Empty);
@@ -39,6 +43,8 @@ namespace DD.DomainGenerator.Actions.Project
             FileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             GithubClientService = githubClientService ?? throw new ArgumentNullException(nameof(githubClientService));
             GitClientService = gitClientService ?? throw new ArgumentNullException(nameof(gitClientService));
+            DotnetService = dotnetService ?? throw new ArgumentNullException(nameof(dotnetService));
+            DDService = dDService ?? throw new ArgumentNullException(nameof(dDService));
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
@@ -66,6 +72,13 @@ namespace DD.DomainGenerator.Actions.Project
                 new CreateDomainGithubRepository(actionExecution, GithubClientService),
                 new CreateRepositoriesFolder(actionExecution, FileService),
                 new CloneDomainGithubRepository(actionExecution, GitClientService, FileService),
+                new CheckOutMasterDomainRepository(actionExecution, GitClientService, FileService),
+                new CleanDomainRepositoryFolder(actionExecution, FileService),
+                new CreateDomainRepositoryFolderStructure(actionExecution, FileService),
+                new CreateDomainSolutionFile(actionExecution, DotnetService, FileService),
+                new CreateDomainProjectFolder(actionExecution, FileService),
+                new CreateDomainProject(actionExecution, DDService, FileService),
+                new AddDomainProjectToDomainSolution(actionExecution, DotnetService, FileService)
             };
         }
     }

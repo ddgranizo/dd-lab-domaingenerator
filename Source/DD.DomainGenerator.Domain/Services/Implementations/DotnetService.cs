@@ -6,6 +6,8 @@ namespace DD.DomainGenerator.Services.Implementations
 {
     public class DotnetService : IDotnetService
     {
+        private const string SolutionExtension = ".sln";
+
         public DotnetService(IProcessService processService)
         {
             ProcessService = processService ?? throw new ArgumentNullException(nameof(processService));
@@ -25,6 +27,11 @@ namespace DD.DomainGenerator.Services.Implementations
         public void CreateSolutionFile(string path, string solutionName)
         {
             CheckIfInitialized();
+            if (solutionName.Length > SolutionExtension.Length 
+                && solutionName.ToLowerInvariant().EndsWith(SolutionExtension))
+            {
+                solutionName = solutionName.Substring(0, solutionName.Length - SolutionExtension.Length);
+            }
             var command = $"new sln -n {solutionName}";
             ProcessService.RunCommand(command, DotnetPath, path);
         }
@@ -37,6 +44,10 @@ namespace DD.DomainGenerator.Services.Implementations
             }
         }
 
-
+        public void AddProjectToSolutionFile(string solutionDirectoryPath, string solutionFile, string relativePathToProject)
+        {
+            var command = $"sln {solutionFile} add {relativePathToProject}"; //Test with `characters` if has spaces
+            ProcessService.RunCommand(command, DotnetPath, solutionDirectoryPath);
+        }
     }
 }

@@ -262,12 +262,6 @@ namespace UIClient.ViewModels
             DeployActions = Mapper.Map<List<DeployActionUnitModel>>(ProjectManager.DeployActions);
         }
 
-        
-        //private bool AreTheSameDeployAction(DeployActionUnit deployActionUnit1, DeployActionUnit deployActionUnit2)
-        //{
-        //    var parametersFirst = string.Join(",", deployActionUnit1.act)
-        //}
-
 
         public ICommand NewProjectCommand { get; set; }
         public ICommand AddActionCommand { get; set; }
@@ -375,6 +369,8 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new MicroServiceProfile());
                 mc.AddProfile(new DeployActionUnitProfile());
                 mc.AddProfile(new SettingProfile());
+                mc.AddProfile(new SchemaViewProfile());
+                mc.AddProfile(new ViewParameterProfile());
             });
         }
 

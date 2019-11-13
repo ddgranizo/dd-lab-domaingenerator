@@ -17,5 +17,6 @@ namespace DD.DomainGenerator.Services
         bool FolderIsEmpty(string path);
         void CleanFolder(string path);
         void DeleteFolder(string path);
+        void CopyFolder(string sourceFolder, string destinationFolder);
     }
 }

@@ -19,7 +19,6 @@ namespace DD.DomainGenerator.Actions.Schemas
         public ActionParameterDefinition HasDatesParameter { get; set; }
         public ActionParameterDefinition HasUserRelationshipParameter { get; set; }
         public ActionParameterDefinition HasOwnerParameter { get; set; }
-        public ActionParameterDefinition AddCRUDUseCasesParameter { get; set; }
 
         public AddSchema() : base(ActionName)
         {
@@ -27,8 +26,6 @@ namespace DD.DomainGenerator.Actions.Schemas
             NameParameter = new ActionParameterDefinition(
                 "name", ActionParameterDefinition.TypeValue.String, "Schema name. Recomended to use same domain name but not in plural. The name will be converted to PascalCase", "n", string.Empty);
 
-            HasIdParameter = new ActionParameterDefinition(
-               "hasid", ActionParameterDefinition.TypeValue.Boolean, "The new schema has id. It will add 'Id' attribute with GUID and primary key. Default value = true", "i", true);
 
             HasStateParameter = new ActionParameterDefinition(
                "hasstate", ActionParameterDefinition.TypeValue.Boolean, "The new schema has state. It will add 'State' attribute with values 1 enbled, 0 disabled. Default value = false", "s", false);
@@ -42,56 +39,117 @@ namespace DD.DomainGenerator.Actions.Schemas
             HasOwnerParameter = new ActionParameterDefinition(
               "hasowner", ActionParameterDefinition.TypeValue.Boolean, "The new schema has owner. It will add 'Owner'. Default value = false", "o", false);
 
-            AddCRUDUseCasesParameter = new ActionParameterDefinition(
-              "addcrudusecases", ActionParameterDefinition.TypeValue.Boolean, "Add CRUD use cases. Default value = yes", "a", true);
+
 
             ActionParametersDefinition.Add(NameParameter);
-            ActionParametersDefinition.Add(HasIdParameter);
             ActionParametersDefinition.Add(HasDatesParameter);
             ActionParametersDefinition.Add(HasStateParameter);
             ActionParametersDefinition.Add(HasOwnerParameter);
             ActionParametersDefinition.Add(HasUserRelationshipParameter);
-            ActionParametersDefinition.Add(AddCRUDUseCasesParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {
-            return  IsParamOk(parameters, NameParameter);
+            return IsParamOk(parameters, NameParameter);
         }
 
         public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var name = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
-            var hasId = GetBoolParameterValue(parameters, HasIdParameter);
+            //var hasId = GetBoolParameterValue(parameters, HasIdParameter);
             var hasState = GetBoolParameterValue(parameters, HasStateParameter);
             var hasDates = GetBoolParameterValue(parameters, HasDatesParameter);
             var hasUserRelationship = GetBoolParameterValue(parameters, HasUserRelationshipParameter);
             var hasOwner = GetBoolParameterValue(parameters, HasOwnerParameter);
-            var addCrudUseCases = GetBoolParameterValue(parameters, AddCRUDUseCasesParameter);
             var schema = new SchemaModel(name);
-            if (hasId)
-            {
-                schema.HasId = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaModelProperty.PropertyTypes.PrimaryKey)
-                { IsPrimaryKey = true });
-            }
+
+            //if (hasId)
+            //{
+            schema.HasId = true;
+            schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaModelProperty.PropertyTypes.PrimaryKey)
+            { IsPrimaryKey = true });
+            //}
 
             if (hasState)
             {
                 schema.HasState = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.State, SchemaModelProperty.PropertyTypes.State));
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Status, SchemaModelProperty.PropertyTypes.Status));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.Active, false)
+                    .AddColumnSet());
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.Inactive, false)
+                     .AddColumnSet());
             }
-            
+
             if (hasDates)
             {
                 schema.HasDates = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedOn, SchemaModelProperty.PropertyTypes.DateTime));
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.DateTime));
+
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtYear, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Year", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtMonth, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Year", 1, false)
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Month", 2, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtDay, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtDayAndHour, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtDayAndHourAndMinute, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAtDayAndHourAndMinuteSecond, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnBetween, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTimeFrom", 1, false)
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTimeTo", 2, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnBefore, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedOnAfter, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtYear, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Year", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtMonth, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Year", 1, false)
+                    .AddProperty(ViewParameter.ParameterType.Integer, "Month", 2, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtDay, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtDayAndHour, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtDayAndHourAndMinute, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAtDayAndHourAndMinuteSecond, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnBetween, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTimeFrom", 1, false)
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTimeTo", 2, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnBefore, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedOnAfter, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.DateTime, "DateTime", 1, false));
             }
+
             if (hasOwner)
             {
-                var userSchema =  project.Schemas.FirstOrDefault(k=>k.Name == Definitions.DefaultBasicDomainNames.User);
+                var userSchema = project.Schemas.FirstOrDefault(k => k.Name == Definitions.DefaultBasicDomainNames.User);
                 if (userSchema == null)
                 {
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
@@ -99,7 +157,12 @@ namespace DD.DomainGenerator.Actions.Schemas
                 schema.HasOwner = true;
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
+
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.Owner, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Guid, "Id", 1, false));
             }
+
             if (hasUserRelationship)
             {
                 var userSchema = project.Schemas.FirstOrDefault(k => k.Name == Definitions.DefaultBasicDomainNames.User);
@@ -112,15 +175,24 @@ namespace DD.DomainGenerator.Actions.Schemas
                 { ForeingSchema = userSchema });
                 schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
                 { ForeingSchema = userSchema });
+
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.CreatedBy, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Guid, "Id", 1, false));
+                schema.AddView(new SchemaView(Definitions.DefaultViewNames.ModifiedBy, false)
+                    .AddColumnSet()
+                    .AddProperty(ViewParameter.ParameterType.Guid, "Id", 1, false));
             }
-            if (addCrudUseCases)
-            {
-                schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Create));
-                schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.DeleteByPk));
-                schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveByPk));
-                schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultiple));
-                schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
-            }
+
+            schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Create));
+            schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.DeleteByPk));
+            schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveByPk));
+            schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultiple));
+            schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
+
+
+
+
             project.Schemas.Add(schema);
             OverrideOutputParameter(NameParameter.Name, name);
 
