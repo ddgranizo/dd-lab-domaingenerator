@@ -110,7 +110,7 @@ namespace DD.DomainGenerator
             }
         }
 
-        public Dictionary<string, object> ExecuteAction(ProjectState projectState, ActionBase action, List<ActionParameter> actionParameters, bool executeVirtual = false, List<string> consoleInputs = null)
+        public Dictionary<string, object> ExecuteAction(ProjectState projectState, ActionBase action, List<ActionParameter> actionParameters,  List<string> consoleInputs = null)
         {
             var outputParameters = new Dictionary<string, object>();
             try

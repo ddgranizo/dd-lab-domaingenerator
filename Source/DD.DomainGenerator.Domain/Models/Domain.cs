@@ -10,10 +10,15 @@ namespace DD.DomainGenerator.Models
         public bool IsRootDomain { get; set; }
         public string Namespace { get; set; }
         public string Name { get; set; }
+        public List<Schema> Schemas { get; set; }
+
 
         public Domain()
         {
+            Schemas = new List<Schema>();
         }
+
+
 
         public Domain(string name) : this()
         {
@@ -37,6 +42,24 @@ namespace DD.DomainGenerator.Models
             IsRootDomain = true;
             Namespace = nameSpace;
             Name = name;
+        }
+
+
+        public void AddSchema(Schema schema)
+        {
+            var existing = Schemas.FirstOrDefault(k => k.Name == schema.Name);
+            if (existing != null)
+            {
+                throw new Exception("Schema with name arelady repated");
+            }
+            Schemas.Add(schema);
+        }
+
+        public void DeleteSchema(string schemaName)
+        {
+            var existing = Schemas.FirstOrDefault(k => k.Name == schemaName)
+                ?? throw new Exception($"This domain doesn't contain schema with name 'schemaName'");
+            Schemas.Remove(existing);
         }
     }
 }

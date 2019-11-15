@@ -46,7 +46,7 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
             
             var useCaseTypeName = GetStringParameterValue(parameters, UseCaseParameter);
             var type = UseCase.StringToType(useCaseTypeName);
-            SchemaModel intersectionSchemaModel = null;
+            Schema intersectionSchemaModel = null;
             if (type == UseCase.UseCaseTypes.RetrieveMultipleIntersection)
             {
                 var intersectionSchemaName = GetStringParameterValue(parameters, IntersectionSchemaParameter).ToWordPascalCase();

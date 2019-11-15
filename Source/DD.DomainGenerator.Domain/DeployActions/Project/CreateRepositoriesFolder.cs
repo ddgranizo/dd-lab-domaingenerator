@@ -30,7 +30,7 @@ namespace DD.DomainGenerator.DeployActions.Project
         {
             try
             {
-                var baseFolder = projectState.ProjectPath;
+                var baseFolder = projectState.Path;
                 if (string.IsNullOrEmpty(baseFolder))
                 {
                     throw new Exception("Project path folder undefined");
@@ -71,7 +71,7 @@ namespace DD.DomainGenerator.DeployActions.Project
         {
             try
             {
-                var baseFolder = projectState.ProjectPath;
+                var baseFolder = projectState.Path;
                 if (string.IsNullOrEmpty(baseFolder))
                 {
                     throw new Exception("Project path folder undefined");

@@ -27,10 +27,10 @@ using System.Text;
 namespace DD.DomainGenerator
 {
 
-    public delegate void ProjectHandler(object sender, ProjectEventArgs args);
+    //public delegate void ProjectHandler(object sender, ProjectEventArgs args);
     public class ProjectManager
     {
-        public event ProjectHandler OnProjectChanged;
+        //public event ProjectHandler OnProjectChanged;
         public event ErrorExecutionActionHandler OnActionError;
         public IRegistryService _registryService { get; set; }
         public ICryptoService _cryptoService { get; set; }
@@ -49,7 +49,7 @@ namespace DD.DomainGenerator
         }
 
         public ProjectState ProjectState { get; set; }
-        public ProjectState VirtualProjectState { get; set; }
+        //public ProjectState VirtualProjectState { get; set; }
         public ActionManager ActionManager { get; }
         public DeployManager DeployManager { get; set; }
         public List<DeployActionUnit> DeployActions { get; set; }
@@ -62,7 +62,7 @@ namespace DD.DomainGenerator
         public ProjectManager()
         {
             ProjectState = new ProjectState();
-            VirtualProjectState = new ProjectState();
+            //VirtualProjectState = new ProjectState();
             _fileService = new FileService();
             _registryService = new RegistryService();
             _cryptoService = new CryptoService(_registryService);
@@ -70,7 +70,7 @@ namespace DD.DomainGenerator
             DeployManager = new DeployManager();
             DeployActions = new List<DeployActionUnit>();
 
-            ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
+            //ActionManager.OnQueueAction += ActionManager_OnQueuedAction;
             ActionManager.OnLog += ActionManager_OnLog;
             ActionManager.OnErrorExecution += ActionManager_OnErrorExecution;
 
@@ -81,143 +81,23 @@ namespace DD.DomainGenerator
             OnActionError?.Invoke(sender, args);
         }
 
-        public void PromptMode()
-        {
-            ReadLineSuggestionHandler = new ReadLineAutocompleteHandler(ActionManager.Actions);
-            ReadLine.AutoCompletionHandler = ReadLineSuggestionHandler;
-            string input = string.Empty;
-            ProjectInfrastructureAction lastAction = ProjectInfrastructureAction.Help;
-            do
-            {
-                Console.WriteLine("Type action number or command name:");
-                foreach (var value in Enum.GetValues(typeof(ProjectInfrastructureAction)))
-                {
-                    Console.WriteLine($" - {(int)value} - {value}");
-                }
-                input = ReadLine.Read();
-                if (int.TryParse(input, out int selectedAction))
-                {
-                    lastAction = (ProjectInfrastructureAction)selectedAction;
-                    if (lastAction != ProjectInfrastructureAction.ExitPromptMode)
-                    {
-                        ExecuteProjectAction(lastAction);
-                    }
-                }
-                else
-                {
-                    var argsV2 = StringFormats.StringToParams(input);
-                    try
-                    {
-                        var inputCommand = new InputRequest(argsV2);
-                        ActionManager.QueueInputRequest(VirtualProjectState, inputCommand);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"ERROR: {ex.Message}");
-                    }
-                }
-                CommitVirtualProjectChanges();
-                UpdateDomainSuggestions();
-            } while (lastAction != ProjectInfrastructureAction.ExitPromptMode);
-        }
-
-
         private void UpdateDomainSuggestions()
         {
             ReadLineSuggestionHandler.UpdateDomains(GetCurrentDomainsList());
         }
 
-
         private List<string> GetCurrentDomainsList()
         {
-            return VirtualProjectState.GetAllDomains().Select(k => k.Name).ToList();
+            return ProjectState.GetAllDomains().Select(k => k.Name).ToList();
         }
 
         private List<string> GetCurrentSchemaList()
         {
-            return VirtualProjectState.GetAllSchemas().Select(k => k.Name).ToList();
+            return ProjectState.GetAllSchemas().Select(k => k.Name).ToList();
         }
 
-        private void ExecuteProjectAction(ProjectInfrastructureAction action)
-        {
-            if (action == ProjectInfrastructureAction.CommitChanges)
-            {
-                CommitProjectChanges();
-            }
-            else if (action == ProjectInfrastructureAction.Help)
-            {
-                Console.WriteLine(GetHelpString(ActionManager.Actions));
-            }
-            else if (action == ProjectInfrastructureAction.OpenFile)
-            {
-                Console.WriteLine("Json file path:");
-                LastFilePath = Console.ReadLine();
-                OpenFile(LastFilePath);
-            }
-            else if (action == ProjectInfrastructureAction.SaveChanges)
-            {
-                if (string.IsNullOrEmpty(LastFilePath))
-                {
-                    Console.WriteLine("Json file path:");
-                    LastFilePath = Console.ReadLine();
-                }
-                SaveChanges(LastFilePath);
-            }
-            else if (action == ProjectInfrastructureAction.ShowProjectState)
-            {
-                string commitedState = Stringfy(ProjectState);
-                Console.WriteLine("################################");
-                Console.WriteLine("### -> Commited project state ->");
-                Console.WriteLine("################################");
-                Console.WriteLine(commitedState);
-            }
-            else if (action == ProjectInfrastructureAction.ShowVirtualProjectState)
-            {
-                string virtualState = Stringfy(VirtualProjectState);
-                Console.WriteLine("################################");
-                Console.WriteLine("### -> Virtual project state ->");
-                Console.WriteLine("################################");
-                Console.WriteLine(virtualState);
-            }
-            else if (action == ProjectInfrastructureAction.NewProject)
-            {
-                NewProject();
-            }
-            else if (action == ProjectInfrastructureAction.DiscardAllQueuedChanges)
-            {
-                DiscardQueuedActions();
-            }
-            else if (action == ProjectInfrastructureAction.DiscardLastQueuedChange)
-            {
-                DiscardLastQueuedAction();
-            }
-        }
-
-        public void NewProject()
-        {
-            ProjectState = new ProjectState();
-            LastFilePath = null;
-            RaiseProjectStateChange();
-        }
-
-        public void OpenFile(string path)
-        {
-            var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
-            if (Path.GetExtension(absolutePath) != ".json")
-            {
-                throw new Exception("Invalid extension file. Select .json file");
-            }
-            var json = _fileService.OpenFile(absolutePath);
-            ProjectState = Objectify(json);
-            RaiseProjectStateChange();
-        }
-
-        public void SaveChanges(string path)
-        {
-            var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
-            var json = Stringfy(ProjectState);
-            _fileService.SaveFile(absolutePath, json);
-        }
+        
+        
 
         private ActionManager GetActionManager()
         {
@@ -248,9 +128,9 @@ namespace DD.DomainGenerator
             actionManager.RegisterAction(new AddSchemaIntersection());
             actionManager.RegisterAction(new AddUseCase());
             actionManager.RegisterAction(new DeleteUseCase());
-            actionManager.RegisterAction(new AddSchemaToDomain());
-            actionManager.RegisterAction(new AddDomainInMicroService(_fileService, dotnetService));
-            actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService, gitClientService, dotnetService));
+            //actionManager.RegisterAction(new AddSchemaToDomain());
+            //actionManager.RegisterAction(new AddDomainInMicroService(_fileService, dotnetService));
+            //actionManager.RegisterAction(new AddMicroService(_fileService, githubClientService, gitClientService, dotnetService));
             actionManager.RegisterAction(new AddEnvironment());
             actionManager.RegisterAction(new DeleteEnvironment());
             actionManager.RegisterAction(new AddSetting());
@@ -259,69 +139,21 @@ namespace DD.DomainGenerator
             return actionManager;
         }
 
-
         public void CommitProjectChanges()
         {
-            ExecuteChanges(ProjectState, false);
+            
         }
 
-        public void CommitVirtualProjectChanges()
-        {
-
-            ExecuteChanges(VirtualProjectState, true);
-        }
-
-        public void DiscardQueuedActions()
-        {
-            ProjectState.Actions.RemoveAll(k => k.State == ActionExecution.ActionExecutionState.Queued);
-            RaiseProjectStateChange();
-        }
-
-        public void DiscardLastQueuedAction()
-        {
-            var lastQueuedAction = ProjectState.Actions.Last(k => k.State == ActionExecution.ActionExecutionState.Queued);
-            if (lastQueuedAction != null)
-            {
-                ProjectState.Actions.Remove(lastQueuedAction);
-            }
-            RaiseProjectStateChange();
-        }
+       
 
 
-        public void QueueAction(ActionExecution action)
-        {
-            var firstActionNotQueued = ProjectState.Actions.FirstOrDefault
-                (k => k.State == ActionExecution.ActionExecutionState.NoQueued);
-            if (firstActionNotQueued == null)
-            {
-                throw new Exception("Cannot find any action with state 'NoQueued'");
-            }
-            if (firstActionNotQueued.Id != action.Id)
-            {
-                throw new Exception("Only can be queued first action not queued");
-            }
-            firstActionNotQueued.State = ActionExecution.ActionExecutionState.Queued;
-            RaiseProjectStateChange();
-        }
-
-        private void ExecuteChanges(ProjectState projectState, bool isVirtual)
-        {
-            foreach (var action in projectState.Actions.Where(k => k.State == ActionExecution.ActionExecutionState.Queued))
-            {
-                if (!TryExecuteAction(projectState, isVirtual, action))
-                {
-                    return;
-                }
-            }
-        }
-
-        private bool TryExecuteAction(ProjectState projectState, bool isVirtual, ActionExecution actionExecution)
+        private bool TryExecuteAction(ProjectState projectState, ActionExecution actionExecution)
         {
             try
             {
                 actionExecution.State = ActionExecution.ActionExecutionState.Executing;
                 var action = ActionManager.Actions.First(k => k.Name == actionExecution.ActionName);
-                var outputParameters = ActionManager.ExecuteAction(projectState, action, actionExecution.InputParameters.ToActionParametersList(), isVirtual, null);
+                var outputParameters = ActionManager.ExecuteAction(projectState, action, actionExecution.InputParameters.ToActionParametersList(), null);
                 actionExecution.OutputParameters = outputParameters;
                 actionExecution.State = ActionExecution.ActionExecutionState.Executed;
             }
@@ -337,80 +169,17 @@ namespace DD.DomainGenerator
 
         private void ExecuteNextChange(ProjectState projectState, bool isVirtual)
         {
-            //var action = projectState.Actions.FirstOrDefault(k => k.State == ActionExecution.ActionExecutionState.Queued);
-            //if (action != null)
-            //{
-            //    action.State = ActionExecution.ActionExecutionState.Executing;
-            //    ActionManager.ExecuteAction(projectState, action.Action, action.ActionParameters, isVirtual, null);
-            //    action.State = ActionExecution.ActionExecutionState.Executed;
-            //}
+
         }
 
-        public void AddNotQueuedAction(ActionBase action, Dictionary<string, object> parameters)
-        {
-            ProjectState.Actions.Add(new ActionExecution(action.Name, parameters));
-            RaiseProjectStateChange();
-        }
+  
 
         public ActionBase GetActionBaseByName(string name)
         {
             return ActionManager.Actions.First(k => k.Name == name);
         }
 
-        public void UpdateQueuedAction(ActionExecution action, Dictionary<string, object> values)
-        {
-            var myAction = ProjectState.Actions.FirstOrDefault(k => k.Id == action.Id);
-            var myActionDefinition = ActionManager.Actions.FirstOrDefault(k => k.Name == myAction.ActionName);
-            if (myAction.State != ActionExecution.ActionExecutionState.Queued)
-            {
-                throw new Exception($"Only actions in state Queued can be modified");
-            }
-            foreach (var item in values)
-            {
-                var parameter = myActionDefinition
-                    .ActionParametersDefinition
-                    .FirstOrDefault(k => k.Name == item.Key);
-                if (parameter.Type == ActionParameterDefinition.TypeValue.Password
-                    && !string.IsNullOrEmpty((string)item.Value)
-                    || parameter.Type != ActionParameterDefinition.TypeValue.Password)
-                {
-                    myAction.InputParameters[parameter.Name] = item.Value;
-                }
-            }
-            RaiseProjectStateChange();
-        }
-
-
-        public void RemoveQueuedAction(ActionExecution action)
-        {
-            var myAction = ProjectState.Actions.FirstOrDefault(k => k.Id == action.Id);
-            if (myAction == null)
-            {
-                throw new Exception($"Cannot find action with id {myAction.Id}");
-            }
-            ProjectState.Actions.Remove(myAction);
-            RaiseProjectStateChange();
-        }
-
-        private void ActionManager_OnQueuedAction(object sender, ActionEventArgs args)
-        {
-            AddNotQueuedAction(args.Action, args.ActionParameters.ToDictionary(args.Action.ActionParametersDefinition));
-        }
-
-        private void RaiseProjectStateChange()
-        {
-            VirtualProjectState = Objectify(Stringfy(ProjectState));
-            CommitProjectChanges();
-            foreach (var item in VirtualProjectState.Actions.Where(k => k.State == ActionExecution.ActionExecutionState.NoQueued))
-            {
-                item.State = ActionExecution.ActionExecutionState.Queued;
-            }
-            CommitVirtualProjectChanges();
-            DeployActions = GetMergedDeployActions(ProjectState);
-            OnProjectChanged?.Invoke(this, new ProjectEventArgs(ProjectState, DeployActions));
-        }
-
-
+       
         public void ExecuteDeployActionUnitExecution(DeployActionUnit deployActionUnit)
         {
             var deployActionFromSource = SearchActionUnit(DeployActions, deployActionUnit);
@@ -431,7 +200,7 @@ namespace DD.DomainGenerator
                 deployActionFromSource.SetResponseException(response.Exception);
                 deployActionFromSource.State = DeployActionUnit.DeployState.Error;
             }
-            RaiseProjectStateChange();
+            //RaiseProjectStateChange();
         }
 
 
@@ -462,7 +231,7 @@ namespace DD.DomainGenerator
                 deployActionFromSource.SetResponseException(response.Exception);
                 deployActionFromSource.State = DeployActionUnit.DeployState.Error;
             }
-            RaiseProjectStateChange();
+            //RaiseProjectStateChange();
         }
 
         private List<DeployActionUnit> GetMergedDeployActions(ProjectState projectState)
@@ -490,17 +259,18 @@ namespace DD.DomainGenerator
         private List<DeployActionUnit> GetDeployActions(ProjectState projectState)
         {
             var allDeployActions = new List<DeployActionUnit>();
-            foreach (var execution in projectState.Actions)
-            {
-                var action = ActionManager.Actions.First(k => k.Name == execution.ActionName);
-                allDeployActions.AddRange(action.GetDeployActionUnits(execution));
-            }
-            return allDeployActions
-                .OrderBy(k => SortUtility.CalculateDeployActionPosition(k))
-                .ToList();
+            return allDeployActions;
+            //foreach (var execution in projectState.Actions)
+            //{
+            //    var action = ActionManager.Actions.First(k => k.Name == execution.ActionName);
+            //    allDeployActions.AddRange(action.GetDeployActionUnits(execution));
+            //}
+            //return allDeployActions
+            //    .OrderBy(k => SortUtility.CalculateDeployActionPosition(k))
+            //    .ToList();
         }
 
-        
+
 
         private static void ActionManager_OnLog(object sender, LogEventArgs e)
         {

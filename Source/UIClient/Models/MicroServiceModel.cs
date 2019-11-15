@@ -9,5 +9,7 @@ namespace UIClient.Models
     public class MicroServiceModel: BaseModel
     {
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
+
+        
     }
 }

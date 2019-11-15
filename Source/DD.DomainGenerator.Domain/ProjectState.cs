@@ -10,37 +10,28 @@ namespace DD.DomainGenerator
     {
         public string Name { get; set; }
         public string NameSpace { get; set; }
-        public List<ActionExecution> Actions { get; set; }
-        public List<Domain> Domains { get; set; }
-        public List<SchemaModel> Schemas { get; set; }
-        public List<SchemaInDomain> SchemaInDomains { get; set; }
-        public string ProjectPath { get; set; }
+        
+        public string Path { get; set; }
         public List<AzurePipelineSetting> AzurePipelineSettings { get; set; }
         public List<GithubSetting> GithubSettings { get; set; }
         public List<Models.Environment> Environments { get; set; }
-        public List<MicroService> Microservices { get; set; }
-        public List<DomainInMicroService> DomainInMicroservices { get; set; }
+        public List<Domain> Domains { get; set; }
 
         public List<Setting> Settings { get; set; }
 
         public ProjectState()
         {
-            SchemaInDomains = new List<SchemaInDomain>();
-            Domains = new List<Domain>();
-            Actions = new List<ActionExecution>();
             AzurePipelineSettings = new List<AzurePipelineSetting>();
             GithubSettings = new List<GithubSetting>();
-            Schemas = new List<SchemaModel>();
-            Microservices = new List<MicroService>();
-            DomainInMicroservices = new List<DomainInMicroService>();
+            Domains = new List<Domain>();
             Environments = new List<Models.Environment>();
             Settings = new List<Setting>();
         }
 
 
-        public List<SchemaModel> GetAllSchemas()
+        public List<Schema> GetAllSchemas()
         {
-            return Schemas;
+            return Domains.SelectMany(k=>k.Schemas).ToList();
         }
 
         public List<Domain> GetAllDomains()
@@ -48,14 +39,10 @@ namespace DD.DomainGenerator
             return Domains;
         }
 
-        public MicroService GetMicroService(string name)
-        {
-            return Microservices.FirstOrDefault(k => k.Name == name);
-        }
 
-        public SchemaModel GetSchema(string name)
+        public Schema GetSchema(string name)
         {
-            return Schemas.FirstOrDefault(k=>k.Name == name);
+            return GetAllSchemas().FirstOrDefault(k=>k.Name == name);
         }
 
         public Domain GetDomain(string name)

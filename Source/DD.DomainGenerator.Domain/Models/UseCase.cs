@@ -22,7 +22,7 @@ namespace DD.DomainGenerator.Models
 
         public UseCaseTypes Type { get; set; }
         public SchemaModelProperty Attribute { get; set; }
-        public SchemaModel Schema { get; set; }
+        public Schema Schema { get; set; }
 
         public bool NeedsAuthorization { get; set; }
 
@@ -42,7 +42,7 @@ namespace DD.DomainGenerator.Models
             Attribute = attribute ?? throw new ArgumentNullException(nameof(attribute));
         }
 
-        public UseCase(UseCaseTypes type, SchemaModel schema)
+        public UseCase(UseCaseTypes type, Schema schema)
         {
             Type = type;
             Schema = schema ?? throw new ArgumentNullException(nameof(schema));

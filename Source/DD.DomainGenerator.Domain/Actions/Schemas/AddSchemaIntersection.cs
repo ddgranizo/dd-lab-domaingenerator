@@ -67,7 +67,7 @@ namespace DD.DomainGenerator.Actions.Schemas
                 ? $"{secondDomain.Name}2Id"
                 : $"{secondDomain.Name}Id";
 
-            var newSchema = new SchemaModel(schemaName) { HasId = true, IsIntersection = true };
+            var newSchema = new Schema(schemaName) { HasId = true, IsIntersection = true };
             newSchema.AddProperty(
                 new SchemaModelProperty(firstAttributeName, SchemaModelProperty.PropertyTypes.ForeingKey));
             newSchema.AddProperty(

@@ -24,7 +24,7 @@ namespace DD.DomainGenerator.Models
         public bool IsDomainSuggestion { get; set; }
         public bool IsEnvironmentSuggestion { get; set; }
         public bool IsSchemaSuggestion { get; set; }
-        public bool IsMicroServiceSuggestion { get; set; }
+        //public bool IsMicroServiceSuggestion { get; set; }
 
 
         public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut, object defaultValue)

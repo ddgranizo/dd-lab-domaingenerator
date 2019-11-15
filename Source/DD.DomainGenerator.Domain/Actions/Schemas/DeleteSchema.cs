@@ -14,29 +14,35 @@ namespace DD.DomainGenerator.Actions.Schemas
     {
         public const string ActionName = "DeleteSchema";
         public ActionParameterDefinition SchemaNameParameter { get; set; }
+        public ActionParameterDefinition DomainParameter { get; set; }
         public DeleteSchema() : base(ActionName)
         {
             SchemaNameParameter = new ActionParameterDefinition(
-                "schemaname", ActionParameterDefinition.TypeValue.String, "Schema name", "d", string.Empty)
+                "schemaname", ActionParameterDefinition.TypeValue.String, "Schema name", "s", string.Empty)
             { IsSchemaSuggestion = true };
+
+
+            DomainParameter = new ActionParameterDefinition(
+                "domain", ActionParameterDefinition.TypeValue.String, "Domain", "d", string.Empty)
+            { IsDomainSuggestion = true };
+
+
             ActionParametersDefinition.Add(SchemaNameParameter);
+            ActionParametersDefinition.Add(DomainParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
         {
-            return IsParamOk(parameters, SchemaNameParameter);
+            return IsParamOk(parameters, SchemaNameParameter)
+                && IsParamOk(parameters, DomainParameter);
         }
 
         public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
-            var name = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
-            var schema = project.GetSchema(name);
-            if (schema == null)
-            {
-                throw new Exception($"Can't find any schema named '{name}'");
-            }
-            project.Schemas.Remove(schema);
-            OverrideOutputParameter(SchemaNameParameter.Name, name);
+            var name = GetStringParameterValue(parameters, SchemaNameParameter);
+            var domainName = GetStringParameterValue(parameters, DomainParameter);
+            var domain = project.GetDomain(domainName);
+            domain.DeleteSchema(name);
         }
 
     }

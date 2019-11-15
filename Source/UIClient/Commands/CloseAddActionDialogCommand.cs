@@ -1,5 +1,4 @@
-﻿using DD.DomainGenerator.Actions.Project;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UIClient.Commands.Base;
@@ -7,15 +6,16 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    public class NewProjectCommand: RelayCommand
+   
+    public class CloseAddActionDialogCommand : RelayCommand
     {
-        public NewProjectCommand(MainViewModel vm)
+        public CloseAddActionDialogCommand(MainViewModel vm)
         {
-            Initialize((input) => {
+            Initialize((input) =>
+            {
                 try
                 {
-                    vm.NewProject();
-                    vm.OpenMenuForAction(InitializeProject.ActionName);
+                    vm.UnsetDialog();
                 }
                 catch (Exception ex)
                 {
@@ -23,5 +23,7 @@ namespace UIClient.Commands
                 }
             });
         }
+
+
     }
 }

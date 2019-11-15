@@ -20,7 +20,7 @@ namespace UIClient.Commands
                 try
                 {
                     var deployActionModel = (DeployActionUnitModel)data;
-                    vm.ProjectManager.ExecuteDeployActionUnitCheck(vm.Mapper.Map<DeployActionUnit>(deployActionModel));
+                    //vm.ProjectManager.ExecuteDeployActionUnitCheck(vm.Mapper.Map<DeployActionUnit>(deployActionModel));
                 }
                 catch (Exception ex)
                 {

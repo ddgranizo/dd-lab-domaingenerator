@@ -12,5 +12,8 @@ namespace UIClient.Models
         public string Namespace { get { return GetValue<string>(); } set { SetValue(value); } }
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
 
+        public List<SchemaModelModel> Schemas { get { return GetValue<List<SchemaModelModel>>(); } set { SetValue(value); UpdateListToCollection(value, SchemasCollection); } }
+        public ObservableCollection<SchemaModelModel> SchemasCollection { get; set; } = new ObservableCollection<SchemaModelModel>();
+
     }
 }

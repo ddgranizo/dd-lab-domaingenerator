@@ -26,15 +26,17 @@ namespace UIClient.ViewModels
     public class MainViewModel : BaseViewModel
     {
         public string LastFileLoaded { get; set; }
+        public ProjectState ProjectState { get; set; }
+        public bool IsActionDialogOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public string MessageDialog { get { return GetValue<string>(); } set { SetValue(value); } }
+        public bool IsDetailSectionVisible { get { return GetValue<bool>(); } set { SetValue(value); } }
 
-        public ProjectStateModel State { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
-        public ProjectStateModel VirtualState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
-        public ProjectStateModel CurrentState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
-        public bool IsActiveVirtualState { get { return GetValue<bool>(); } set { SetValue(value); RaisePropertyChange(nameof(IsActiveRealState)); } }
-        public bool IsActiveRealState { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public ProjectStateModel ProjectStateModel { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
 
         public List<ActionBase> NewActions { get { return GetValue<List<ActionBase>>(); } set { SetValue(value); UpdateListToCollection(value, NewActionsCollection); } }
         public ObservableCollection<ActionBase> NewActionsCollection { get; set; } = new ObservableCollection<ActionBase>();
+
         public ActionBase SelectedNewAction { get { return GetValue<ActionBase>(); } set { SetValue(value, OnNewActionChanged); } }
         public List<ActionParameterDefinition> NewActionParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { SetValue(value); UpdateListToCollection(value, NewActionParametersDefinitionsCollection); } }
         public ObservableCollection<ActionParameterDefinition> NewActionParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
@@ -60,19 +62,26 @@ namespace UIClient.ViewModels
 
         public IMapper Mapper { get; set; }
         private Window _window;
-        public ProjectManager ProjectManager { get; set; }
 
+        private readonly ProjectManager _projectManager;
         public readonly IStoredDataService<RecentProjects> StoredRecentProjectsService;
-
+        private readonly ICryptoService _cryptoService;
+        private readonly IRegistryService _registryService;
+        private readonly IFileService _fileService;
+        private readonly IJsonParserService _jsonParserService;
         public MainViewModel()
         {
-            IsActiveVirtualState = true;
             StoredRecentProjectsService = new StoredRecentProjectsService();
+            _registryService = new RegistryService();
+            _cryptoService = new CryptoService(_registryService);
+            _fileService = new FileService();
+            _jsonParserService = new JsonParserService();
+            _projectManager = new ProjectManager();
+            NewActions = _projectManager.ActionManager.Actions;
             SetRecentProjects();
             InitializeCommands();
-            InitializePorjectManager();
             InitializeMapper();
-            RaiseStateChanged();
+            NewProject();
         }
 
         private void SetRecentProjects()
@@ -88,34 +97,9 @@ namespace UIClient.ViewModels
         public void Initialize(Window window)
         {
             _window = window;
+            
         }
-
-        private void InitializePorjectManager()
-        {
-            ProjectManager = new ProjectManager();
-            ProjectManager.OnProjectChanged += ProjectManager_OnProjectChanged;
-            ProjectManager.OnActionError += ProjectManager_OnActionError;
-            NewActions = ProjectManager.ActionManager.Actions
-                .OrderBy(k => k.Name)
-                .ToList();
-        }
-
-        public void CleanErrors()
-        {
-            Errors = new List<ErrorExecutionActionModel>();
-        }
-
-        private void ProjectManager_OnActionError(object sender, DD.DomainGenerator.Events.ErrorExecutionActionEventArgs args)
-        {
-            var currentErrors = Errors;
-            currentErrors.Add(Mapper.Map<ErrorExecutionActionModel>(args));
-            Errors = currentErrors;
-        }
-
-        private void ProjectManager_OnProjectChanged(object sender, DD.DomainGenerator.Events.ProjectEventArgs args)
-        {
-            RaiseStateChanged();
-        }
+        
 
         private void InitializeMapper()
         {
@@ -167,7 +151,7 @@ namespace UIClient.ViewModels
         {
             var value = parameter.Type == ActionParameterDefinition.TypeValue.Password
                 && !string.IsNullOrEmpty((string)newValue)
-                    ? ProjectManager._cryptoService.Encrypt((string)newValue)
+                    ? _cryptoService.Encrypt((string)newValue)
                     : newValue;
 
             if (SelectedActionForModifyParametersDefinitionsValues.ContainsKey(parameter.Name))
@@ -181,11 +165,14 @@ namespace UIClient.ViewModels
         }
 
 
+
+
+
         public void NewActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
         {
             var value = parameter.Type == ActionParameterDefinition.TypeValue.Password
                 && !string.IsNullOrEmpty((string)newValue)
-                    ? ProjectManager._cryptoService.Encrypt((string)newValue)
+                    ? _cryptoService.Encrypt((string)newValue)
                     : newValue;
             if (NewActionParametersDefinitionsValues.ContainsKey(parameter.Name))
             {
@@ -232,19 +219,16 @@ namespace UIClient.ViewModels
         {
             if (action.IsDomainSuggestion)
             {
-                return VirtualState.Domains.Select(k => k.Name).ToList();
+                return ProjectState.Domains.Select(k => k.Name).ToList();
             }
             else if (action.IsSchemaSuggestion)
             {
-                return VirtualState.Schemas.Select(k => k.Name).ToList();
-            }
-            else if (action.IsMicroServiceSuggestion)
-            {
-                return VirtualState.Microservices.Select(k => k.Name).ToList();
+                //TODO: filter schemas for domain
+                return ProjectState.Domains.SelectMany(k=>k.Schemas).Select(k => k.Name).ToList();
             }
             else if (action.IsEnvironmentSuggestion)
             {
-                return VirtualState.Environments.Select(k => k.Name).ToList();
+                return ProjectState.Environments.Select(k => k.Name).ToList();
             }
             else
             {
@@ -254,58 +238,49 @@ namespace UIClient.ViewModels
 
         public void RaiseStateChanged()
         {
-            State = Mapper.Map<ProjectStateModel>(ProjectManager.ProjectState);
-            VirtualState = Mapper.Map<ProjectStateModel>(ProjectManager.VirtualProjectState);
-            CurrentState = IsActiveVirtualState
-                ? VirtualState
-                : State;
-            DeployActions = Mapper.Map<List<DeployActionUnitModel>>(ProjectManager.DeployActions);
+            ProjectStateModel = Mapper.Map<ProjectStateModel>(ProjectState);
         }
 
 
         public ICommand NewProjectCommand { get; set; }
-        public ICommand AddActionCommand { get; set; }
         public ICommand RemoveActionCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; }
         public ICommand RemoveSelectedNewActionCommand { get; set; }
         public ICommand ModifyActionRequestCommand { get; set; }
-        public ICommand ModifyActionConfirmCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
         public ICommand ExecuteDeployActionUnitCommand { get; set; }
-        public ICommand ChangeCurrentRealVirtualStateCommand { get; set; }
-        public ICommand SetActionStateExecutedCommand { get; set; }
+        public ICommand ExecuteActionCommand { get; set; }
         public ICommand CheckDeployActionUnitCommand { get; set; }
         public ICommand CheckAndExecuteAboveAndThisDeployActionUnitCommand { get; set; }
-
+        public ICommand OpenAddActionDialogCommand { get; set; }
+        public ICommand CloseAddActionDialogCommand { get; set; }
         private void InitializeCommands()
         {
             NewProjectCommand = new NewProjectCommand(this);
-            AddActionCommand = new AddActionCommand(this);
             RemoveActionCommand = new RemoveActionCommand(this);
             SaveChangesCommand = new SaveChangesCommand(this);
             RemoveSelectedNewActionCommand = new RemoveSelectedNewActionCommand(this);
             ModifyActionRequestCommand = new ModifyActionRequestCommand(this);
-            ModifyActionConfirmCommand = new ModifyActionConfirmCommand(this);
             OpenFileCommand = new OpenFileCommand(this);
             ExecuteDeployActionUnitCommand = new ExecuteDeployActionUnitCommand(this);
-            ChangeCurrentRealVirtualStateCommand = new ChangeCurrentRealVirtualStateCommand(this);
-            SetActionStateExecutedCommand = new SetActionQueuedCommand(this);
+            ExecuteActionCommand = new ExecuteActionCommand(this);
             CheckDeployActionUnitCommand = new CheckDeployActionUnitCommand(this);
             CheckAndExecuteAboveAndThisDeployActionUnitCommand = new CheckAndExecuteAboveAndThisDeployActionUnitCommand(this);
+            OpenAddActionDialogCommand = new OpenAddActionDialogCommand(this);
+            CloseAddActionDialogCommand = new CloseAddActionDialogCommand(this);
 
             RegisterCommand(NewProjectCommand);
-            RegisterCommand(AddActionCommand);
             RegisterCommand(RemoveActionCommand);
             RegisterCommand(SaveChangesCommand);
             RegisterCommand(RemoveSelectedNewActionCommand);
             RegisterCommand(ModifyActionRequestCommand);
-            RegisterCommand(ModifyActionConfirmCommand);
             RegisterCommand(OpenFileCommand);
             RegisterCommand(ExecuteDeployActionUnitCommand);
-            RegisterCommand(ChangeCurrentRealVirtualStateCommand);
-            RegisterCommand(SetActionStateExecutedCommand);
+            RegisterCommand(ExecuteActionCommand);
             RegisterCommand(CheckDeployActionUnitCommand);
             RegisterCommand(CheckAndExecuteAboveAndThisDeployActionUnitCommand);
+            RegisterCommand(OpenAddActionDialogCommand);
+            RegisterCommand(CloseAddActionDialogCommand);
 
             RaiseCanExecuteCommandChanged();
         }
@@ -338,14 +313,28 @@ namespace UIClient.ViewModels
 
         public void NewProject()
         {
-            ProjectManager.NewProject();
+            ProjectState = new ProjectState();
             LastFileLoaded = null;
+            RaiseStateChanged();
         }
 
         public void OpenFile(string file)
         {
-            ProjectManager.OpenFile(file);
-            LastFileLoaded = file;
+            var absolutePath = _fileService.GetAbsoluteCurrentPath(file);
+            if (Path.GetExtension(absolutePath) != ".json")
+            {
+                throw new Exception("Invalid extension file. Select .json file");
+            }
+            var json = _fileService.OpenFile(absolutePath);
+            ProjectState = _jsonParserService.Objectify<ProjectState>(json);
+            RaiseStateChanged();
+        }
+
+        public void SaveChanges(string path)
+        {
+            var absolutePath = _fileService.GetAbsoluteCurrentPath(path);
+            var json = _jsonParserService.Stringfy(ProjectState);
+            _fileService.SaveFile(absolutePath, json);
         }
 
         private MapperConfiguration ConfigureMappingProfiles()
@@ -374,7 +363,23 @@ namespace UIClient.ViewModels
             });
         }
 
-
+        public void SetActionDialog()
+        {
+            IsActionDialogOpen = true;
+        }
         
+        public void UnsetDialog()
+        {
+            IsActionDialogOpen = false;
+        }
+
+
+        public void OpenMenuForAction(string actionName)
+        {
+            var actionBase = NewActions.FirstOrDefault(k => k.Name == actionName)
+                 ?? throw new Exception($"Can't find action named {actionName}");
+            SelectedNewAction = actionBase;
+            SetActionDialog();
+        }
     }
 }

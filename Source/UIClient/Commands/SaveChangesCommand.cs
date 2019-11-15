@@ -19,7 +19,7 @@ namespace UIClient.Commands
                         string.IsNullOrEmpty(vm.LastFileLoaded)
                         ? vm.GetInputText("Path for save the file", "Save the file")
                         : vm.LastFileLoaded;
-                    vm.ProjectManager.SaveChanges(path);
+                    vm.SaveChanges(path);
                     vm.AddNewRecentFile(path);
                 }
                 catch (Exception ex)

@@ -42,23 +42,23 @@ namespace DD.DomainGenerator.DeployActions.Domains
                 var microserviceName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.MicroserviceName] as string;
 
                 var domain = projectState.Domains.First(k => k.Name == domainName);
-                var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
+                //var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
 
-                var solutionDependency = GetDependency<CreateSolutionFile>
-                    (sourceActionExecution, currentExecutionDeployActions, 
-                        k => 
-                            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name) 
-                            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
+                //var solutionDependency = GetDependency<CreateSolutionFile>
+                //    (sourceActionExecution, currentExecutionDeployActions, 
+                //        k => 
+                //            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name) 
+                //            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
 
-                var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
-                var projectFileName = GetDomainProjectName(projectState,  domainName);
-                var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
-                var existsFolder = FileService.ExistsFolder(projectFolder);
-                if (!existsFolder)
-                {
-                    return new DeployActionUnitResponse()
-                        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
-                }
+                //var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
+                //var projectFileName = GetDomainProjectName(projectState,  domainName);
+                //var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
+                //var existsFolder = FileService.ExistsFolder(projectFolder);
+                //if (!existsFolder)
+                //{
+                //    return new DeployActionUnitResponse()
+                //        .Ok(DeployActionUnitResponse.DeployActionResponseType.NotCompletedJob);
+                //}
 
 
                 //var currentBranch = GitClientService.GetCurrentBranchRepository(repositoryPath);
@@ -89,22 +89,22 @@ namespace DD.DomainGenerator.DeployActions.Domains
                 var microserviceName = sourceActionExecution.InputParameters[ActionsParametersDefinitions.AddDomainInMicroservice.MicroserviceName] as string;
 
                 var domain = projectState.Domains.First(k => k.Name == domainName);
-                var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
+                //var microservice = projectState.Microservices.First(k => k.Name == microserviceName);
 
-                var solutionDependency = GetDependency<CreateSolutionFile>
-                    (sourceActionExecution, currentExecutionDeployActions,
-                        k =>
-                            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name)
-                            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
+                //var solutionDependency = GetDependency<CreateSolutionFile>
+                //    (sourceActionExecution, currentExecutionDeployActions,
+                //        k =>
+                //            k.ActionExecution.OutputParameters.ContainsKey(ActionsParametersDefinitions.AddMicroService.Name)
+                //            && k.ActionExecution.OutputParameters[ActionsParametersDefinitions.AddMicroService.Name] as string == microserviceName);
 
-                var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
-                var projectFileName = GetDomainProjectName(projectState, domainName);
-                var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
-                var existsFolder = FileService.ExistsFolder(projectFolder);
-                if (!existsFolder)
-                {
-                    FileService.CreateFolder(projectFolder);
-                }
+                //var solutionFolder = solutionDependency.ResponseParameters[DeployResponseParametersDefinitions.MicroServices.CreateSolutionFile.Path] as string;
+                //var projectFileName = GetDomainProjectName(projectState, domainName);
+                //var projectFolder = FileService.ConcatDirectoryAndFileOrFolder(solutionFolder, projectFileName);
+                //var existsFolder = FileService.ExistsFolder(projectFolder);
+                //if (!existsFolder)
+                //{
+                //    FileService.CreateFolder(projectFolder);
+                //}
 
                 return null;
 

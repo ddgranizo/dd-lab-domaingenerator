@@ -20,27 +20,27 @@ namespace UIClient.Commands
             {
                 try
                 {
-                    var deployActionModel = (DeployActionUnitModel)data;
-                    var deployAction = vm.ProjectManager.SearchActionUnit
-                        (vm.ProjectManager.DeployActions, vm.Mapper.Map<DeployActionUnit>(deployActionModel));
+                    //var deployActionModel = (DeployActionUnitModel)data;
+                    //var deployAction = vm.ProjectManager.SearchActionUnit
+                    //    (vm.ProjectManager.DeployActions, vm.Mapper.Map<DeployActionUnit>(deployActionModel));
 
-                    var index = vm.ProjectManager.DeployActions.IndexOf(deployAction);
-                    for (int i = 0; i <= index; i++)
-                    {
-                        var action = vm.ProjectManager.DeployActions[i];
-                        if (action.State == DeployActionUnit.DeployState.NotInitiated)
-                        {
-                            vm.ProjectManager.ExecuteDeployActionUnitCheck(action);
-                        }
-                        if (action.State == DeployActionUnit.DeployState.QueuedForExecution)
-                        {
-                            vm.ProjectManager.ExecuteDeployActionUnitExecution(action);
-                        }
-                        if (action.State == DeployActionUnit.DeployState.Error)
-                        {
-                            break;
-                        }
-                    }
+                    //var index = vm.ProjectManager.DeployActions.IndexOf(deployAction);
+                    //for (int i = 0; i <= index; i++)
+                    //{
+                    //    var action = vm.ProjectManager.DeployActions[i];
+                    //    if (action.State == DeployActionUnit.DeployState.NotInitiated)
+                    //    {
+                    //        vm.ProjectManager.ExecuteDeployActionUnitCheck(action);
+                    //    }
+                    //    if (action.State == DeployActionUnit.DeployState.QueuedForExecution)
+                    //    {
+                    //        vm.ProjectManager.ExecuteDeployActionUnitExecution(action);
+                    //    }
+                    //    if (action.State == DeployActionUnit.DeployState.Error)
+                    //    {
+                    //        break;
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {

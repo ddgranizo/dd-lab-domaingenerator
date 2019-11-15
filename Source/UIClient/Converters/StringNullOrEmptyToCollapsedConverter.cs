@@ -6,9 +6,9 @@ using System.Windows.Data;
 
 namespace UIClient.Converters
 {
-    public class NullToCollapsedConverter : IValueConverter
+    public class StringNullOrEmptyToCollapsedConverter : IValueConverter
     {
-        public NullToCollapsedConverter()
+        public StringNullOrEmptyToCollapsedConverter()
         {
         }
 
@@ -16,7 +16,7 @@ namespace UIClient.Converters
         {
             bool applyOpposite = parameter != null && parameter.ToString().ToLower() == "false";
 
-            if (value == null)
+            if (value == null || string.IsNullOrEmpty((string)value))
             {
                 return applyOpposite 
                     ? Visibility.Visible

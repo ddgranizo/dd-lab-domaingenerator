@@ -14,6 +14,7 @@ namespace DD.DomainGenerator.Actions.Schemas
     {
         public const string ActionName = "AddSchema";
         public ActionParameterDefinition NameParameter { get; set; }
+        public ActionParameterDefinition DomainParameter { get; set; }
         public ActionParameterDefinition HasIdParameter { get; set; }
         public ActionParameterDefinition HasStateParameter { get; set; }
         public ActionParameterDefinition HasDatesParameter { get; set; }
@@ -26,6 +27,11 @@ namespace DD.DomainGenerator.Actions.Schemas
             NameParameter = new ActionParameterDefinition(
                 "name", ActionParameterDefinition.TypeValue.String, "Schema name. Recomended to use same domain name but not in plural. The name will be converted to PascalCase", "n", string.Empty);
 
+            DomainParameter = new ActionParameterDefinition(
+                "domain", ActionParameterDefinition.TypeValue.String, "Domain name", "d", string.Empty)
+            {
+                IsDomainSuggestion = true,
+            };
 
             HasStateParameter = new ActionParameterDefinition(
                "hasstate", ActionParameterDefinition.TypeValue.Boolean, "The new schema has state. It will add 'State' attribute with values 1 enbled, 0 disabled. Default value = false", "s", false);
@@ -34,7 +40,7 @@ namespace DD.DomainGenerator.Actions.Schemas
               "hasuserrelationship", ActionParameterDefinition.TypeValue.Boolean, "The new schema has user relationship. It will add 'CreatedBy' and 'ModifiedBy' forening keys to the schema, related with 'User' schema (must be created first). Default value = false", "u", false);
 
             HasDatesParameter = new ActionParameterDefinition(
-               "hasdates", ActionParameterDefinition.TypeValue.Boolean, "The new schema has dates. It will add 'CreatedOn' and 'ModifiedOn' of DateTime type. Default value = false", "d", false);
+               "hasdates", ActionParameterDefinition.TypeValue.Boolean, "The new schema has dates. It will add 'CreatedOn' and 'ModifiedOn' of DateTime type. Default value = false", "hd", false);
 
             HasOwnerParameter = new ActionParameterDefinition(
               "hasowner", ActionParameterDefinition.TypeValue.Boolean, "The new schema has owner. It will add 'Owner'. Default value = false", "o", false);
@@ -42,6 +48,7 @@ namespace DD.DomainGenerator.Actions.Schemas
 
 
             ActionParametersDefinition.Add(NameParameter);
+            ActionParametersDefinition.Add(DomainParameter);
             ActionParametersDefinition.Add(HasDatesParameter);
             ActionParametersDefinition.Add(HasStateParameter);
             ActionParametersDefinition.Add(HasOwnerParameter);
@@ -61,7 +68,10 @@ namespace DD.DomainGenerator.Actions.Schemas
             var hasDates = GetBoolParameterValue(parameters, HasDatesParameter);
             var hasUserRelationship = GetBoolParameterValue(parameters, HasUserRelationshipParameter);
             var hasOwner = GetBoolParameterValue(parameters, HasOwnerParameter);
-            var schema = new SchemaModel(name);
+
+            var domainName = GetStringParameterValue(parameters, DomainParameter);
+
+            var schema = new Schema(name);
 
             //if (hasId)
             //{
@@ -149,7 +159,7 @@ namespace DD.DomainGenerator.Actions.Schemas
 
             if (hasOwner)
             {
-                var userSchema = project.Schemas.FirstOrDefault(k => k.Name == Definitions.DefaultBasicDomainNames.User);
+                var userSchema = project.GetSchema(Definitions.DefaultBasicDomainNames.User);
                 if (userSchema == null)
                 {
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
@@ -165,7 +175,7 @@ namespace DD.DomainGenerator.Actions.Schemas
 
             if (hasUserRelationship)
             {
-                var userSchema = project.Schemas.FirstOrDefault(k => k.Name == Definitions.DefaultBasicDomainNames.User);
+                var userSchema = project.GetSchema(Definitions.DefaultBasicDomainNames.User);
                 if (userSchema == null)
                 {
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
@@ -191,9 +201,10 @@ namespace DD.DomainGenerator.Actions.Schemas
             schema.AddUseCase(new UseCase(UseCase.UseCaseTypes.Update));
 
 
+            var domain = project.Domains.FirstOrDefault(k => k.Name == domainName)
+                ?? throw new Exception($"Can't find domain named '{domainName}'");
+            domain.AddSchema(schema);
 
-
-            project.Schemas.Add(schema);
             OverrideOutputParameter(NameParameter.Name, name);
 
         }

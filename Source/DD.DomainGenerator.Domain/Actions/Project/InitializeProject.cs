@@ -60,7 +60,7 @@ namespace DD.DomainGenerator.Actions.Project
             var nameSpace = GetStringParameterValue(parameters, NamespaceParameter);
             var path = GetStringParameterValue(parameters, ProjectPathParameter);
             var absolutePath = FileService.GetAbsoluteCurrentPath(path);
-            project.ProjectPath = absolutePath;
+            project.Path = absolutePath;
             project.Name = name;
             project.NameSpace = nameSpace;
         }

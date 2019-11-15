@@ -32,7 +32,7 @@ namespace DD.DomainGenerator.Models
         public bool IsNullable { get; set; }
         public bool IsUnique { get; set; }
         public bool IsAutoIncremental { get; set; }
-        public SchemaModel ForeingSchema { get; set; }
+        public Schema ForeingSchema { get; set; }
 
         public SchemaModelProperty()
         {

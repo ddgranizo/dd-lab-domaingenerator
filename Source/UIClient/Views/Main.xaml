@@ -7,8 +7,20 @@
         xmlns:local="clr-namespace:UIClient.Views"
         xmlns:usr="clr-namespace:UIClient.UserControls"
         xmlns:vm="clr-namespace:UIClient.ViewModels"
+        
+         
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        
         mc:Ignorable="d"
-        Title="Main" Height="450" Width="1200">
+        Title="Main" Height="550" Width="1200">
     <Window.Resources>
         <vm:MainViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </Window.Resources>
@@ -29,7 +41,7 @@
             <RowDefinition  Height="auto"/>
         </Grid.RowDefinitions>
         
-        <DockPanel Grid.Row="0">
+        <DockPanel Grid.Row="0" >
             <Menu DockPanel.Dock="Top" Background="White">
                 <MenuItem Header="Menu" >
                     <MenuItem Header="New" Command="{Binding Source={StaticResource ViewModel}, Path=NewProjectCommand,  Mode=OneWay}" />
@@ -50,26 +62,13 @@
                     <Separator />
                     <MenuItem Header="Save" Command="{Binding Source={StaticResource ViewModel}, Path=SaveChangesCommand,  Mode=OneWay}" />
                 </MenuItem>
-                <MenuItem Header="Project">
-                    <MenuItem Header="Change Real/Virtual" Command="{Binding Source={StaticResource ViewModel}, Path=ChangeCurrentRealVirtualStateCommand, Mode=OneWay}">
-                    </MenuItem>
-                </MenuItem>
             </Menu>
         </DockPanel>
-        
-        
-        
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
 
-                <Grid>
+
+        <materialDesign:DialogHost IsOpen="{Binding IsActionDialogOpen}" Grid.RowSpan="3" Panel.ZIndex="1000" d:DesignWidth="0" d:DesignHeight="0" >
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Margin="10" Width="400" Height="400">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -82,7 +81,10 @@
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <ComboBox ItemsSource="{Binding NewActionsCollection}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedNewAction}" Grid.Column="0" ></ComboBox>
-                        <Button Command="{Binding Source={StaticResource ViewModel}, Path=RemoveSelectedNewActionCommand, Mode=TwoWay}" Grid.Column="1" >Unselect</Button>
+
+                        <Button Grid.Column="1"  Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Close"  Command="{Binding Source={StaticResource ViewModel}, Path=CloseAddActionDialogCommand, Mode=OneWay}" >
+                            <materialDesign:PackIcon Kind="Close" Width="15" Height="15"/>
+                        </Button>
                     </Grid>
 
                     <Grid Grid.Row="1" Visibility="{Binding SelectedNewAction, Converter={StaticResource NullToCollapsedConverter}}">
@@ -90,7 +92,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <ItemsControl ItemsSource="{Binding NewActionParametersDefinitionsCollection}" Grid.Row="0" >
+                        <ItemsControl Margin="10" ItemsSource="{Binding NewActionParametersDefinitionsCollection}" Grid.Row="0" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <usr:GenericInputControlView 
@@ -101,8 +103,10 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Grid Grid.Row="1" >
-                            <Button Grid.Row="1" Command="{Binding Source={StaticResource ViewModel}, Path=AddActionCommand, Mode=OneWay}">Add</Button>
+                        <Grid Grid.Row="1">
+                            <Button Grid.Column="0"  Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Execute action"  Command="{Binding Source={StaticResource ViewModel}, Path=ExecuteActionCommand, Mode=OneWay}" >
+                                <materialDesign:PackIcon Kind="Add" Width="15" Height="15"/>
+                            </Button>
                         </Grid>
                     </Grid>
 
@@ -126,280 +130,28 @@
                             <Button Grid.Row="1" Command="{Binding Source={StaticResource ViewModel}, Path=ModifyActionConfirmCommand, Mode=OneWay}">Modify</Button>
                         </Grid>
                     </Grid>
-                    
-                    <TabControl Grid.Row="2">
-                        <TabItem Header="Current state">
-                                <ListView ItemsSource="{Binding CurrentState.ActionsCollection}" SelectedItem="{Binding SelectedAction}" >
-                                    <ListView.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Modify"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=ModifyActionRequestCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                                            <MenuItem Header="Set state Ready"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=SetActionStateExecutedCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                                            <MenuItem Header="Remove"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=RemoveActionCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                                        </ContextMenu>
-                                    </ListView.ContextMenu>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:ActionControlView Action="{Binding Path=.}"></usr:ActionControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                        </TabItem>
-                        
-                    </TabControl>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
 
+
+        <Button Grid.Row="1" VerticalAlignment="Top" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="New action"  Command="{Binding Source={StaticResource ViewModel}, Path=OpenAddActionDialogCommand, Mode=OneWay}" >
+            <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
+        </Button>
+        <GroupBox Grid.Row="1" Header="Settings">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <usr:ProjectControlView ProjectState="{Binding ProjectStateModel}"/>
                 </Grid>
             </Grid>
-            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="1" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
-            <Grid Grid.Column="2">
-                <TabControl>
-                    <TabItem Header="Domains/Schemas">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Domains"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.DomainsCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:DomainControlView Domain="{Binding Path=.}"></usr:DomainControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            <Grid Margin="10" Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Domain/Schema"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.SchemaInDomainsCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:SchemaInDomainControlView SchemaInDomain="{Binding Path=.}"></usr:SchemaInDomainControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            <Grid Grid.Column="2">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Schemas"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.SchemasCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:SchemaControlView Schema="{Binding Path=.}"></usr:SchemaControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Settings">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Row="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Margin="2" Text="Settings"></TextBlock>
-                                    <ListView ItemsSource="{Binding CurrentState.SettingsCollection}" Grid.Row="1">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <usr:SettingControlView Setting="{Binding Path=.}"></usr:SettingControlView>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Environments">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Row="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Margin="2" Text="Github settings"></TextBlock>
-                                    <ListView ItemsSource="{Binding CurrentState.GithubSettingsCollection}" Grid.Row="1">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <usr:GithubSettingControlView GithubSetting="{Binding Path=.}"></usr:GithubSettingControlView>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Grid>
-                                <Grid Grid.Row="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Margin="2" Text="Azure Pipeline settings"></TextBlock>
-                                    <ListView ItemsSource="{Binding CurrentState.AzurePipelineSettingsCollection}" Grid.Row="1">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <usr:AzurePipelineSettingControlView AzurePipelineSetting="{Binding Path=.}"></usr:AzurePipelineSettingControlView>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Grid>
-                            </Grid>
-                            <Grid Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Environments"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.EnvironmentsCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:EnvironmentControlView Environment="{Binding Path=.}"></usr:EnvironmentControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Microservices">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Domains"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.DomainsCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:DomainControlView Domain="{Binding Path=.}"></usr:DomainControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            <Grid Margin="10" Grid.Column="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Microservice/Domain"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.DomainInMicroservicesCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:DomainInMicroServiceControlView DomainInMicroService="{Binding Path=.}"></usr:DomainInMicroServiceControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            <Grid Grid.Column="2">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Margin="2" Text="Microservices"></TextBlock>
-                                <ListView ItemsSource="{Binding CurrentState.MicroservicesCollection}" Grid.Row="1">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <usr:MicroServiceControlView  MicroService="{Binding Path=.}"></usr:MicroServiceControlView>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-            </Grid>
-            <GridSplitter HorizontalAlignment="Right"  VerticalAlignment="Stretch"  Grid.Column="3" ResizeBehavior="PreviousAndNext" Width="10" Background="#FFBCBCBC" />
-            <Grid Grid.Column="4">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Margin="2" Text="Deploy actions"></TextBlock>
-                    <ListView ItemsSource="{Binding DeployActionsCollection}" Grid.Row="1">
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Check"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=CheckDeployActionUnitCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                                <MenuItem Header="Execute"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=ExecuteDeployActionUnitCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                                <Separator />
-                                <MenuItem Header="Check and Execute above and this"
-                                                Command="{Binding Source={StaticResource ViewModel}, Path=CheckAndExecuteAboveAndThisDeployActionUnitCommand, Mode=OneWay}"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <usr:DeployActionUnitControlView DeployActionUnit="{Binding Path=.}"></usr:DeployActionUnitControlView>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-            </Grid>
-        </Grid>
-
-        <Grid Visibility="{Binding Errors, Converter={StaticResource EnumerableToCollapsedConverter}}" MaxHeight="100" Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Margin="2" Text="Errors"></TextBlock>
-                <ListView x:Name="ErrorsList" ItemsSource="{Binding ErrorsCollection}" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <usr:ErrorControlView Error="{Binding Path=.}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-           
-        </Grid>
-
+        </GroupBox>
+            
         <StatusBar Grid.Row="3">
-            <TextBlock Visibility="{Binding IsActiveVirtualState, Converter={StaticResource BoolToCollapsedConverter}}">Current state: Virtual</TextBlock>
-            <TextBlock Visibility="{Binding IsActiveVirtualState, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">Current state: Real</TextBlock>
+            <Label>Status bar</Label>
         </StatusBar>
     </Grid>
 </Window>

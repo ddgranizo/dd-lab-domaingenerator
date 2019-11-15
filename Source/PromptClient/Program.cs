@@ -20,7 +20,7 @@ namespace PromptClient
         static void Main(string[] args)
         {
             var projectManager = new ProjectManager();
-            projectManager.PromptMode();
+            //projectManager.PromptMode();
         }
     }
 }

@@ -6,7 +6,7 @@ using static DD.DomainGenerator.Definitions;
 
 namespace DD.DomainGenerator.Models
 {
-    public class SchemaModel
+    public class Schema
     {
         public string Name { get; set; }
         public List<UseCase> UseCases { get; set; }
@@ -20,7 +20,7 @@ namespace DD.DomainGenerator.Models
         public List<SchemaModelProperty> Properties { get; set; }
         public List<SchemaView> Views { get; set; }
 
-        public SchemaModel(string name)
+        public Schema(string name)
         {
             UseCases = new List<UseCase>();
             if (string.IsNullOrEmpty(name))
@@ -52,7 +52,7 @@ namespace DD.DomainGenerator.Models
             Views.Add(view);
         }
 
-        public void DeleteUseCase(UseCase.UseCaseTypes type, SchemaModel intersectionDomain = null)
+        public void DeleteUseCase(UseCase.UseCaseTypes type, Schema intersectionDomain = null)
         {
             var item = UseCases.FirstOrDefault(k => k.Type == type && k.Schema?.Name == intersectionDomain?.Name);
             if (item == null)
