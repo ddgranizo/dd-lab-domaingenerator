@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +17,13 @@ namespace UIClient.ViewModels
 {
     public class AzurePipelineSettingControlViewModel : BaseViewModel
     {
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
+
         public AzurePipelineSettingModel AzurePipelineSetting { get { return GetValue<AzurePipelineSettingModel>(); } set { SetValue(value); RaisePropertyChange(nameof(Url)); } }
         public string Url { get { return AzurePipelineSetting?.OrganizationUri; } }
         private AzurePipelineSettingControlView _view;
+
+        public bool IsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
 
         public AzurePipelineSettingControlViewModel()
         {

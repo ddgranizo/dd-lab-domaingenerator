@@ -5,7 +5,7 @@ using static DD.DomainGenerator.Models.ViewParameter;
 
 namespace DD.DomainGenerator.Models
 {
-    public class SchemaView
+    public class View
     {
         private const string ColumnSetParameter = "ColumnSet";
 
@@ -13,7 +13,7 @@ namespace DD.DomainGenerator.Models
         public bool IsCustom { get; set; }
         public List<ViewParameter> Parameters { get; set; }
 
-        public SchemaView(string name, bool isCustom)
+        public View(string name, bool isCustom)
         {
             Name = name;
             IsCustom = isCustom;
@@ -21,13 +21,13 @@ namespace DD.DomainGenerator.Models
             
         }
 
-        public SchemaView AddColumnSet()
-        {
-            Parameters.Add(new ViewParameter(ParameterType.ColumnSet, ColumnSetParameter, 99, false));
-            return this;
-        }
+        //public View AddColumnSet()
+        //{
+        //    Parameters.Add(new ViewParameter(ParameterType.ColumnSet, ColumnSetParameter, 99, false));
+        //    return this;
+        //}
 
-        public SchemaView AddProperty(ParameterType type, string name, int order, bool isCustom)
+        public View AddProperty(ParameterType type, string name, int order, bool isCustom)
         {
             Parameters.Add(new ViewParameter(type, name, order, isCustom));
             return this;

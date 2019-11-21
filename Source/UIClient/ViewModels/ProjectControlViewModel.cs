@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +17,16 @@ namespace UIClient.ViewModels
 {
     public class ProjectControlViewModel : BaseViewModel
     {
-		public ProjectStateModel ProjectState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-        public bool IsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public ProjectStateModel ProjectState { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
+
+        public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsDomainsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsSettingsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsAzurePipelineSettingsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsGithubSettingsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsEnvironmentsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
 
         private ProjectControlView _view;
 

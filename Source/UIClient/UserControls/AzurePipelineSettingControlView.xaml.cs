@@ -1,4 +1,5 @@
 
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UIClient.Events;
 using UIClient.Models;
 using UIClient.ViewModels;
 
@@ -21,6 +23,25 @@ namespace UIClient.UserControls
 {
     public partial class AzurePipelineSettingControlView : UserControl
     {
+        public DomainEventManager EventManager
+        {
+            get
+            {
+                return (DomainEventManager)GetValue(EventManagerProperty);
+            }
+            set
+            {
+                SetValue(EventManagerProperty, value);
+            }
+        }
+        public static readonly DependencyProperty EventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(EventManager),
+                          typeof(DomainEventManager),
+                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
 
         public AzurePipelineSettingModel AzurePipelineSetting
         {
@@ -59,12 +80,28 @@ namespace UIClient.UserControls
             {
                 v.SetAzurePipelineSetting((AzurePipelineSettingModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(EventManager))
+            {
+                v.SetEventManager((DomainEventManager)e.NewValue);
+            }
         }
 
 		private void SetAzurePipelineSetting(AzurePipelineSettingModel data)
         {
             _viewModel.AzurePipelineSetting = data;
         }
-		
+
+        private void SetEventManager(DomainEventManager data)
+        {
+            _viewModel.EventManager = data;
+        }
+
+        private void General_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
     }
 }

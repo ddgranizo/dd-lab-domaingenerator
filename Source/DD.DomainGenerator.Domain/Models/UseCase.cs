@@ -15,43 +15,54 @@ namespace DD.DomainGenerator.Models
             DeleteByPk = 20,
             DeleteByUn = 21,
             Update = 30,
-            RetrieveMultiple = 40,
-            RetrieveMultipleIntersection = 46,
-            Authorise = 99
+            //RetrieveMultiple = 40,
+            //RetrieveMultipleIntersection = 46,
+            //Authorise = 99
+            View = 40,
+            Custom = 99,
         }
 
+        public string Name { get; set; }
         public UseCaseTypes Type { get; set; }
-        public SchemaModelProperty Attribute { get; set; }
         public Schema Schema { get; set; }
+        public bool IsCustom { get; set; }
 
-        public bool NeedsAuthorization { get; set; }
+
 
         public UseCase()
         {
 
         }
 
+
+        public UseCase(string name)
+        {
+            Type = UseCaseTypes.Custom;
+            Name = name;
+            IsCustom = true;
+        }
+
         public UseCase(UseCaseTypes type)
         {
             Type = type;
+            Name = type.ToString();
+            IsCustom = false;
         }
 
-        public UseCase(UseCaseTypes type, SchemaModelProperty attribute)
-        {
-            Type = type;
-            Attribute = attribute ?? throw new ArgumentNullException(nameof(attribute));
-        }
 
         public UseCase(UseCaseTypes type, Schema schema)
         {
             Type = type;
+            Name = type.ToString();
             Schema = schema ?? throw new ArgumentNullException(nameof(schema));
+            IsCustom = false;
         }
 
         public static List<string> GetUseCaseTypesList()
         {
             return Enum.GetNames(typeof(UseCaseTypes)).ToList();
         }
+
 
 
         public static UseCaseTypes StringToType(string type)

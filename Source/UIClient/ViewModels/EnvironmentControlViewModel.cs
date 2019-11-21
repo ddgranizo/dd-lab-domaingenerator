@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,12 +17,15 @@ namespace UIClient.ViewModels
 {
     public class EnvironmentControlViewModel : BaseViewModel
     {
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-		public EnvironmentModel Environment { get { return GetValue<EnvironmentModel>(); } set { SetValue(value); } }
+        public EnvironmentModel Environment { get { return GetValue<EnvironmentModel>(); } set { SetValue(value); } }
         
 		private EnvironmentControlView _view;
 
-		public EnvironmentControlViewModel()
+        public bool IsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public EnvironmentControlViewModel()
         {
 			
         }

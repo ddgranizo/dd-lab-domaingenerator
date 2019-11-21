@@ -11,8 +11,8 @@ namespace UIClient.Profiles
     {
         public SchemaModelProfile()
         {
-            CreateMap<Schema, SchemaModelModel>();
-            CreateMap<SchemaModelModel, SchemaModelModel>();
+            CreateMap<Schema, SchemaModel>();
+            CreateMap<SchemaModel, SchemaModel>();
         }
     }
 }

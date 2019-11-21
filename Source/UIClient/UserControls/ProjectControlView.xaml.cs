@@ -1,4 +1,5 @@
 
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,26 @@ namespace UIClient.UserControls
 
     public partial class ProjectControlView : UserControl
     {
+
+        public DomainEventManager EventManager
+        {
+            get
+            {
+                return (DomainEventManager)GetValue(EventManagerProperty);
+            }
+            set
+            {
+                SetValue(EventManagerProperty, value);
+            }
+        }
+        public static readonly DependencyProperty EventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(EventManager),
+                          typeof(DomainEventManager),
+                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
 
         public ProjectStateModel ProjectState
         {
@@ -63,6 +84,10 @@ namespace UIClient.UserControls
             {
                 v.SetProjectState((ProjectStateModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(EventManager))
+            {
+                v.SetEventManager((DomainEventManager)e.NewValue);
+            }
         }
 
 		private void SetProjectState(ProjectStateModel data)
@@ -70,13 +95,58 @@ namespace UIClient.UserControls
             _viewModel.ProjectState = data;
         }
 
+        private void SetEventManager(DomainEventManager data)
+        {
+            _viewModel.EventManager = data;
+        }
+
         private void HierarchyItemControlView_CollapsedChanged(object sender, RoutedEventArgs e)
         {
             if (_viewModel != null)
             {
-                _viewModel.IsOpen = (e as CollapsedChangedEventArgs).Data;
+                _viewModel.IsGeneralOpen = (e as CollapsedChangedEventArgs).Data;
             }
             
+        }
+
+        private void Domain_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsDomainsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void AzurePipelineSettings_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsAzurePipelineSettingsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void Settings_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsSettingsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void GithubSettings_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsGithubSettingsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void Environments_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsEnvironmentsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
     }
 }

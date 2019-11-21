@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UIClient.Events;
 using UIClient.Models;
 using UIClient.ViewModels;
 
@@ -24,11 +25,31 @@ namespace UIClient.UserControls
     public partial class SchemaControlView : UserControl
     {
 
-        public SchemaModelModel Schema
+        public DomainEventManager EventManager
         {
             get
             {
-                return (SchemaModelModel)GetValue(SchemaProperty);
+                return (DomainEventManager)GetValue(EventManagerProperty);
+            }
+            set
+            {
+                SetValue(EventManagerProperty, value);
+            }
+        }
+        public static readonly DependencyProperty EventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(EventManager),
+                          typeof(DomainEventManager),
+                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
+
+        public SchemaModel Schema
+        {
+            get
+            {
+                return (SchemaModel)GetValue(SchemaProperty);
             }
             set
             {
@@ -39,7 +60,7 @@ namespace UIClient.UserControls
 		public static readonly DependencyProperty SchemaProperty =
                       DependencyProperty.Register(
                           nameof(Schema),
-                          typeof(SchemaModelModel),
+                          typeof(SchemaModel),
                           typeof(SchemaControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
@@ -59,44 +80,87 @@ namespace UIClient.UserControls
 			SchemaControlView v = d as SchemaControlView;
 			if (e.Property.Name == nameof(Schema))
             {
-                v.SetSchema((SchemaModelModel)e.NewValue);
+                v.SetSchema((SchemaModel)e.NewValue);
+            }
+            else if (e.Property.Name == nameof(EventManager))
+            {
+                v.SetEventManager((DomainEventManager)e.NewValue);
             }
         }
 
-		private void SetSchema(SchemaModelModel data)
+		private void SetSchema(SchemaModel data)
         {
             _viewModel.Schema = data;
         }
-    
 
-        private void ShowProperties_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void SetEventManager(DomainEventManager data)
         {
-            _viewModel.ShowProperties = true;
+            _viewModel.EventManager = data;
         }
 
-        private void HideProperties_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void General_CollapsedChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowProperties = false;
+            if (_viewModel != null)
+            {
+                _viewModel.IsGeneralOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
 
-        private void ShowUseCases_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void Properties_CollapsedChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowUseCases = true;
+            if (_viewModel != null)
+            {
+                _viewModel.IsPropertiesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
 
-        private void HideUseCases_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void Views_CollapsedChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowUseCases = false;
+            if (_viewModel != null)
+            {
+                _viewModel.IsRepositoriesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
 
-        private void ShowViews_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+
+        private void UseCases_CollapsedChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowViews = true;
+            if (_viewModel != null)
+            {
+                _viewModel.IsUseCasesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
 
-        private void HideViews_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void BusinessUseCases_CollapsedChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.ShowViews = false;
+            if (_viewModel != null)
+            {
+                _viewModel.IsBusinessUseCasesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void BasicUseCases_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsBasicUseCasesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void Repositories_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsRepositoriesOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void Models_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsModelsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
     }
 }

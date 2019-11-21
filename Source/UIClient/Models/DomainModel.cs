@@ -8,12 +8,10 @@ namespace UIClient.Models
 {
     public class DomainModel : BaseModel
     {
-        public bool IsRootDomain { get { return GetValue<bool>(); } set { SetValue(value); } }
-        public string Namespace { get { return GetValue<string>(); } set { SetValue(value); } }
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
 
-        public List<SchemaModelModel> Schemas { get { return GetValue<List<SchemaModelModel>>(); } set { SetValue(value); UpdateListToCollection(value, SchemasCollection); } }
-        public ObservableCollection<SchemaModelModel> SchemasCollection { get; set; } = new ObservableCollection<SchemaModelModel>();
+        public List<SchemaModel> Schemas { get { return GetValue<List<SchemaModel>>(); } set { SetValue(value); UpdateListToCollection(value, SchemasCollection); } }
+        public ObservableCollection<SchemaModel> SchemasCollection { get; set; } = new ObservableCollection<SchemaModel>();
 
     }
 }

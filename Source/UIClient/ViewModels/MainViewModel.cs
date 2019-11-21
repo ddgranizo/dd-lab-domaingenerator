@@ -69,6 +69,8 @@ namespace UIClient.ViewModels
         private readonly IRegistryService _registryService;
         private readonly IFileService _fileService;
         private readonly IJsonParserService _jsonParserService;
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
+
         public MainViewModel()
         {
             StoredRecentProjectsService = new StoredRecentProjectsService();
@@ -77,7 +79,7 @@ namespace UIClient.ViewModels
             _fileService = new FileService();
             _jsonParserService = new JsonParserService();
             _projectManager = new ProjectManager();
-            NewActions = _projectManager.ActionManager.Actions;
+            NewActions = _projectManager.ActionManager.Actions.OrderBy(k => k.Name).ToList();
             SetRecentProjects();
             InitializeCommands();
             InitializeMapper();
@@ -97,9 +99,9 @@ namespace UIClient.ViewModels
         public void Initialize(Window window)
         {
             _window = window;
-            
+
         }
-        
+
 
         private void InitializeMapper()
         {
@@ -134,7 +136,7 @@ namespace UIClient.ViewModels
                     var itemsSugestions = new Dictionary<string, List<string>>();
                     foreach (var item in baseAction.ActionParametersDefinition)
                     {
-                        List<string> sugestions = GetActionParameterSugestions(item);
+                        List<string> sugestions = GetActionParameterSugestions(item, ProjectState, SelectedActionForModifyParametersDefinitionsValues);
                         itemsSugestions.Add(item.Name, sugestions);
                     }
                     NewActionParametersSugestions = itemsSugestions;
@@ -146,27 +148,7 @@ namespace UIClient.ViewModels
                 SelectedActionForModifyParametersDefinitionsValues = new Dictionary<string, object>();
             }
         }
-
-        public void ModifyActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
-        {
-            var value = parameter.Type == ActionParameterDefinition.TypeValue.Password
-                && !string.IsNullOrEmpty((string)newValue)
-                    ? _cryptoService.Encrypt((string)newValue)
-                    : newValue;
-
-            if (SelectedActionForModifyParametersDefinitionsValues.ContainsKey(parameter.Name))
-            {
-                SelectedActionForModifyParametersDefinitionsValues[parameter.Name] = value;
-            }
-            else
-            {
-                SelectedActionForModifyParametersDefinitionsValues.Add(parameter.Name, value);
-            }
-        }
-
-
-
-
+     
 
         public void NewActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
         {
@@ -182,6 +164,30 @@ namespace UIClient.ViewModels
             {
                 NewActionParametersDefinitionsValues.Add(parameter.Name, value);
             }
+
+            UpdateDynamicSuggestions(parameter);
+        }
+
+        private void UpdateDynamicSuggestions(ActionParameterDefinition triggerParameter)
+        {
+            var currentSuggestions = NewActionParametersSugestions;
+            var modified = false;
+            foreach (var actionParameter in SelectedNewAction.ActionParametersDefinition)
+            {
+                if (actionParameter.InputSuggestionsHandler != null
+                    && currentSuggestions.ContainsKey(actionParameter.Name)
+                    && actionParameter.Name != triggerParameter.Name)
+                {
+                    var suggestions = actionParameter.InputSuggestionsHandler.Invoke(ProjectState, NewActionParametersDefinitionsValues);
+                    currentSuggestions[actionParameter.Name] = suggestions;
+                    modified = true;
+                }
+            }
+            if (modified)
+            {
+                NewActionParametersSugestions = new Dictionary<string, List<string>>();
+                NewActionParametersSugestions = currentSuggestions;
+            }
         }
 
         public void OnNewActionChanged(ActionBase action)
@@ -194,7 +200,7 @@ namespace UIClient.ViewModels
                 foreach (var item in action.ActionParametersDefinition)
                 {
                     object value = item.DefaultValue;
-                    List<string> sugestions = GetActionParameterSugestions(item);
+                    List<string> sugestions = GetActionParameterSugestions(item, ProjectState, itemsValues);
                     itemsValues.Add(item.Name, value);
                     itemsSugestions.Add(item.Name, sugestions);
                 }
@@ -214,8 +220,7 @@ namespace UIClient.ViewModels
             }
         }
 
-
-        private List<string> GetActionParameterSugestions(ActionParameterDefinition action)
+        private List<string> GetActionParameterSugestions(ActionParameterDefinition action, ProjectState projectState, Dictionary<string, object> otherValues)
         {
             if (action.IsDomainSuggestion)
             {
@@ -223,24 +228,27 @@ namespace UIClient.ViewModels
             }
             else if (action.IsSchemaSuggestion)
             {
-                //TODO: filter schemas for domain
-                return ProjectState.Domains.SelectMany(k=>k.Schemas).Select(k => k.Name).ToList();
+                return ProjectState.Domains.SelectMany(k => k.Schemas).Select(k => k.Name).ToList();
             }
             else if (action.IsEnvironmentSuggestion)
             {
                 return ProjectState.Environments.Select(k => k.Name).ToList();
             }
-            else
+            else if (action.InputSuggestions != null && action.InputSuggestions.Count > 0)
             {
                 return action.InputSuggestions;
             }
+            else if (action.InputSuggestionsHandler != null)
+            {
+                return new List<string>();
+            }
+            return new List<string>();
         }
 
         public void RaiseStateChanged()
         {
             ProjectStateModel = Mapper.Map<ProjectStateModel>(ProjectState);
         }
-
 
         public ICommand NewProjectCommand { get; set; }
         public ICommand RemoveActionCommand { get; set; }
@@ -326,6 +334,7 @@ namespace UIClient.ViewModels
                 throw new Exception("Invalid extension file. Select .json file");
             }
             var json = _fileService.OpenFile(absolutePath);
+            LastFileLoaded = absolutePath;
             ProjectState = _jsonParserService.Objectify<ProjectState>(json);
             RaiseStateChanged();
         }
@@ -360,6 +369,8 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new SettingProfile());
                 mc.AddProfile(new SchemaViewProfile());
                 mc.AddProfile(new ViewParameterProfile());
+                mc.AddProfile(new RepositoryProfile());
+                mc.AddProfile(new ModelProfile());
             });
         }
 
@@ -367,7 +378,7 @@ namespace UIClient.ViewModels
         {
             IsActionDialogOpen = true;
         }
-        
+
         public void UnsetDialog()
         {
             IsActionDialogOpen = false;

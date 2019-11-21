@@ -45,8 +45,8 @@ namespace DD.DomainGenerator.Actions.Schemas
         public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
             var schemaName = GetStringParameterValue(parameters, NameParameter).ToWordPascalCase();
-            var firstSchemaName = GetStringParameterValue(parameters, FirstSchemaNameParameter).ToWordPascalCase();
-            var secondSchemaName = GetStringParameterValue(parameters, SecondSchemaNameParameter).ToWordPascalCase();
+            var firstSchemaName = GetStringParameterValue(parameters, FirstSchemaNameParameter);
+            var secondSchemaName = GetStringParameterValue(parameters, SecondSchemaNameParameter);
 
             var firstSchema = project.GetSchema(firstSchemaName);
             if (firstSchema == null)
@@ -54,30 +54,28 @@ namespace DD.DomainGenerator.Actions.Schemas
                 throw new Exception($"Can't find any schema named '{firstSchemaName}'");
             }
             
-            var secondDomain = project.GetSchema( secondSchemaName);
-            if (secondDomain == null)
+            var secondSchema = project.GetSchema( secondSchemaName);
+            if (secondSchema == null)
             {
                 throw new Exception($"Can't find any schema named '{secondSchemaName}'");
             }
            
-            var firstAttributeName = firstSchema.Name == secondDomain.Name
-                ? $"{firstSchema.Name}1Id"
+            var firstAttributeName = firstSchema.Name == secondSchema.Name
+                ? $"{firstSchema.Name}OneId"
                 : $"{firstSchema.Name}Id";
-            var secondAttributeName = firstSchema.Name == secondDomain.Name
-                ? $"{secondDomain.Name}2Id"
-                : $"{secondDomain.Name}Id";
+            var secondAttributeName = firstSchema.Name == secondSchema.Name
+                ? $"{secondSchema.Name}TwoId"
+                : $"{secondSchema.Name}Id";
 
             var newSchema = new Schema(schemaName) { HasId = true, IsIntersection = true };
             newSchema.AddProperty(
-                new SchemaModelProperty(firstAttributeName, SchemaModelProperty.PropertyTypes.ForeingKey));
+                new SchemaProperty(firstAttributeName, SchemaProperty.PropertyTypes.ForeingKey, false));
             newSchema.AddProperty(
-                new SchemaModelProperty(secondAttributeName, SchemaModelProperty.PropertyTypes.ForeingKey));
+                new SchemaProperty(secondAttributeName, SchemaProperty.PropertyTypes.ForeingKey, false));
 
-            firstSchema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
-            secondDomain.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
+            //firstSchema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
+            //secondSchema.AddUseCase(new UseCase(UseCase.UseCaseTypes.RetrieveMultipleIntersection, newSchema));
             OverrideOutputParameter(NameParameter.Name, schemaName);
-            OverrideOutputParameter(FirstSchemaNameParameter.Name, firstSchemaName);
-            OverrideOutputParameter(SecondSchemaNameParameter.Name, secondSchemaName);
         }
     }
 }

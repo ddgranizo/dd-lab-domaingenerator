@@ -40,20 +40,20 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
 
         public override void Execute(ProjectState project, List<ActionParameter> parameters)
         {
-            var schemaName = GetStringParameterValue(parameters, SchemaNameParameter).ToWordPascalCase();
+            var schemaName = GetStringParameterValue(parameters, SchemaNameParameter);
             var schema = project.GetSchema(schemaName)
                 ?? throw new Exception($"Can't find any schema named '{schemaName}'");
             
             var useCaseTypeName = GetStringParameterValue(parameters, UseCaseParameter);
             var type = UseCase.StringToType(useCaseTypeName);
             Schema intersectionSchemaModel = null;
-            if (type == UseCase.UseCaseTypes.RetrieveMultipleIntersection)
-            {
-                var intersectionSchemaName = GetStringParameterValue(parameters, IntersectionSchemaParameter).ToWordPascalCase();
-                var intersectionSchema = project.GetSchema(intersectionSchemaName)
-                    ?? throw new Exception($"Can't find any intersection domain named '{schemaName}'");
-                intersectionSchemaModel = intersectionSchema;
-            }
+            //if (type == UseCase.UseCaseTypes.RetrieveMultipleIntersection)
+            //{
+            //    var intersectionSchemaName = GetStringParameterValue(parameters, IntersectionSchemaParameter).ToWordPascalCase();
+            //    var intersectionSchema = project.GetSchema(intersectionSchemaName)
+            //        ?? throw new Exception($"Can't find any intersection domain named '{schemaName}'");
+            //    intersectionSchemaModel = intersectionSchema;
+            //}
             schema.DeleteUseCase(type, intersectionSchemaModel);
             OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
         }

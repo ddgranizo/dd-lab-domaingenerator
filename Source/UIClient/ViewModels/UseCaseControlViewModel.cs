@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,10 +20,10 @@ namespace UIClient.ViewModels
 
 
 		public UseCaseModel UseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
+        public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-
-        
-		private UseCaseControlView _view;
+        private UseCaseControlView _view;
 
 		public UseCaseControlViewModel()
         {

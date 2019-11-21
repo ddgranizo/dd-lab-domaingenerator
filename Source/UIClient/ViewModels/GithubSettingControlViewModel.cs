@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,11 +17,16 @@ namespace UIClient.ViewModels
 {
     public class GithubSettingControlViewModel : BaseViewModel
     {
-		public GithubSettingModel GithubSetting { get { return GetValue<GithubSettingModel>(); } set { SetValue(value); } }
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
+
+
+        public GithubSettingModel GithubSetting { get { return GetValue<GithubSettingModel>(); } set { SetValue(value); } }
 
 		private GithubSettingControlView _view;
 
-		public GithubSettingControlViewModel()
+        public bool IsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public GithubSettingControlViewModel()
         {
 			
         }

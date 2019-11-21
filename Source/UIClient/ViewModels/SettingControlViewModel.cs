@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,8 +18,11 @@ namespace UIClient.ViewModels
     public class SettingControlViewModel : BaseViewModel
     {
 		public SettingModel Setting { get { return GetValue<SettingModel>(); } set { SetValue(value); } }
-        
-		private SettingControlView _view;
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
+
+        public bool IsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        private SettingControlView _view;
 
 		public SettingControlViewModel()
         {

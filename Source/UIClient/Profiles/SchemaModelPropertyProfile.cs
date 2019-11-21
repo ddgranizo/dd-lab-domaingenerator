@@ -11,8 +11,8 @@ namespace UIClient.Profiles
     {
         public SchemaModelPropertyProfile()
         {
-            CreateMap<SchemaModelProperty, SchemaModelPropertyModel>();
-            CreateMap<SchemaModelPropertyModel, SchemaModelProperty>();
+            CreateMap<SchemaProperty, SchemaPropertyModel>();
+            CreateMap<SchemaPropertyModel, SchemaProperty>();
         }
     }
 }

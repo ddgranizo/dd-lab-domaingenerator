@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +17,13 @@ namespace UIClient.ViewModels
 {
     public class DomainControlViewModel : BaseViewModel
     {
-		public DomainModel Domain { get { return GetValue<DomainModel>(); } set { SetValue(value); } }
-		private DomainControlView _view;
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
+
+        public DomainModel Domain { get { return GetValue<DomainModel>(); } set { SetValue(value); } }
+
+        public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsSchemasOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        private DomainControlView _view;
 
 		public DomainControlViewModel()
         {

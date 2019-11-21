@@ -31,7 +31,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             TypeParameter = new ActionParameterDefinition(
                 "type", ActionParameterDefinition.TypeValue.String, "Type. Possible values: Guid = 1, Boolean = 2, Integer = 3, Decimal = 4,  Float = 5, Time = 6, DateTime = 7, String = 8, LongString = 9, Password = 99, ",
                 "t", string.Empty)
-            { InputSuggestions = SchemaModelProperty.GetUseCaseTypesList() };
+            { InputSuggestions = SchemaProperty.GetUseCaseTypesList() };
 
             LengthParameter = new ActionParameterDefinition(
                 "length", ActionParameterDefinition.TypeValue.Integer, "Length. Use only for String types", "l", 0);
@@ -77,8 +77,8 @@ namespace DD.DomainGenerator.Actions.Schemas
                 throw new Exception($"Can't find any schema named '{schemaName}'");
             }
 
-            var typedType = SchemaModelProperty.StringToType(type);
-            var property = new SchemaModelProperty(name, typedType)
+            var typedType = SchemaProperty.StringToType(type);
+            var property = new SchemaProperty(name, typedType, true)
             {
                 IsAutoIncremental = isAutoincremental,
                 IsNullable = isNullable,

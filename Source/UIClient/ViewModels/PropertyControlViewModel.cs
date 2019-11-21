@@ -1,3 +1,4 @@
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,12 +18,13 @@ namespace UIClient.ViewModels
     public class PropertyControlViewModel : BaseViewModel
     {
 
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-		public SchemaModelPropertyModel Property { get { return GetValue<SchemaModelPropertyModel>(); } set { SetValue(value); } }
+        public SchemaPropertyModel Property { get { return GetValue<SchemaPropertyModel>(); } set { SetValue(value); } }
+        public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
 
 
-        
-		private PropertyControlView _view;
+        private PropertyControlView _view;
 
 		public PropertyControlViewModel()
         {

@@ -6,7 +6,7 @@ using System.Text;
 namespace DD.DomainGenerator.Models
 {
 
-    public class SchemaModelProperty
+    public class SchemaProperty
     {
         public enum PropertyTypes
         {
@@ -33,18 +33,19 @@ namespace DD.DomainGenerator.Models
         public bool IsUnique { get; set; }
         public bool IsAutoIncremental { get; set; }
         public Schema ForeingSchema { get; set; }
-
-        public SchemaModelProperty()
+        public bool IsCustom { get; set; }
+        public SchemaProperty()
         {
         }
 
-        public SchemaModelProperty(string name, PropertyTypes type)
+        public SchemaProperty(string name, PropertyTypes type, bool isCustom)
         {
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentException("message", nameof(name));
             }
             Type = type;
+            IsCustom = isCustom;
             Name = name;
         }
 

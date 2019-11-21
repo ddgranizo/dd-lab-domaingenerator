@@ -1,0 +1,38 @@
+<UserControl x:Class="UIClient.UserControls.RepositoryControlView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:UIClient.ViewModels"
+        xmlns:conv="clr-namespace:UIClient.Converters"
+        xmlns:usr="clr-namespace:UIClient.UserControls"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:RepositoryControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.Resources>
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        </Grid.Resources>
+
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding  Repository.Name}" Icon="Database" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <StackPanel Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding Repository.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Repository.IsCustom, StringFormat='IsCustom={0}'}" Icon="FormatAlignJustify"/>
+
+                <usr:HierarchyItemControlView Text="Views" Icon="TableRow" IsCollapsible="True" CollapsedChanged="Views_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsViewsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Repository.ViewsCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:ViewControlView SchemaView="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </StackPanel>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

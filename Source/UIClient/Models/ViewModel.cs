@@ -6,7 +6,7 @@ using UIClient.Models.Base;
 
 namespace UIClient.Models
 {
-    public class SchemaViewModel : BaseModel
+    public class ViewModel : BaseModel
     {
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public bool IsCustom { get { return GetValue<bool>(); } set { SetValue(value); } }

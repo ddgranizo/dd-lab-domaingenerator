@@ -25,6 +25,28 @@ namespace DD.DomainGenerator.Actions.Base
         public List<DeployActionUnit> DeployActions { get; set; }
         public IConsoleService ConsoleService { get; set; }
         public Dictionary<string, object> OutputParameters { get; set; }
+
+        public Func<ProjectState, Dictionary<string, object>, List<string>> GetDomainSchemasSuggestionHandler =
+            new Func<ProjectState, Dictionary<string, object>, List<string>>((state, values) =>
+            {
+                string domainValue = values.ContainsKey("domain")
+                    ? (string)values["domain"]
+                    : null;
+
+                if (!string.IsNullOrEmpty(domainValue))
+                {
+                    var domain = state.Domains.FirstOrDefault(k => k.Name == domainValue);
+                    if (domain != null)
+                    {
+                        return domain.Schemas.Select(k => k.Name).ToList();
+                    }
+                }
+                return state.GetAllSchemas().Select(k => k.Name).ToList();
+            });
+
+        
+
+
         public ActionBase(string name)
         {
             if (string.IsNullOrEmpty(name))

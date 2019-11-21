@@ -14,73 +14,80 @@
         <Grid.Resources>
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Schema.Name}"/>
-        <Grid Grid.Row="1" Margin="7,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Has Id" Visibility="{Binding Schema.HasId, Converter={StaticResource BoolToCollapsedConverter}}"/>
-            <TextBlock Grid.Row="1" Text="Has State" Visibility="{Binding Schema.HasState, Converter={StaticResource BoolToCollapsedConverter}}"/>
-            <TextBlock Grid.Row="2" Text="Has User relationship" Visibility="{Binding Schema.HasUserRelationship, Converter={StaticResource BoolToCollapsedConverter}}"/>
-            <TextBlock Grid.Row="3" Text="Has Owner" Visibility="{Binding Schema.HasOwner, Converter={StaticResource BoolToCollapsedConverter}}"/>
-            <TextBlock Grid.Row="4" Text="Has Dates" Visibility="{Binding Schema.HasDates, Converter={StaticResource BoolToCollapsedConverter}}"/>
 
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding  Schema.Name}" Icon="Settings" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <StackPanel Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding Schema.HasState, StringFormat='HasState={0}'}"  Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Schema.HasUserRelationship, StringFormat='HasUserRelationship={0}'}" Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Schema.HasOwner, StringFormat='HasOwner={0}'}" Icon="FormatAlignJustify"/>
 
-            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='+ Properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowProperties_PreviewMouseDown"/>
-            <TextBlock Grid.Row="5" Text="{Binding Schema.Properties.Count, StringFormat='- Properties ({0})'}" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideProperties_PreviewMouseDown"/>
-            <Grid Grid.Row="6" Visibility="{Binding ShowProperties, Converter={StaticResource BoolToCollapsedConverter}}">
-                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.PropertiesCollection}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <usr:PropertyControlView Property="{Binding Path=.}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
+                <usr:HierarchyItemControlView Text="Properties" Icon="Details" IsCollapsible="True" CollapsedChanged="Properties_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsPropertiesOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Schema.PropertiesCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:PropertyControlView  Property="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
 
-            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='+ Use cases ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowUseCases_PreviewMouseDown"/>
-            <TextBlock Grid.Row="7" Text="{Binding Schema.UseCases.Count, StringFormat='- Use cases ({0})'}" Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideUseCases_PreviewMouseDown"/>
+                <usr:HierarchyItemControlView Text="Models" Icon="GlobeModel" IsCollapsible="True" CollapsedChanged="Models_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsModelsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Schema.ModelsCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:ModelControlView  Model="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                
+                
+                <usr:HierarchyItemControlView Text="Repositories" Icon="Database" IsCollapsible="True" CollapsedChanged="Repositories_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsRepositoriesOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Schema.RepositoriesCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:RepositoryControlView Repository="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
 
-            <Grid Grid.Row="8"  Visibility="{Binding ShowUseCases, Converter={StaticResource BoolToCollapsedConverter}}" >
-                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.UseCasesCollection}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <usr:UseCaseControlView UseCase="{Binding Path=.}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
+                <usr:HierarchyItemControlView Text="UseCases" Icon="Work" IsCollapsible="True" CollapsedChanged="UseCases_CollapsedChanged"/>
+                <StackPanel Visibility="{Binding IsUseCasesOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    
+                    <usr:HierarchyItemControlView Text="Basic" Icon="Work" IsCollapsible="True" CollapsedChanged="BasicUseCases_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsBasicUseCasesOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding Schema.BasicUseCasesCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:UseCaseControlView UseCase="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
+                    </Grid>
 
+                    <usr:HierarchyItemControlView Text="Business" Icon="Work" IsCollapsible="True" CollapsedChanged="BusinessUseCases_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsBusinessUseCasesOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding Schema.BusinessUseCasesCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:UseCaseControlView UseCase="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-            <TextBlock Grid.Row="9" Text="{Binding Schema.Views.Count, StringFormat='+ Views ({0})'}" Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" PreviewMouseDown="ShowViews_PreviewMouseDown"/>
-            <TextBlock Grid.Row="9" Text="{Binding Schema.Views.Count, StringFormat='- Views ({0})'}" Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}}" PreviewMouseDown="HideViews_PreviewMouseDown"/>
-
-            <Grid Grid.Row="10"  Visibility="{Binding ShowViews, Converter={StaticResource BoolToCollapsedConverter}}" >
-                <ItemsControl Margin="10,0,0,0" ItemsSource="{Binding Schema.ViewsCollection}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <usr:SchemaViewControlView SchemaView="{Binding Path=.}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-
-        </Grid>
+                    </Grid>
+                    
+                    
+                </StackPanel>
+                
+            </StackPanel>
+        </StackPanel>
+       
     </Grid>
 </UserControl>

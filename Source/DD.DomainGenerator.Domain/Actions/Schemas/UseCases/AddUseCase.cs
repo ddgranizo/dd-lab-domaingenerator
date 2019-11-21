@@ -54,19 +54,19 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
             var useCaseTypeName = GetStringParameterValue(parameters, UseCaseParameter);
             var type = UseCase.StringToType(useCaseTypeName);
             Schema intersectionSchemaModel = null;
-            if (type == UseCase.UseCaseTypes.RetrieveMultipleIntersection)
-            {
-                var intersectionSchemaName = GetStringParameterValue(parameters, IntersectionDomainParameter).ToWordPascalCase();
-                var intersectionSchema = project.GetSchema(intersectionSchemaName)
-                    ?? throw new Exception($"Can't find any intersection schema named '{intersectionSchemaName}'");
-                intersectionSchemaModel = intersectionSchema;
-            }
+            //if (type == UseCase.UseCaseTypes.RetrieveMultipleIntersection)
+            //{
+            //    var intersectionSchemaName = GetStringParameterValue(parameters, IntersectionDomainParameter).ToWordPascalCase();
+            //    var intersectionSchema = project.GetSchema(intersectionSchemaName)
+            //        ?? throw new Exception($"Can't find any intersection schema named '{intersectionSchemaName}'");
+            //    intersectionSchemaModel = intersectionSchema;
+            //}
             var caseUse = new UseCase(type, intersectionSchemaModel);
             var authorization = GetBoolParameterValue(parameters, NeedsAthorizationParameter);
-            if (authorization)
-            {
-                caseUse.NeedsAuthorization = true;
-            }
+            //if (authorization)
+            //{
+            //    caseUse.NeedsAuthorization = true;
+            //}
             schema.AddUseCase(caseUse);
             OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
         }

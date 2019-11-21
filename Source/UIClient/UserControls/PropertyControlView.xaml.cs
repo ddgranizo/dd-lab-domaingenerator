@@ -1,4 +1,5 @@
 
+using DD.DomainGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UIClient.Events;
 using UIClient.Models;
 using UIClient.ViewModels;
 
@@ -21,11 +23,31 @@ namespace UIClient.UserControls
 {
     public partial class PropertyControlView : UserControl
     {
-        public SchemaModelPropertyModel Property
+        public DomainEventManager EventManager
         {
             get
             {
-                return (SchemaModelPropertyModel)GetValue(PropertyProperty);
+                return (DomainEventManager)GetValue(EventManagerProperty);
+            }
+            set
+            {
+                SetValue(EventManagerProperty, value);
+            }
+        }
+        public static readonly DependencyProperty EventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(EventManager),
+                          typeof(DomainEventManager),
+                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
+
+        public SchemaPropertyModel Property
+        {
+            get
+            {
+                return (SchemaPropertyModel)GetValue(PropertyProperty);
             }
             set
             {
@@ -36,7 +58,7 @@ namespace UIClient.UserControls
 		public static readonly DependencyProperty PropertyProperty =
                       DependencyProperty.Register(
                           nameof(Property),
-                          typeof(SchemaModelPropertyModel),
+                          typeof(SchemaPropertyModel),
                           typeof(PropertyControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
@@ -56,13 +78,30 @@ namespace UIClient.UserControls
 			PropertyControlView v = d as PropertyControlView;
 			if (e.Property.Name == nameof(Property))
             {
-                v.SetProperty((SchemaModelPropertyModel)e.NewValue);
+                v.SetProperty((SchemaPropertyModel)e.NewValue);
+            }
+            else if (e.Property.Name == nameof(EventManager))
+            {
+                v.SetEventManager((DomainEventManager)e.NewValue);
             }
         }
 
-		private void SetProperty(SchemaModelPropertyModel data)
+		private void SetProperty(SchemaPropertyModel data)
         {
             _viewModel.Property = data;
+        }
+
+        private void SetEventManager(DomainEventManager data)
+        {
+            _viewModel.EventManager = data;
+        }
+
+        private void General_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsGeneralOpen = (e as CollapsedChangedEventArgs).Data;
+            }
         }
     }
 }

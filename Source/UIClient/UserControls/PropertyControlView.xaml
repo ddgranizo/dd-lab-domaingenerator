@@ -4,17 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
+        xmlns:conv="clr-namespace:UIClient.Converters"
+        xmlns:usr="clr-namespace:UIClient.UserControls"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
         <vm:PropertyControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
-            
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding Property.Name}" />
-            <TextBlock Text="{Binding Property.Type, StringFormat='({0})'}" Margin="5,0,0,0" />
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding  Property.Name}" Icon="Details" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <StackPanel Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding Property.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Property.Type, StringFormat='Type={0}'}" Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Property.IsCustom, StringFormat='IsCustom={0}'}" Icon="FormatAlignJustify"/>
+            </StackPanel>
         </StackPanel>
+        
     </Grid>
 </UserControl>

@@ -71,20 +71,20 @@ namespace DD.DomainGenerator.Actions.Schemas
             if (addId && !schema.HasId)
             {
                 schema.HasId = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaModelProperty.PropertyTypes.PrimaryKey)
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.Id, SchemaProperty.PropertyTypes.PrimaryKey, false)
                 { IsPrimaryKey = true });
             }
             if (addState && !schema.HasState)
             {
                 schema.HasState = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.State, SchemaModelProperty.PropertyTypes.State));
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Status, SchemaModelProperty.PropertyTypes.Status));
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.State, SchemaProperty.PropertyTypes.State, false));
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.Status, SchemaProperty.PropertyTypes.Status, false));
             }
             if (addDates && !schema.HasDates)
             {
                 schema.HasDates = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedOn, SchemaModelProperty.PropertyTypes.DateTime));
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.DateTime));
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.CreatedOn, SchemaProperty.PropertyTypes.DateTime, false));
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaProperty.PropertyTypes.DateTime, false));
             }
             if (addOwner && !schema.HasOwner)
             {
@@ -94,7 +94,7 @@ namespace DD.DomainGenerator.Actions.Schemas
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
                 }
                 schema.HasOwner = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaModelProperty.PropertyTypes.ForeingKey)
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.Owner, SchemaProperty.PropertyTypes.ForeingKey, false)
                 { ForeingSchema = userSchema });
             }
             if (addUserRelationship && !schema.HasUserRelationship)
@@ -105,9 +105,9 @@ namespace DD.DomainGenerator.Actions.Schemas
                     throw new Exception("Can't add user relationship because 'User' domain doesn't exists");
                 }
                 schema.HasUserRelationship = true;
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaModelProperty.PropertyTypes.ForeingKey)
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.CreatedBy, SchemaProperty.PropertyTypes.ForeingKey, false)
                 { ForeingSchema = userSchema });
-                schema.AddProperty(new SchemaModelProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaModelProperty.PropertyTypes.ForeingKey)
+                schema.AddProperty(new SchemaProperty(Definitions.DefaultAttributesSchemaNames.ModifiedOn, SchemaProperty.PropertyTypes.ForeingKey, false)
                 { ForeingSchema = userSchema });
             }
 

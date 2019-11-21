@@ -17,11 +17,24 @@ namespace UIClient.ViewModels
 {
     public class SchemaControlViewModel : BaseViewModel
     {
-        public SchemaModelModel Schema { get { return GetValue<SchemaModelModel>(); } set { SetValue(value, UdpatedSchemaModel); } }
+        public SchemaModel Schema { get { return GetValue<SchemaModel>(); } set { SetValue(value, UdpatedSchemaModel); } }
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-        public bool ShowProperties { get { return GetValue<bool>(); } set { SetValue(value); } }
-        public bool ShowUseCases { get { return GetValue<bool>(); } set { SetValue(value); } }
-        public bool ShowViews { get { return GetValue<bool>(); } set { SetValue(value); } }
+        //public bool ShowProperties { get { return GetValue<bool>(); } set { SetValue(value); } }
+        //public bool ShowUseCases { get { return GetValue<bool>(); } set { SetValue(value); } }
+        //public bool ShowViews { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+
+        public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsPropertiesOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public bool IsUseCasesOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsBasicUseCasesOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsBusinessUseCasesOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+        public bool IsRepositoriesOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsModelsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
 
         private SchemaControlView _view;
 
@@ -31,7 +44,7 @@ namespace UIClient.ViewModels
         }
 
 
-        private void UdpatedSchemaModel(SchemaModelModel schemaModelModel)
+        private void UdpatedSchemaModel(SchemaModel schemaModelModel)
         {
 
         }

@@ -4,6 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
+             
+        xmlns:usr="clr-namespace:UIClient.UserControls"
+             
         xmlns:conv="clr-namespace:UIClient.Converters"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -13,13 +16,32 @@
         <Grid.Resources>
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <TextBlock Text="{Binding Domain.Name}" />
             <TextBlock Text="Root" FontWeight="Bold" Visibility="{Binding Domain.IsRootDomain,Converter={StaticResource BoolToCollapsedConverter}}" Margin="5,0,0,0"/>
-        </StackPanel>
+        </StackPanel>-->
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding  Domain.Name}" Icon="Domain" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            
+            
+           <StackPanel Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding Domain.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
 
+                <usr:HierarchyItemControlView Text="Schemas" Icon="Table" IsCollapsible="True" CollapsedChanged="Schemas_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsSchemasOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Domain.SchemasCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:SchemaControlView  Schema="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

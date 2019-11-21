@@ -4,18 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
+             
+        xmlns:usr="clr-namespace:UIClient.UserControls"
+        xmlns:conv="clr-namespace:UIClient.Converters"
+             
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
+    <UserControl.Resources>
         <vm:EnvironmentControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
-            
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <StackPanel>
+        <!--<StackPanel>
             <TextBlock Text="{Binding Environment.Name}"/>
             <TextBlock Margin="10,0,0,0" Text="{Binding Environment.ShortName}"/>
             <TextBlock Margin="10,0,0,0" Text="{Binding Environment.Order, StringFormat='Order: {0}'}"/>
+        </StackPanel>-->
+
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding Environment.Name}" Icon="Sitemap" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <StackPanel Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding Environment.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Environment.ShortName, StringFormat='Short mame={0}'}" Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding Environment.Order, StringFormat='Order={0}'}" Icon="FormatAlignJustify"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -18,6 +18,7 @@ namespace UIClient.Commands
                 {
                     //vm.CleanErrors();
                     vm.SelectedNewAction.PrepareExecution(vm.ProjectState, vm.NewActionParametersDefinitionsValues.ToActionParametersList());
+                    vm.SelectedNewAction = null;
                     vm.RaiseStateChanged();
                     vm.UnsetDialog();
                     //vm.ProjectManager.AddActionForExecute(vm.SelectedNewAction, vm.NewActionParametersDefinitionsValues);

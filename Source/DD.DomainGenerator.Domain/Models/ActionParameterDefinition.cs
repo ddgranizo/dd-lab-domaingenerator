@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DD.DomainGenerator.Models
@@ -16,6 +17,7 @@ namespace DD.DomainGenerator.Models
             Password = 99,
         }
 
+        public Func<ProjectState, Dictionary<string, object>, List<string>> InputSuggestionsHandler { get; set; }
         public List<string> InputSuggestions { get; set; }
         public TypeValue Type { get; set; }
         public string Description { get; }
@@ -24,7 +26,9 @@ namespace DD.DomainGenerator.Models
         public bool IsDomainSuggestion { get; set; }
         public bool IsEnvironmentSuggestion { get; set; }
         public bool IsSchemaSuggestion { get; set; }
-        //public bool IsMicroServiceSuggestion { get; set; }
+        
+
+        
 
 
         public ActionParameterDefinition(string name, TypeValue type, string description, string shortCut, object defaultValue)

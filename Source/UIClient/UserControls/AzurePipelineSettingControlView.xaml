@@ -4,17 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
+             
+        xmlns:usr="clr-namespace:UIClient.UserControls"
+        xmlns:conv="clr-namespace:UIClient.Converters"
+             
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
         <vm:AzurePipelineSettingControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
-            
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <StackPanel >
+        <!--<StackPanel >
             <TextBlock Text="{Binding AzurePipelineSetting.Name}"/>
             <TextBlock Text="{Binding Url}" Margin="10,0,0,0"/>
+        </StackPanel>-->
+
+        <StackPanel>
+            <usr:HierarchyItemControlView Text="{Binding  AzurePipelineSetting.Name}" Icon="Azure" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <StackPanel Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                <usr:HierarchyItemControlView Text="{Binding AzurePipelineSetting.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding AzurePipelineSetting.OrganizationUri, StringFormat='Url={0}'}" Icon="FormatAlignJustify"/>
+                <usr:HierarchyItemControlView Text="{Binding AzurePipelineSetting.Token, StringFormat='Token={0}'}" Icon="FormatAlignJustify"/>
+            </StackPanel>
         </StackPanel>
+
     </Grid>
 </UserControl>

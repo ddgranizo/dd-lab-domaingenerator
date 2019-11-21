@@ -17,9 +17,9 @@
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
         <StackPanel Orientation="Horizontal">
-            <Grid PreviewMouseDown="Collapser_PreviewMouseDown" MinWidth="20" MinHeight="20" VerticalAlignment="Center" Background="White">
-                <materialDesign:PackIcon VerticalAlignment="Center" x:Name="DoUnCollapse" Visibility="{Binding ShowDoUncollapse, Converter={StaticResource BoolToCollapsedConverter}}" Kind="ChevronRight" Width="20" Height="20" />
-                <materialDesign:PackIcon VerticalAlignment="Center" x:Name="DoCollapse" Visibility="{Binding ShowDoCollapse, Converter={StaticResource BoolToCollapsedConverter}}" Kind="ChevronDown" Width="20" Height="20" />
+            <Grid PreviewMouseDown="Collapser_PreviewMouseDown" MinWidth="20" MinHeight="20" VerticalAlignment="Center" Background="White" Cursor="Hand">
+                <materialDesign:PackIcon VerticalAlignment="Center" x:Name="DoUnCollapse" Visibility="{Binding ShowDoCollapse, Converter={StaticResource BoolToCollapsedConverter}}" Kind="ChevronRight" Width="20" Height="20" />
+                <materialDesign:PackIcon VerticalAlignment="Center" x:Name="DoCollapse" Visibility="{Binding ShowDoUncollapse, Converter={StaticResource BoolToCollapsedConverter}}" Kind="ChevronDown" Width="20" Height="20" />
             </Grid>
             <materialDesign:PackIcon VerticalAlignment="Center" Margin="0,0,0,0" Kind="{Binding Icon}" Width="20" Height="20"/>
             <TextBlock VerticalAlignment="Center" Text="{Binding Text}"/>

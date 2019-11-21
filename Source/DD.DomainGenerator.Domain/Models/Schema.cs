@@ -17,8 +17,9 @@ namespace DD.DomainGenerator.Models
         public bool HasOwner { get; set; }
         public bool IsIntersection { get; set; }
         public bool NeedsAuthorization { get; set; }
-        public List<SchemaModelProperty> Properties { get; set; }
-        public List<SchemaView> Views { get; set; }
+        public List<SchemaProperty> Properties { get; set; }
+        public List<Repository> Repositories { get; set; }
+        public List<Model> Models { get; set; }
 
         public Schema(string name)
         {
@@ -27,14 +28,43 @@ namespace DD.DomainGenerator.Models
             {
                 throw new ArgumentException("message", nameof(name));
             }
-
-            Properties = new List<SchemaModelProperty>();
-            Views = new List<SchemaView>();
+            Properties = new List<SchemaProperty>();
             Name = name;
-            AddView(new SchemaView(DefaultViewNames.All, false).AddColumnSet());
+            Repositories = new List<Repository>();
+            Models = new List<Model>();
+            AddRepository(new Repository($"{name}MainRepository", false, true));
+            AddModel(new Model(name, false, true, true));
         }
 
-        public void AddProperty(SchemaModelProperty property)
+        public Repository GetDefaultRepository()
+        {
+            return Repositories.First(k => k.IsMain);
+        }
+
+        public Repository GetRepository(string name)
+        {
+            return Repositories.First(k => k.Name == name);
+        }
+
+        public void AddModel(Model model)
+        {
+            if (Models.FirstOrDefault(k => k.Name == model.Name) != null)
+            {
+                throw new Exception("Model repeated in schema");
+            }
+            Models.Add(model);
+        }
+
+        public void AddRepository(Repository repository)
+        {
+            if (Repositories.FirstOrDefault(k => k.Name == repository.Name) != null)
+            {
+                throw new Exception("Repository repeated in schema");
+            }
+            Repositories.Add(repository);
+        }
+
+        public void AddProperty(SchemaProperty property)
         {
             if (Properties.FirstOrDefault(k => k.Name == property.Name) != null)
             {
@@ -43,14 +73,7 @@ namespace DD.DomainGenerator.Models
             Properties.Add(property);
         }
 
-        public void AddView(SchemaView view)
-        {
-            if (Views.FirstOrDefault(k => k.Name == view.Name) != null)
-            {
-                throw new Exception("View name repeated in schema");
-            }
-            Views.Add(view);
-        }
+        
 
         public void DeleteUseCase(UseCase.UseCaseTypes type, Schema intersectionDomain = null)
         {
@@ -66,28 +89,27 @@ namespace DD.DomainGenerator.Models
         {
             var repeatedCrud = UseCases.Where(k => k.Type == useCase.Type);
             if (repeatedCrud.Count() > 0
-                && (useCase.Type == UseCase.UseCaseTypes.Authorise
-                || useCase.Type == UseCase.UseCaseTypes.Create
+                && (useCase.Type == UseCase.UseCaseTypes.Create
                 || useCase.Type == UseCase.UseCaseTypes.DeleteByPk
                 || useCase.Type == UseCase.UseCaseTypes.DeleteByUn
                 || useCase.Type == UseCase.UseCaseTypes.RetrieveByPk
                 || useCase.Type == UseCase.UseCaseTypes.RetrieveByUn
-                || useCase.Type == UseCase.UseCaseTypes.RetrieveMultiple
+                //|| useCase.Type == UseCase.UseCaseTypes.RetrieveMultiple
                 || useCase.Type == UseCase.UseCaseTypes.Update))
             {
                 throw new Exception("Repeated use case");
             }
 
-            if (useCase.Schema != null)
-            {
-                var repeatedIntersection = repeatedCrud
-                    .Where(k => k.Schema?.Name == useCase.Schema.Name);
-                if (repeatedIntersection.Count() > 0
-                    && (useCase.Type == UseCase.UseCaseTypes.RetrieveMultipleIntersection))
-                {
-                    throw new Exception("Repeated use case");
-                }
-            }
+            //if (useCase.Schema != null)
+            //{
+            //    var repeatedIntersection = repeatedCrud
+            //        .Where(k => k.Schema?.Name == useCase.Schema.Name);
+            //    if (repeatedIntersection.Count() > 0
+            //        && (useCase.Type == UseCase.UseCaseTypes.RetrieveMultipleIntersection))
+            //    {
+            //        throw new Exception("Repeated use case");
+            //    }
+            //}
 
             UseCases.Add(useCase);
         }

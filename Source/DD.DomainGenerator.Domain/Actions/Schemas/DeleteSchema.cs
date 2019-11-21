@@ -17,18 +17,16 @@ namespace DD.DomainGenerator.Actions.Schemas
         public ActionParameterDefinition DomainParameter { get; set; }
         public DeleteSchema() : base(ActionName)
         {
-            SchemaNameParameter = new ActionParameterDefinition(
-                "schemaname", ActionParameterDefinition.TypeValue.String, "Schema name", "s", string.Empty)
-            { IsSchemaSuggestion = true };
-
-
             DomainParameter = new ActionParameterDefinition(
                 "domain", ActionParameterDefinition.TypeValue.String, "Domain", "d", string.Empty)
             { IsDomainSuggestion = true };
 
+            SchemaNameParameter = new ActionParameterDefinition(
+                "schemaname", ActionParameterDefinition.TypeValue.String, "Schema name", "s", string.Empty)
+            { InputSuggestionsHandler = GetDomainSchemasSuggestionHandler };
 
-            ActionParametersDefinition.Add(SchemaNameParameter);
             ActionParametersDefinition.Add(DomainParameter);
+            ActionParametersDefinition.Add(SchemaNameParameter);
         }
 
         public override bool CanExecute(ProjectState project, List<ActionParameter> parameters)
