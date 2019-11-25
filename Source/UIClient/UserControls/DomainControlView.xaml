@@ -16,13 +16,6 @@
         <Grid.Resources>
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
         </Grid.Resources>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="{Binding Domain.Name}" />
-            <TextBlock Text="Root" FontWeight="Bold" Visibility="{Binding Domain.IsRootDomain,Converter={StaticResource BoolToCollapsedConverter}}" Margin="5,0,0,0"/>
-        </StackPanel>-->
         <StackPanel>
             <usr:HierarchyItemControlView Text="{Binding  Domain.Name}" Icon="Domain" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
             
@@ -35,7 +28,7 @@
                     <ItemsControl  ItemsSource="{Binding Domain.SchemasCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:SchemaControlView  Schema="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:SchemaControlView  Schema="{Binding Path=.}"   EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:DomainControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:UIClient.Views"
         xmlns:usr="clr-namespace:UIClient.UserControls"
         xmlns:vm="clr-namespace:UIClient.ViewModels"
-        
-         
+        xmlns:usrusecase="clr-namespace:UIClient.UserControls.Editors.UseCases"
+        xmlns:usrinput="clr-namespace:UIClient.UserControls.Inputs"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -32,6 +32,7 @@
             <conv:DictionaryItemConverter x:Key="DictionaryItemConverter" />
             <conv:EnumerableToCollapsedConverter x:Key="EnumerableToCollapsedConverter" />
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+            <conv:DetailViewSelectorToCollapsedConverter x:Key="DetailViewSelectorToCollapsedConverter" />
         </Grid.Resources>
         
         <Grid.RowDefinitions>
@@ -95,7 +96,7 @@
                         <ItemsControl Margin="10" ItemsSource="{Binding NewActionParametersDefinitionsCollection}" Grid.Row="0" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <usr:GenericInputControlView 
+                                    <usrinput:GenericInputControlView 
                                         ParameterDefinition="{Binding Path=.}" 
                                         DefaultValues="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.NewActionParametersDefinitionsValues}"   
                                         SugestionsDictionary="{Binding RelativeSource={RelativeSource AncestorType=local:Main},  Path=ViewModel.NewActionParametersSugestions}"
@@ -118,15 +119,20 @@
         <Button Grid.Row="1" VerticalAlignment="Top" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="New action"  Command="{Binding Source={StaticResource ViewModel}, Path=OpenAddActionDialogCommand, Mode=OneWay}" >
             <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
         </Button>
-        <GroupBox Grid.Row="1" Header="Settings">
+        <GroupBox Grid.Row="1" Header="Project">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0">
-                        <usr:ProjectControlView ProjectState="{Binding ProjectStateModel}" EventManager="{Binding EventManager}"/>
-                </ScrollViewer>
+                <GroupBox Header="Project definition" Margin="3" Grid.Column="0">
+                    <ScrollViewer>
+                        <usr:ProjectControlView ProjectState="{Binding ProjectStateModel}"  EventManager="{Binding EventManager}"/>
+                    </ScrollViewer>
+                </GroupBox>
+                <GroupBox Header="{Binding SelectedUseCase.Name, StringFormat='Use case editor: {0}',TargetNullValue='Null', FallbackValue='Null'}" Margin="3" Grid.Column="1" Visibility="{Binding CurrentDetailView, Converter={StaticResource DetailViewSelectorToCollapsedConverter}, ConverterParameter='UseCase'}">
+                    <usrusecase:UseCaseEditorControlView UseCase="{Binding SelectedUseCase}"  ValueChanged="UseCaseEditorControlView_ValueChanged"/>
+                </GroupBox>
             </Grid>
         </GroupBox>
             

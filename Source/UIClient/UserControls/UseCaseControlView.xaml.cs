@@ -40,7 +40,7 @@ namespace UIClient.UserControls
                       DependencyProperty.Register(
                           nameof(EventManager),
                           typeof(DomainEventManager),
-                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(UseCaseControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -104,6 +104,27 @@ namespace UIClient.UserControls
             {
                 _viewModel.IsGeneralOpen = (e as CollapsedChangedEventArgs).Data;
             }
+        }
+
+        private void Input_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsInputsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void Output_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.IsOutputsOpen = (e as CollapsedChangedEventArgs).Data;
+            }
+        }
+
+        private void UseCase_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _viewModel.SelectedUseCse();
         }
     }
 }

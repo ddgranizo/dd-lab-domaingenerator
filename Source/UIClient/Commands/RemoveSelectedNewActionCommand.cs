@@ -14,11 +14,9 @@ namespace UIClient.Commands
             Initialize(data =>
             {
                 vm.SelectedNewAction = null;
-                vm.SelectedActionForModify = null;
             }, 
-            data => { 
-                return vm.SelectedNewAction != null
-                || vm.SelectedActionForModify != null; });
+            data => {
+                return vm.SelectedNewAction != null; });
         }
     }
 }

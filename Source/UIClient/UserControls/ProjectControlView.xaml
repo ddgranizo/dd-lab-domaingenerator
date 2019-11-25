@@ -19,6 +19,7 @@
             <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
             <conv:StringNullOrEmptyToCollapsedConverter x:Key="StringNullOrEmptyToCollapsedConverter" />
         </Grid.Resources>
+        
         <StackPanel Visibility="{Binding ProjectState.Name, Converter={StaticResource StringNullOrEmptyToCollapsedConverter}}">
             
             <usr:HierarchyItemControlView Text="Project" Icon="Projector" IsCollapsible="True" CollapsedChanged="HierarchyItemControlView_CollapsedChanged"/>
@@ -32,7 +33,7 @@
                     <ItemsControl  ItemsSource="{Binding ProjectState.SettingsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:SettingControlView  Setting="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:SettingControlView  Setting="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView} }"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -43,7 +44,7 @@
                     <ItemsControl  ItemsSource="{Binding ProjectState.AzurePipelineSettingsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:AzurePipelineSettingControlView  AzurePipelineSetting="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:AzurePipelineSettingControlView  AzurePipelineSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -54,7 +55,7 @@
                     <ItemsControl  ItemsSource="{Binding ProjectState.GithubSettingsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:GithubSettingControlView  GithubSetting="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:GithubSettingControlView  GithubSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -65,7 +66,7 @@
                     <ItemsControl  ItemsSource="{Binding ProjectState.EnvironmentsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:EnvironmentControlView  Environment="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:EnvironmentControlView  Environment="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -76,7 +77,7 @@
                     <ItemsControl  ItemsSource="{Binding ProjectState.DomainsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:DomainControlView  Domain="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:DomainControlView  Domain="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

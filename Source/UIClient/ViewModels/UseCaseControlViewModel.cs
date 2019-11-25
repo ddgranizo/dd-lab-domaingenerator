@@ -21,6 +21,10 @@ namespace UIClient.ViewModels
 
 		public UseCaseModel UseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
         public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsInputsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsOutputsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+
         public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
         private UseCaseControlView _view;
@@ -34,8 +38,10 @@ namespace UIClient.ViewModels
         {
 			_view = v;
         }
-
 		
-
+        public void SelectedUseCse()
+        {
+            EventManager.RaiseOnSelectedUseCaseCaseEvent(UseCase);
+        }
     }
 }

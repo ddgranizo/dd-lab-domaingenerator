@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using UIClient.UserControls;
+using UIClient.UserControls.Inputs;
 using UIClient.ViewModels.Base;
 
 namespace UIClient.ViewModels

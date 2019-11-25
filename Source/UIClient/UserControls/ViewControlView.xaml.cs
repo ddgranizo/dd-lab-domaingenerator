@@ -39,7 +39,7 @@ namespace UIClient.UserControls
                       DependencyProperty.Register(
                           nameof(EventManager),
                           typeof(DomainEventManager),
-                          typeof(DomainControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(ViewControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });

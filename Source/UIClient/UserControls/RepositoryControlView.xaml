@@ -26,7 +26,7 @@
                     <ItemsControl  ItemsSource="{Binding Repository.ViewsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:ViewControlView SchemaView="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:ViewControlView SchemaView="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:RepositoryControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

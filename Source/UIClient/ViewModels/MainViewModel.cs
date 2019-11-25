@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Input;
 using UIClient.Commands;
 using UIClient.Commands.Base;
+using UIClient.Events;
 using UIClient.Models;
 using UIClient.Models.Stored;
 using UIClient.Profiles;
@@ -25,6 +26,12 @@ namespace UIClient.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+
+        public enum DetailViewSelector
+        {
+            UseCase = 10,
+        }
+
         public string LastFileLoaded { get; set; }
         public ProjectState ProjectState { get; set; }
         public bool IsActionDialogOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
@@ -44,21 +51,16 @@ namespace UIClient.ViewModels
         public Dictionary<string, object> NewActionParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
         public Dictionary<string, List<string>> NewActionParametersSugestions { get { return GetValue<Dictionary<string, List<string>>>(); } set { SetValue(value); } }
 
-        public ActionExecutionModel SelectedAction { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value); } }
-        public ActionExecutionModel SelectedActionForModify { get { return GetValue<ActionExecutionModel>(); } set { SetValue(value, ActionForModifyChanged); } }
-
-        public List<ActionParameterDefinition> SelectedActionForModifyParametersDefinitions { get { return GetValue<List<ActionParameterDefinition>>(); } set { SetValue(value); UpdateListToCollection(value, SelectedActionForModifyParametersDefinitionsCollection); } }
-        public ObservableCollection<ActionParameterDefinition> SelectedActionForModifyParametersDefinitionsCollection { get; set; } = new ObservableCollection<ActionParameterDefinition>();
-        public Dictionary<string, object> SelectedActionForModifyParametersDefinitionsValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
 
         public List<string> RecentProjects { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, RecentProjectsCollection); } }
         public ObservableCollection<string> RecentProjectsCollection { get; set; } = new ObservableCollection<string>();
 
-        public List<ErrorExecutionActionModel> Errors { get { return GetValue<List<ErrorExecutionActionModel>>(); } set { SetValue(value); UpdateListToCollection(value, ErrorsCollection); } }
-        public ObservableCollection<ErrorExecutionActionModel> ErrorsCollection { get; set; } = new ObservableCollection<ErrorExecutionActionModel>();
+        public DomainEventManager EventManager { get; set; }
 
-        public List<DeployActionUnitModel> DeployActions { get { return GetValue<List<DeployActionUnitModel>>(); } set { SetValue(value); UpdateListToCollection(value, DeployActionsCollection); } }
-        public ObservableCollection<DeployActionUnitModel> DeployActionsCollection { get; set; } = new ObservableCollection<DeployActionUnitModel>();
+        public UseCaseModel SelectedUseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
+
+        public DetailViewSelector CurrentDetailView { get { return GetValue<DetailViewSelector>(); } set { SetValue(value); } }
+
 
         public IMapper Mapper { get; set; }
         private Window _window;
@@ -69,7 +71,6 @@ namespace UIClient.ViewModels
         private readonly IRegistryService _registryService;
         private readonly IFileService _fileService;
         private readonly IJsonParserService _jsonParserService;
-        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
         public MainViewModel()
         {
@@ -79,11 +80,26 @@ namespace UIClient.ViewModels
             _fileService = new FileService();
             _jsonParserService = new JsonParserService();
             _projectManager = new ProjectManager();
+            EventManager = new DomainEventManager();
+            EventManager.OnSelectedUseCase += EventManager_OnSelectedUseCase;
             NewActions = _projectManager.ActionManager.Actions.OrderBy(k => k.Name).ToList();
             SetRecentProjects();
             InitializeCommands();
             InitializeMapper();
             NewProject();
+        }
+
+        private void EventManager_OnSelectedUseCase(object sender, UseCaseEventArgs args)
+        {
+            SelectedUseCase = _jsonParserService.Objectify<UseCaseModel>(_jsonParserService.Stringfy<UseCaseModel>(args.UseCase));
+
+            CurrentDetailView = DetailViewSelector.UseCase;
+        }
+
+
+        public void SavedUseCaseFromEditor(UseCaseModel model)
+        {
+            
         }
 
         private void SetRecentProjects()
@@ -99,7 +115,6 @@ namespace UIClient.ViewModels
         public void Initialize(Window window)
         {
             _window = window;
-
         }
 
 
@@ -120,35 +135,7 @@ namespace UIClient.ViewModels
             StoredRecentProjectsService.SaveStoredData(currentProjectsStored);
         }
 
-        private void ActionForModifyChanged(ActionExecutionModel action)
-        {
-            if (action != null)
-            {
-                var baseAction = NewActions.FirstOrDefault(k => k.Name == action.ActionName);
-                if (baseAction != null)
-                {
-                    SelectedActionForModifyParametersDefinitionsValues = action.OutputParameters;
-                    SelectedActionForModifyParametersDefinitions =
-                        baseAction.ActionParametersDefinition
-                        .Where(k => k.Name.ToLower() != "help")
-                        .ToList();
 
-                    var itemsSugestions = new Dictionary<string, List<string>>();
-                    foreach (var item in baseAction.ActionParametersDefinition)
-                    {
-                        List<string> sugestions = GetActionParameterSugestions(item, ProjectState, SelectedActionForModifyParametersDefinitionsValues);
-                        itemsSugestions.Add(item.Name, sugestions);
-                    }
-                    NewActionParametersSugestions = itemsSugestions;
-                }
-            }
-            else
-            {
-                SelectedActionForModifyParametersDefinitions = new List<ActionParameterDefinition>();
-                SelectedActionForModifyParametersDefinitionsValues = new Dictionary<string, object>();
-            }
-        }
-     
 
         public void NewActionParameterValueChanged(ActionParameterDefinition parameter, object newValue)
         {
@@ -251,42 +238,27 @@ namespace UIClient.ViewModels
         }
 
         public ICommand NewProjectCommand { get; set; }
-        public ICommand RemoveActionCommand { get; set; }
         public ICommand SaveChangesCommand { get; set; }
         public ICommand RemoveSelectedNewActionCommand { get; set; }
-        public ICommand ModifyActionRequestCommand { get; set; }
         public ICommand OpenFileCommand { get; set; }
-        public ICommand ExecuteDeployActionUnitCommand { get; set; }
         public ICommand ExecuteActionCommand { get; set; }
-        public ICommand CheckDeployActionUnitCommand { get; set; }
-        public ICommand CheckAndExecuteAboveAndThisDeployActionUnitCommand { get; set; }
         public ICommand OpenAddActionDialogCommand { get; set; }
         public ICommand CloseAddActionDialogCommand { get; set; }
         private void InitializeCommands()
         {
             NewProjectCommand = new NewProjectCommand(this);
-            RemoveActionCommand = new RemoveActionCommand(this);
             SaveChangesCommand = new SaveChangesCommand(this);
             RemoveSelectedNewActionCommand = new RemoveSelectedNewActionCommand(this);
-            ModifyActionRequestCommand = new ModifyActionRequestCommand(this);
             OpenFileCommand = new OpenFileCommand(this);
-            ExecuteDeployActionUnitCommand = new ExecuteDeployActionUnitCommand(this);
             ExecuteActionCommand = new ExecuteActionCommand(this);
-            CheckDeployActionUnitCommand = new CheckDeployActionUnitCommand(this);
-            CheckAndExecuteAboveAndThisDeployActionUnitCommand = new CheckAndExecuteAboveAndThisDeployActionUnitCommand(this);
             OpenAddActionDialogCommand = new OpenAddActionDialogCommand(this);
             CloseAddActionDialogCommand = new CloseAddActionDialogCommand(this);
 
             RegisterCommand(NewProjectCommand);
-            RegisterCommand(RemoveActionCommand);
             RegisterCommand(SaveChangesCommand);
             RegisterCommand(RemoveSelectedNewActionCommand);
-            RegisterCommand(ModifyActionRequestCommand);
             RegisterCommand(OpenFileCommand);
-            RegisterCommand(ExecuteDeployActionUnitCommand);
             RegisterCommand(ExecuteActionCommand);
-            RegisterCommand(CheckDeployActionUnitCommand);
-            RegisterCommand(CheckAndExecuteAboveAndThisDeployActionUnitCommand);
             RegisterCommand(OpenAddActionDialogCommand);
             RegisterCommand(CloseAddActionDialogCommand);
 
@@ -350,7 +322,6 @@ namespace UIClient.ViewModels
         {
             return new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new ActionExecutionProfile());
                 mc.AddProfile(new AzurePipelineSettingProfile());
                 mc.AddProfile(new DomainProfile());
                 mc.AddProfile(new EnvironmentProfile());
@@ -358,19 +329,17 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new ProjectStateProfile());
                 mc.AddProfile(new SchemaModelProfile());
                 mc.AddProfile(new SchemaModelPropertyProfile());
-                mc.AddProfile(new ServiceProfile());
                 mc.AddProfile(new UseCaseProfile());
-                mc.AddProfile(new SchemaInDomainProfile());
-                mc.AddProfile(new ErrorExecutionActionProfile());
                 mc.AddProfile(new ActionBaseProfile());
-                mc.AddProfile(new DomainInMicroServiceProfile());
-                mc.AddProfile(new MicroServiceProfile());
-                mc.AddProfile(new DeployActionUnitProfile());
                 mc.AddProfile(new SettingProfile());
                 mc.AddProfile(new SchemaViewProfile());
                 mc.AddProfile(new ViewParameterProfile());
                 mc.AddProfile(new RepositoryProfile());
                 mc.AddProfile(new ModelProfile());
+                mc.AddProfile(new ExecutionSequenceProfile());
+                mc.AddProfile(new ExecutionSentenceExecutionProfile());
+                mc.AddProfile(new UseCaseParameterProfile());
+                mc.AddProfile(new ExecutionSentenceBaseProfile());
             });
         }
 

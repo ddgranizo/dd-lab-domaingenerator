@@ -27,7 +27,7 @@
                     <ItemsControl  ItemsSource="{Binding Schema.PropertiesCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:PropertyControlView  Property="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:PropertyControlView  Property="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:SchemaControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -38,7 +38,7 @@
                     <ItemsControl  ItemsSource="{Binding Schema.ModelsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:ModelControlView  Model="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:ModelControlView  Model="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:SchemaControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -50,7 +50,7 @@
                     <ItemsControl  ItemsSource="{Binding Schema.RepositoriesCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:RepositoryControlView Repository="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                <usr:RepositoryControlView Repository="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:SchemaControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -64,7 +64,7 @@
                         <ItemsControl  ItemsSource="{Binding Schema.BasicUseCasesCollection}" Grid.Row="0" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <usr:UseCaseControlView UseCase="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                    <usr:UseCaseControlView UseCase="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:SchemaControlView}}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -76,7 +76,7 @@
                         <ItemsControl  ItemsSource="{Binding Schema.BusinessUseCasesCollection}" Grid.Row="0" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <usr:UseCaseControlView UseCase="{Binding Path=.}" EventManager="{Binding EventManager}"/>
+                                    <usr:UseCaseControlView UseCase="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:SchemaControlView}}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

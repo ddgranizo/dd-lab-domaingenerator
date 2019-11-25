@@ -7,7 +7,7 @@
         xmlns:conv="clr-namespace:UIClient.Converters"
         xmlns:usr="clr-namespace:UIClient.UserControls"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
+    <UserControl.Resources>
         <vm:UseCaseControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
@@ -17,17 +17,39 @@
         </Grid.Resources>
 
         <StackPanel>
-            <usr:HierarchyItemControlView Text="{Binding  UseCase.Name}" Icon="Work" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" />
+            <usr:HierarchyItemControlView Cursor="Hand" Text="{Binding  UseCase.Name}" Icon="Work" IsCollapsible="True" CollapsedChanged="General_CollapsedChanged" MouseLeftButtonDown="UseCase_MouseLeftButtonDown"/>
             <StackPanel Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
                 <usr:HierarchyItemControlView Text="{Binding UseCase.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
                 <usr:HierarchyItemControlView Text="{Binding UseCase.Type, StringFormat='Type={0}'}" Icon="FormatAlignJustify"/>
                 <usr:HierarchyItemControlView Text="{Binding UseCase.IsCustom, StringFormat='IsCustom={0}'}" Icon="FormatAlignJustify"/>
 
                 <usr:HierarchyItemControlView Text="{Binding UseCase.Schema.Name, StringFormat='Schema={0}'}" Icon="FormatAlignJustify" Visibility="{Binding UseCase.Schema, Converter={StaticResource NullToCollapsedConverter}}"/>
-    
+
+                <usr:HierarchyItemControlView Text="Input Parameters" Icon="Sigma" IsCollapsible="True" CollapsedChanged="Input_CollapsedChanged" />
+                <Grid Visibility="{Binding IsInputsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding UseCase.InputParametersCollection}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:UseCaseParameterControlView  UseCaseParameter="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:UseCaseControlView}}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <usr:HierarchyItemControlView Text="Output Parameters" Icon="Sigma" IsCollapsible="True" CollapsedChanged="Output_CollapsedChanged" />
+                <StackPanel Visibility="{Binding IsOutputsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding UseCase.OutputParametersCollection}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:UseCaseParameterControlView  UseCaseParameter="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:UseCaseControlView}}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
             </StackPanel>
-            
-            
+
+
         </StackPanel>
 
     </Grid>

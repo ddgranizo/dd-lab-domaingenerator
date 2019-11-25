@@ -22,20 +22,30 @@ namespace DD.DomainGenerator.Models
             Custom = 99,
         }
 
+
+
+
         public string Name { get; set; }
         public UseCaseTypes Type { get; set; }
         public Schema Schema { get; set; }
         public bool IsCustom { get; set; }
 
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
 
+        public List<UseCaseParameter> InputParameters { get; set; }
+        public List<UseCaseParameter> OutputParameters { get; set; }
+
+        public ExecutionSequence ExecutionSequence { get; set; }
 
         public UseCase()
         {
-
+            InputParameters = new List<UseCaseParameter>();
+            OutputParameters = new List<UseCaseParameter>();
         }
 
-
         public UseCase(string name)
+            :this()
         {
             Type = UseCaseTypes.Custom;
             Name = name;
@@ -43,14 +53,43 @@ namespace DD.DomainGenerator.Models
         }
 
         public UseCase(UseCaseTypes type)
+            : this()
         {
             Type = type;
             Name = type.ToString();
             IsCustom = false;
+            if (type == UseCaseTypes.RetrieveByPk)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
+                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+            }
+            else if(type == UseCaseTypes.RetrieveByUn)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.String, "Name"));
+                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+            }
+            else if (type == UseCaseTypes.Create)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
+            }
+            else if (type == UseCaseTypes.Update)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+            }
+            else if (type == UseCaseTypes.DeleteByPk)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
+            }
+            else if (type == UseCaseTypes.DeleteByUn)
+            {
+                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.String, "Name"));
+            }
         }
 
 
         public UseCase(UseCaseTypes type, Schema schema)
+            : this()
         {
             Type = type;
             Name = type.ToString();

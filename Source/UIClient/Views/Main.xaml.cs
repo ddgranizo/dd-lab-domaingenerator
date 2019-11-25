@@ -40,5 +40,10 @@ namespace UIClient.Views
             ViewModel.NewActionParameterValueChanged(myEvent.ParameterDefinition, myEvent.Data);
         }
 
+        private void UseCaseEditorControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as UseCaseChangedRoutedEventArgs;
+            ViewModel.SavedUseCaseFromEditor(myEvent.Value);
+        }
     }
 }
