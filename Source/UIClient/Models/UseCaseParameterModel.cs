@@ -12,7 +12,7 @@ namespace UIClient.Models
         public InputType Type { get { return GetValue<InputType>(); } set { SetValue(value); } }
         public InputType EnumerableType { get { return GetValue<InputType>(); } set { SetValue(value); } }
         public InputType DictionaryKeyType { get { return GetValue<InputType>(); } set { SetValue(value); } }
-        public InputType DictionaryKeyValue { get { return GetValue<InputType>(); } set { SetValue(value); } }
+        public InputType DictionaryValueType { get { return GetValue<InputType>(); } set { SetValue(value); } }
 
     }
 }

@@ -20,69 +20,115 @@
             <conv:StringNullOrEmptyToCollapsedConverter x:Key="StringNullOrEmptyToCollapsedConverter" />
         </Grid.Resources>
         
+        
         <StackPanel Visibility="{Binding ProjectState.Name, Converter={StaticResource StringNullOrEmptyToCollapsedConverter}}">
-            
-            <usr:HierarchyItemControlView Text="Project" Icon="Projector" IsCollapsible="True" CollapsedChanged="HierarchyItemControlView_CollapsedChanged"/>
-            <StackPanel  Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                <usr:HierarchyItemControlView Text="{Binding ProjectState.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
-                <usr:HierarchyItemControlView Text="{Binding ProjectState.NameSpace, StringFormat='NameSpace={0}'}" Icon="FormatAlignJustify"/>
-                <usr:HierarchyItemControlView Text="{Binding ProjectState.Path, StringFormat='Path={0}'}"  Icon="FormatAlignJustify"/>
-
-                <usr:HierarchyItemControlView Text="Settings" Icon="Settings" IsCollapsible="True" CollapsedChanged="Settings_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding ProjectState.SettingsCollection}" Grid.Row="0" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <usr:SettingControlView  Setting="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView} }"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-
-                <usr:HierarchyItemControlView Text="Azure pipeline settings" Icon="Azure" IsCollapsible="True" CollapsedChanged="AzurePipelineSettings_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsAzurePipelineSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding ProjectState.AzurePipelineSettingsCollection}" Grid.Row="0" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <usr:AzurePipelineSettingControlView  AzurePipelineSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-
-                <usr:HierarchyItemControlView Text="Github settings" Icon="GithubBox" IsCollapsible="True" CollapsedChanged="GithubSettings_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsGithubSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding ProjectState.GithubSettingsCollection}" Grid.Row="0" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <usr:GithubSettingControlView  GithubSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-
-                <usr:HierarchyItemControlView Text="Environments" Icon="Sitemap" IsCollapsible="True" CollapsedChanged="Environments_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsEnvironmentsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding ProjectState.EnvironmentsCollection}" Grid.Row="0" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <usr:EnvironmentControlView  Environment="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-
-                <usr:HierarchyItemControlView Text="Domains" Icon="Domain" IsCollapsible="True" CollapsedChanged="Domain_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsDomainsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding ProjectState.DomainsCollection}" Grid.Row="0" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <usr:DomainControlView  Domain="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <ToolBar >
+                    <RadioButton IsChecked="{Binding IsRadioTreeChecked}">
+                        <RadioButton.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="Show tree structure"></TextBlock>
+                            </ToolTip>
+                        </RadioButton.ToolTip>
+                        <materialDesign:PackIcon Kind="Tree" Width="15" Height="15"/>
+                    </RadioButton>
+                    <RadioButton IsChecked="{Binding IsRadioUseCaseListChecked}">
+                        <RadioButton.ToolTip>
+                            <ToolTip>
+                                <TextBlock Text="Show use cases list"></TextBlock>
+                            </ToolTip>
+                        </RadioButton.ToolTip>
+                        <materialDesign:PackIcon Kind="Work" Width="15" Height="15"/>
+                    </RadioButton>
+                </ToolBar>
             </StackPanel>
+
+
+            <StackPanel Visibility="{Binding IsRadioUseCaseListChecked, Converter={StaticResource BoolToCollapsedConverter}}">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Margin="5,0,5,0">Search</TextBlock>
+                    <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding SearchText, Delay=400, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                </Grid>
+                <ScrollViewer>
+                    <ItemsControl  ItemsSource="{Binding FilteredUseCaseListItemsCollection}" Grid.Row="0" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <usr:UseCaseListItemControlView  UseCaseItem="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView} }"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+            
+            
+            <StackPanel Visibility="{Binding IsRadioTreeChecked, Converter={StaticResource BoolToCollapsedConverter}}">
+                <usr:HierarchyItemControlView Text="Project" Icon="Projector" IsCollapsible="True" CollapsedChanged="HierarchyItemControlView_CollapsedChanged"/>
+                <StackPanel  Visibility="{Binding IsGeneralOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <usr:HierarchyItemControlView Text="{Binding ProjectState.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
+                    <usr:HierarchyItemControlView Text="{Binding ProjectState.NameSpace, StringFormat='NameSpace={0}'}" Icon="FormatAlignJustify"/>
+                    <usr:HierarchyItemControlView Text="{Binding ProjectState.Path, StringFormat='Path={0}'}"  Icon="FormatAlignJustify"/>
+
+                    <usr:HierarchyItemControlView Text="Settings" Icon="Settings" IsCollapsible="True" CollapsedChanged="Settings_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding ProjectState.SettingsCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:SettingControlView  Setting="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView} }"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+
+                    <usr:HierarchyItemControlView Text="Azure pipeline settings" Icon="Azure" IsCollapsible="True" CollapsedChanged="AzurePipelineSettings_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsAzurePipelineSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding ProjectState.AzurePipelineSettingsCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:AzurePipelineSettingControlView  AzurePipelineSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+
+                    <usr:HierarchyItemControlView Text="Github settings" Icon="GithubBox" IsCollapsible="True" CollapsedChanged="GithubSettings_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsGithubSettingsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding ProjectState.GithubSettingsCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:GithubSettingControlView  GithubSetting="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+
+                    <usr:HierarchyItemControlView Text="Environments" Icon="Sitemap" IsCollapsible="True" CollapsedChanged="Environments_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsEnvironmentsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding ProjectState.EnvironmentsCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:EnvironmentControlView  Environment="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+
+                    <usr:HierarchyItemControlView Text="Domains" Icon="Domain" IsCollapsible="True" CollapsedChanged="Domain_CollapsedChanged"/>
+                    <Grid Visibility="{Binding IsDomainsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                        <ItemsControl  ItemsSource="{Binding ProjectState.DomainsCollection}" Grid.Row="0" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <usr:DomainControlView  Domain="{Binding Path=.}"  EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:ProjectControlView}}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+            
         </StackPanel>
         <TextBlock Text="Initialize a project!" Visibility="{Binding ProjectState.Name, Converter={StaticResource StringNullOrEmptyToCollapsedConverter}, ConverterParameter=False}"></TextBlock>
     </Grid>

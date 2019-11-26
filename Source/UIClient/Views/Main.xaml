@@ -25,7 +25,7 @@
         <vm:MainViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </Window.Resources>
     <Grid x:Name="MainGrid" AllowDrop="True" Drop="MainGrid_Drop" DataContext="{Binding Source={StaticResource ViewModel}}">
-        
+
         <Grid.Resources>
             <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
             <conv:StringToCollapsedConverter x:Key="StringToCollapsedConverter" />
@@ -34,14 +34,14 @@
             <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
             <conv:DetailViewSelectorToCollapsedConverter x:Key="DetailViewSelectorToCollapsedConverter" />
         </Grid.Resources>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition  Height="auto"/>
             <RowDefinition  Height="*"/>
             <RowDefinition  Height="auto"/>
             <RowDefinition  Height="auto"/>
         </Grid.RowDefinitions>
-        
+
         <DockPanel Grid.Row="0" >
             <Menu DockPanel.Dock="Top" Background="White">
                 <MenuItem Header="Menu" >
@@ -67,7 +67,7 @@
         </DockPanel>
 
 
-        <materialDesign:DialogHost IsOpen="{Binding IsActionDialogOpen}" Grid.RowSpan="3" Panel.ZIndex="1000" d:DesignWidth="0" d:DesignHeight="0" >
+        <materialDesign:DialogHost x:Name="ActionDialog" IsOpen="{Binding IsActionDialogOpen}" Grid.RowSpan="3" Panel.ZIndex="1000" d:DesignWidth="0" d:DesignHeight="0" >
             <materialDesign:DialogHost.DialogContent>
                 <Grid Margin="10" Width="400" Height="400">
                     <Grid.RowDefinitions>
@@ -110,7 +110,18 @@
                             </Button>
                         </Grid>
                     </Grid>
-                    
+
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+
+
+        <materialDesign:DialogHost x:Name="GenericFormDialog" IsOpen="{Binding IsGenericFormDialogOpen}" Grid.RowSpan="3" Panel.ZIndex="1000" d:DesignWidth="0" d:DesignHeight="0" >
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Margin="10" Width="400" Height="400">
+                    <ScrollViewer>
+                        <usrinput:GenericFormControlView FormModel="{Binding GenericFormRequestModel}" InitialValues="{Binding GenericFormRequestInitialValues}" OnConfirmedValues="GenericFormControlView_OnConfirmedValues" OnCanceledValues="GenericFormControlView_OnCanceledValues"/>
+                    </ScrollViewer>
                 </Grid>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
@@ -131,11 +142,11 @@
                     </ScrollViewer>
                 </GroupBox>
                 <GroupBox Header="{Binding SelectedUseCase.Name, StringFormat='Use case editor: {0}',TargetNullValue='Null', FallbackValue='Null'}" Margin="3" Grid.Column="1" Visibility="{Binding CurrentDetailView, Converter={StaticResource DetailViewSelectorToCollapsedConverter}, ConverterParameter='UseCase'}">
-                    <usrusecase:UseCaseEditorControlView UseCase="{Binding SelectedUseCase}"  ValueChanged="UseCaseEditorControlView_ValueChanged"/>
+                    <usrusecase:UseCaseEditorControlView UseCase="{Binding SelectedUseCase}"  ValueChanged="UseCaseEditorControlView_ValueChanged" EventManager="{Binding EventManager}"/>
                 </GroupBox>
             </Grid>
         </GroupBox>
-            
+
         <StatusBar Grid.Row="3">
             <Label>Status bar</Label>
         </StatusBar>

@@ -33,7 +33,6 @@ namespace UIClient.Views
             }
         }
 
-
         private void NewActionGenericInputControlView_ValueChanged(object sender, RoutedEventArgs e)
         {
             var myEvent = e as ValueChangedEventArgs;
@@ -44,6 +43,17 @@ namespace UIClient.Views
         {
             var myEvent = e as UseCaseChangedRoutedEventArgs;
             ViewModel.SavedUseCaseFromEditor(myEvent.Value);
+        }
+
+        private void GenericFormControlView_OnConfirmedValues(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as OnGenericFormConfirmedValuesEventArgs;
+            ViewModel.GenericFormValueConfirmed(myEvent.Data);
+        }
+
+        private void GenericFormControlView_OnCanceledValues(object sender, RoutedEventArgs e)
+        {
+            ViewModel.GenericFormValueCancelled();
         }
     }
 }

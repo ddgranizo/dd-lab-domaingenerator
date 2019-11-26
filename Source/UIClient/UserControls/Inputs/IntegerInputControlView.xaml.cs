@@ -49,8 +49,6 @@ namespace UIClient.UserControls.Inputs
 
 
 
-
-
         public int DefaultValue
         {
             get

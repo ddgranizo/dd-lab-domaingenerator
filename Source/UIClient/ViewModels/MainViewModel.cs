@@ -16,6 +16,7 @@ using UIClient.Commands;
 using UIClient.Commands.Base;
 using UIClient.Events;
 using UIClient.Models;
+using UIClient.Models.Inputs;
 using UIClient.Models.Stored;
 using UIClient.Profiles;
 using UIClient.Services;
@@ -26,18 +27,18 @@ namespace UIClient.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-
         public enum DetailViewSelector
         {
             UseCase = 10,
         }
+
+       
 
         public string LastFileLoaded { get; set; }
         public ProjectState ProjectState { get; set; }
         public bool IsActionDialogOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
         public string MessageDialog { get { return GetValue<string>(); } set { SetValue(value); } }
         public bool IsDetailSectionVisible { get { return GetValue<bool>(); } set { SetValue(value); } }
-
 
         public ProjectStateModel ProjectStateModel { get { return GetValue<ProjectStateModel>(); } set { SetValue(value); } }
 
@@ -59,8 +60,14 @@ namespace UIClient.ViewModels
 
         public UseCaseModel SelectedUseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
 
-        public DetailViewSelector CurrentDetailView { get { return GetValue<DetailViewSelector>(); } set { SetValue(value); } }
 
+        public Guid GenericFormRequestId { get { return GetValue<Guid>(); } set { SetValue(value); } }
+        public Dictionary<string, object> GenericFormRequestInitialValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
+        public GenericFormModel GenericFormRequestModel { get { return GetValue<GenericFormModel>(); } set { SetValue(value); } }
+        public bool IsGenericFormDialogOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+
+
+        public DetailViewSelector CurrentDetailView { get { return GetValue<DetailViewSelector>(); } set { SetValue(value); } }
 
         public IMapper Mapper { get; set; }
         private Window _window;
@@ -82,6 +89,7 @@ namespace UIClient.ViewModels
             _projectManager = new ProjectManager();
             EventManager = new DomainEventManager();
             EventManager.OnSelectedUseCase += EventManager_OnSelectedUseCase;
+            EventManager.OnGenericFormInputRequested += EventManager_OnGenericFormInputRequested;
             NewActions = _projectManager.ActionManager.Actions.OrderBy(k => k.Name).ToList();
             SetRecentProjects();
             InitializeCommands();
@@ -89,13 +97,32 @@ namespace UIClient.ViewModels
             NewProject();
         }
 
+        private void EventManager_OnGenericFormInputRequested(object sender, GenericFormRequestEventArgs args)
+        {
+            GenericFormRequestId = args.RequestId;
+            GenericFormRequestInitialValues = args.InitialValues;
+            GenericFormRequestModel = args.FormModel;
+            SetGenericFormDialog();
+        }
+
         private void EventManager_OnSelectedUseCase(object sender, UseCaseEventArgs args)
         {
             SelectedUseCase = _jsonParserService.Objectify<UseCaseModel>(_jsonParserService.Stringfy<UseCaseModel>(args.UseCase));
-
             CurrentDetailView = DetailViewSelector.UseCase;
         }
 
+
+        public void GenericFormValueConfirmed(Dictionary<string, object> values)
+        {
+            UnsetGenericFormDialog();
+            EventManager.RaiseOnGenericFormInputResponsedEvent(GenericFormRequestId, true, values);
+        }
+
+        public void GenericFormValueCancelled()
+        {
+            UnsetGenericFormDialog();
+            EventManager.RaiseOnGenericFormInputResponsedEvent(GenericFormRequestId, false, null);
+        }
 
         public void SavedUseCaseFromEditor(UseCaseModel model)
         {
@@ -342,6 +369,17 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new ExecutionSentenceBaseProfile());
             });
         }
+
+        public void SetGenericFormDialog()
+        {
+            IsGenericFormDialogOpen = true;
+        }
+
+        public void UnsetGenericFormDialog()
+        {
+            IsGenericFormDialogOpen = false;
+        }
+
 
         public void SetActionDialog()
         {

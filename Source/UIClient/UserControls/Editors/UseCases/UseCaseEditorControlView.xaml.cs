@@ -25,7 +25,7 @@ namespace UIClient.UserControls.Editors.UseCases
     {
 
         public static readonly RoutedEvent ValueChangedEvent =
-                    EventManager.RegisterRoutedEvent(nameof(ValueChanged), RoutingStrategy.Bubble,
+                    System.Windows.EventManager.RegisterRoutedEvent(nameof(ValueChanged), RoutingStrategy.Bubble,
                     typeof(RoutedEventHandler), typeof(UseCaseEditorControlView));
 
         public event RoutedEventHandler ValueChanged
@@ -44,6 +44,26 @@ namespace UIClient.UserControls.Editors.UseCases
             RaiseEvent(args);
         }
 
+        public DomainEventManager EventManager
+        {
+            get
+            {
+                return (DomainEventManager)GetValue(EventManagerProperty);
+            }
+            set
+            {
+                SetValue(EventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty EventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(EventManager),
+                          typeof(DomainEventManager),
+                          typeof(UseCaseEditorControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          {
+                              BindsTwoWayByDefault = true,
+                          });
 
         public UseCaseModel UseCase
         {
@@ -82,9 +102,18 @@ namespace UIClient.UserControls.Editors.UseCases
             {
                 v.SetUseCase((UseCaseModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(EventManager))
+            {
+                v.SetEventManager((DomainEventManager)e.NewValue);
+            }
         }
 
-		private void SetUseCase(UseCaseModel data)
+        private void SetEventManager(DomainEventManager data)
+        {
+            _viewModel.EventManager = data;
+        }
+
+        private void SetUseCase(UseCaseModel data)
         {
             _viewModel.UseCase = data;
         }

@@ -17,8 +17,9 @@ namespace UIClient.ViewModels
 {
     public class UseCaseEditorControlViewModel : BaseViewModel
     {
+        public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-		public UseCaseModel UseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
+        public UseCaseModel UseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
         
 		private UseCaseEditorControlView _view;
 
@@ -32,6 +33,10 @@ namespace UIClient.ViewModels
         public ICommand MoveUpOutputParameterCommand { get; set; }
         public ICommand MoveDownInputParameterCommand { get; set; }
         public ICommand MoveDownOutputParameterCommand { get; set; }
+
+
+        public Guid GenericFormRequestId { get; set; }
+
 
         public UseCaseEditorControlViewModel()
         {

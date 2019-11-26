@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DD.DomainGenerator.Models
@@ -31,6 +32,11 @@ namespace DD.DomainGenerator.Models
         {
             Type = type;
             Name = name;
+        }
+
+        public static List<string> GetUseCaseParameterTypesList()
+        {
+            return Enum.GetNames(typeof(InputType)).ToList();
         }
     }
 }
