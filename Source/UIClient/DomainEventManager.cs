@@ -28,6 +28,7 @@ namespace UIClient
             OnGenericFormInputRequested?.Invoke(this, new GenericFormRequestEventArgs(requestId, formModel));
         }
 
+       
         public void RaiseOnGenericFormInputResponsedEvent(Guid requestId, bool completed, Dictionary<string, object> values)
         {
             OnGenericFormInputResponsed?.Invoke(this, new GenericFormResponseEventArgs(requestId, completed, values));

@@ -13,6 +13,6 @@ namespace UIClient.Models.Inputs
         public TypeValue Type { get; set; }
         public string[] Options { get; set; }
         public IGenericFormSuggestionHandler SuggestionHandler { get; set; }
-
+        public object DefaultValue { get; set; }
     }
 }

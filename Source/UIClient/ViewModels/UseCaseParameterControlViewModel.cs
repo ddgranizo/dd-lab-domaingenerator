@@ -18,7 +18,7 @@ namespace UIClient.ViewModels
     public class UseCaseParameterControlViewModel : BaseViewModel
     {
 
-		public UseCaseParameterModel UseCaseParameter { get { return GetValue<UseCaseParameterModel>(); } set { SetValue(value); } }
+		public DataParameterModel UseCaseParameter { get { return GetValue<DataParameterModel>(); } set { SetValue(value); } }
         public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
 
         public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }

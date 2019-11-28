@@ -21,7 +21,7 @@ using UIClient.ViewModels;
 
 namespace UIClient.UserControls
 {
-    public partial class ViewControlView : UserControl
+    public partial class RepositoryMethodControlView : UserControl
     {
 
         public DomainEventManager EventManager
@@ -39,16 +39,16 @@ namespace UIClient.UserControls
                       DependencyProperty.Register(
                           nameof(EventManager),
                           typeof(DomainEventManager),
-                          typeof(ViewControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(RepositoryMethodControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
 
-        public ViewModel SchemaView
+        public RepositoryMethodModel RepositoryMethod
         {
             get
             {
-                return (ViewModel)GetValue(SchemaViewProperty);
+                return (RepositoryMethodModel)GetValue(SchemaViewProperty);
             }
             set
             {
@@ -58,28 +58,28 @@ namespace UIClient.UserControls
 
         public static readonly DependencyProperty SchemaViewProperty =
                       DependencyProperty.Register(
-                          nameof(SchemaView),
-                          typeof(ViewModel),
-                          typeof(ViewControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          nameof(RepositoryMethod),
+                          typeof(RepositoryMethodModel),
+                          typeof(RepositoryMethodControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
 
-        private readonly ViewControlViewModel _viewModel = null;
+        private readonly RepositoryMethodControlViewModel _viewModel = null;
 
-        public ViewControlView()
+        public RepositoryMethodControlView()
         {
             InitializeComponent();
-            _viewModel = Resources["ViewModel"] as ViewControlViewModel;
+            _viewModel = Resources["ViewModel"] as RepositoryMethodControlViewModel;
             _viewModel.Initialize(this);
         }
 
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ViewControlView v = d as ViewControlView;
-            if (e.Property.Name == nameof(SchemaView))
+            RepositoryMethodControlView v = d as RepositoryMethodControlView;
+            if (e.Property.Name == nameof(RepositoryMethod))
             {
-                v.SetSchemaView((ViewModel)e.NewValue);
+                v.SetRepositoryMethod((RepositoryMethodModel)e.NewValue);
             }
             else if (e.Property.Name == nameof(EventManager))
             {
@@ -93,9 +93,9 @@ namespace UIClient.UserControls
             _viewModel.EventManager = data;
         }
 
-        private void SetSchemaView(ViewModel data)
+        private void SetRepositoryMethod(RepositoryMethodModel data)
         {
-            _viewModel.View = data;
+            _viewModel.RepositoryMethod = data;
         }
 
         private void General_CollapsedChanged(object sender, RoutedEventArgs e)

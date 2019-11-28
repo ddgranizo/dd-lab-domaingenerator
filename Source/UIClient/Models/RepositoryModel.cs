@@ -9,8 +9,8 @@ namespace UIClient.Models
     public class RepositoryModel : BaseModel
     {
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
-        public List<ViewModel> Views { get { return GetValue<List<ViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, ViewsCollection); } }
-        public ObservableCollection<ViewModel> ViewsCollection { get; set; } = new ObservableCollection<ViewModel>();
+        public List<RepositoryMethodModel> RepositoryMethods { get { return GetValue<List<RepositoryMethodModel>>(); } set { SetValue(value); UpdateListToCollection(value, RepositoryMethodsCollection); } }
+        public ObservableCollection<RepositoryMethodModel> RepositoryMethodsCollection { get; set; } = new ObservableCollection<RepositoryMethodModel>();
 
         public bool  IsCustom { get { return GetValue<bool>(); } set { SetValue(value); } }
 

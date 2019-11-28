@@ -7,7 +7,7 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    
+
     public class RemoveUseCaseEditorParameterCommand : RelayCommand
     {
         public enum ParameterDirection
@@ -22,26 +22,32 @@ namespace UIClient.Commands
             {
                 try
                 {
-                    if (input != null)
+                    var useCaseItem = direction == ParameterDirection.Input
+                        ? vm.SelectedInputUseCaseParameter
+                        : vm.SelectedOutputUseCaseParameter;
+
+                    if (direction == ParameterDirection.Input)
                     {
-                        if (direction == ParameterDirection.Input)
-                        {
-                            var parameters = vm.UseCase.InputParameters;
-                            parameters.Remove((UseCaseParameterModel)input);
-                            vm.UseCase.InputParameters = parameters;
-                        }
-                        else if (direction == ParameterDirection.Output)
-                        {
-                            var parameters = vm.UseCase.OutputParameters;
-                            parameters.Remove((UseCaseParameterModel)input);
-                            vm.UseCase.OutputParameters = parameters;
-                        }
-                    }   
+                        var parameters = vm.UseCase.InputParameters;
+                        parameters.Remove((DataParameterModel)input);
+                        vm.UseCase.InputParameters = parameters;
+                    }
+                    else if (direction == ParameterDirection.Output)
+                    {
+                        var parameters = vm.UseCase.OutputParameters;
+                        parameters.Remove((DataParameterModel)input);
+                        vm.UseCase.OutputParameters = parameters;
+                    }
+                    vm.RaiseCanExecuteCommandChanged();
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
+            }, data =>
+            {
+                return direction == ParameterDirection.Input && vm.SelectedInputUseCaseParameter != null
+                        || direction == ParameterDirection.Output && vm.SelectedOutputUseCaseParameter != null;
             });
         }
 

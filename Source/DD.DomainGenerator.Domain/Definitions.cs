@@ -6,6 +6,22 @@ namespace DD.DomainGenerator
 {
     public class Definitions
     {
+        public enum DomainInputType
+        {
+            Boolean = 1,
+            Integer = 2,
+            Decimal = 3,
+            Double = 4,
+            Guid = 9,
+            String = 10,
+            Datetime = 20,
+
+            Enumerable = 80,
+            Dictionary = 90,
+            DomainEntity = 99,
+        }
+
+
         public struct ActionsParametersDefinitions
         {
             public struct AddMicroService
@@ -93,7 +109,7 @@ namespace DD.DomainGenerator
             }
             public struct MicroServices
             {
-                
+
                 public struct CloneGitRepository
                 {
                     public const string Path = "Path";
@@ -133,7 +149,7 @@ namespace DD.DomainGenerator
                     public const string SolutionFileName = "SolutionFileName";
                     public const string SolutionFilePath = "SolutionFilePath";
                 }
-               
+
             }
         }
 
@@ -178,6 +194,16 @@ namespace DD.DomainGenerator
         public struct DefaultBasicDomainNames
         {
             public const string User = "User";
+        }
+
+        public struct DefaultRepositoryMethodNames
+        {
+            public const string RetrieveByPk = "RetrieveByPk";
+            public const string RetrieveByUn = "RetrieveByUn";
+            public const string Create = "Create";
+            public const string DeleteByPk = "DeleteByPk";
+            public const string DeleteByUn = "DeleteByUn";
+            public const string Update = "Update";
         }
 
         public struct DefaultViewNames
@@ -242,7 +268,7 @@ namespace DD.DomainGenerator
         {
             public const string Master = "master";
         }
-        
+
 
         public struct ProjectTemplates
         {

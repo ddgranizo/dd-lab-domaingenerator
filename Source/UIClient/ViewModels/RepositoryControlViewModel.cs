@@ -19,9 +19,9 @@ namespace UIClient.ViewModels
     {
         public DomainEventManager EventManager { get { return GetValue<DomainEventManager>(); } set { SetValue(value); } }
 
-        public RepositoryModel Repository { get { return GetValue<RepositoryModel>(); } set { SetValue(value); } }
+        public RepositoryModel Repository { get { return GetValue<RepositoryModel>(); } set { SetValue(value, UpdatedRepository); } }
         public bool IsGeneralOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
-        public bool IsViewsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsMethodsOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
 
         
 
@@ -36,6 +36,11 @@ namespace UIClient.ViewModels
         public void Initialize(RepositoryControlView v)
         {
 			_view = v;
+        }
+
+        private void UpdatedRepository(RepositoryModel repository)
+        {
+
         }
 
 		

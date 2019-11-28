@@ -25,6 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -64,27 +65,30 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition  Width="*"/>
                     </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Button VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Add new parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=AddInputParameterCommand, Mode=OneWay}" >
+                            <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
+                        </Button>
+                        <Button VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Move down parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=MoveDownInputParameterCommand, Mode=OneWay}" >
+                            <materialDesign:PackIcon Kind="ArrowBottom" Width="15" Height="15"/>
+                        </Button>
+                        <Button VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Move up parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=MoveUpInputParameterCommand, Mode=OneWay}" >
+                            <materialDesign:PackIcon Kind="ArrowTop" Width="15" Height="15"/>
+                        </Button>
+                    </StackPanel>
                     <TextBlock  Grid.Column="1" Text="Input parameters" Grid.Row="0" Margin="5"></TextBlock>
-                    <Button Grid.Row="0" VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Add new parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=AddInputParameterCommand, Mode=OneWay}" >
-                        <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
-                    </Button>
+                    
                 </Grid>
 
 
-                <ListView Grid.Row="1" ItemsSource="{Binding UseCase.InputParametersCollection}" Margin="5">
+                <ListView Grid.Row="1" ItemsSource="{Binding UseCase.InputParametersCollection}" Margin="5" SelectedItem="{Binding SelectedInputUseCaseParameter}">
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Modify" Command="{Binding ModifyInputParameterCommand}" 
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
                                 Path=PlacementTarget.SelectedItem}"/>
                             <MenuItem Header="Remove" Command="{Binding RemoveInputParameterCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
-                                Path=PlacementTarget.SelectedItem}"/>
-                            <Separator />
-                            <MenuItem Header="Move up" Command="{Binding MoveUpInputParameterCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
-                                Path=PlacementTarget.SelectedItem}"/>
-                            <MenuItem Header="Move up" Command="{Binding MoveDownInputParameterCommand}" 
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
                                 Path=PlacementTarget.SelectedItem}"/>
                         </ContextMenu>
@@ -109,13 +113,14 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition  Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" Text="Output parameters" Grid.Row="0" Margin="5"></TextBlock>
-                    <Button Grid.Row="0" VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Add new parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=AddOutputParameterCommand, Mode=OneWay}" >
+                    <Button VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Right" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Add new parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=AddOutputParameterCommand, Mode=OneWay}" >
                         <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
                     </Button>
+                    <TextBlock Grid.Column="1" Text="Output parameters" Grid.Row="0" Margin="5"></TextBlock>
+                   
                 </Grid>
-                
-                <ListView Grid.Row="1" ItemsSource="{Binding UseCase.OutputParametersCollection}" Margin="5">
+
+                <ListView Grid.Row="1" ItemsSource="{Binding UseCase.OutputParametersCollection}" Margin="5" SelectedItem="{Binding SelectedOutputUseCaseParameter}">
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Modify" Command="{Binding ModifyOutputParameterCommand}" 
@@ -125,12 +130,6 @@
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
                                 Path=PlacementTarget.SelectedItem}"/>
                             <Separator />
-                            <MenuItem Header="Move up" Command="{Binding MoveUpOutputParameterCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
-                                Path=PlacementTarget.SelectedItem}"/>
-                            <MenuItem Header="Move up" Command="{Binding MoveDownOutputParameterCommand}" 
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}},
-                                Path=PlacementTarget.SelectedItem}"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                     <ListView.ItemTemplate>
@@ -143,6 +142,18 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Execution sequence"  VerticalAlignment="Center"/>
+                <Button VerticalAlignment="Center" Panel.ZIndex="200" HorizontalAlignment="Left" Margin="5,0,5,0" Height="25"  Width="25" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Add new parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=AddInputParameterCommand, Mode=OneWay}" >
+                    <materialDesign:PackIcon Kind="Plus" Width="15" Height="15"/>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

@@ -100,7 +100,6 @@ namespace UIClient.ViewModels
         private void EventManager_OnGenericFormInputRequested(object sender, GenericFormRequestEventArgs args)
         {
             GenericFormRequestId = args.RequestId;
-            GenericFormRequestInitialValues = args.InitialValues;
             GenericFormRequestModel = args.FormModel;
             SetGenericFormDialog();
         }
@@ -356,17 +355,27 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new ProjectStateProfile());
                 mc.AddProfile(new SchemaModelProfile());
                 mc.AddProfile(new SchemaModelPropertyProfile());
-                mc.AddProfile(new UseCaseProfile());
+           
                 mc.AddProfile(new ActionBaseProfile());
                 mc.AddProfile(new SettingProfile());
                 mc.AddProfile(new SchemaViewProfile());
                 mc.AddProfile(new ViewParameterProfile());
                 mc.AddProfile(new RepositoryProfile());
                 mc.AddProfile(new ModelProfile());
-                mc.AddProfile(new ExecutionSequenceProfile());
-                mc.AddProfile(new ExecutionSentenceExecutionProfile());
-                mc.AddProfile(new UseCaseParameterProfile());
+                
+                mc.AddProfile(new DataParameterProfile());
                 mc.AddProfile(new ExecutionSentenceBaseProfile());
+                
+                mc.AddProfile(new DataParameterValueProfile());
+
+                mc.AddProfile(new UseCaseProfile());
+                mc.AddProfile(new UseCaseExecutionProfile());
+                mc.AddProfile(new UseCaseExecutionContextProfile());
+                mc.AddProfile(new UseCaseLinkExecutionParameterProfile());
+                mc.AddProfile(new UseCaseLinkInputExecutionParameterProfile());
+                mc.AddProfile(new UseCaseLinkOutputExecutionParameterProfile());
+                mc.AddProfile(new UseCaseExecutionContextParameterProfile());
+                mc.AddProfile(new UseCaseExecutionSentenceProfile());
             });
         }
 

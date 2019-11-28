@@ -107,9 +107,14 @@ namespace UIClient.UserControls
 
         private void Views_CollapsedChanged(object sender, RoutedEventArgs e)
         {
+            
+        }
+
+        private void Methods_CollapsedChanged(object sender, RoutedEventArgs e)
+        {
             if (_viewModel != null)
             {
-                _viewModel.IsViewsOpen = (e as CollapsedChangedEventArgs).Data;
+                _viewModel.IsMethodsOpen = (e as CollapsedChangedEventArgs).Data;
             }
         }
     }

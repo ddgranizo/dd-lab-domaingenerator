@@ -32,8 +32,6 @@ namespace UIClient.ViewModels
         public List<string> Sugestions { get { return GetValue<List<string>>(); } set { SetValue(value); UpdateListToCollection(value, SugestionsCollection); } }
         public ObservableCollection<string> SugestionsCollection { get; set; } = new ObservableCollection<string>();
 
-
-
         private GenericInputControlView _view;
 
         public GenericInputControlViewModel()

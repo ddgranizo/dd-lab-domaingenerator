@@ -17,15 +17,15 @@ namespace UIClient.Models
 
         public string DisplayName { get { return GetValue<string>(); } set { SetValue(value); } }
         public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
-        public ExecutionSequenceModel ExecutionSequence { get { return GetValue<ExecutionSequenceModel>(); } set { SetValue(value); } }
+        public UseCaseExecutionModel Execution { get { return GetValue<UseCaseExecutionModel>(); } set { SetValue(value); } }
 
-        public List<UseCaseParameterModel> InputParameters { get { return GetValue<List<UseCaseParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, InputParametersCollection); } }
+        public List<DataParameterModel> InputParameters { get { return GetValue<List<DataParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, InputParametersCollection); } }
         [JsonIgnore]
-        public ObservableCollection<UseCaseParameterModel> InputParametersCollection { get; set; } = new ObservableCollection<UseCaseParameterModel>();
+        public ObservableCollection<DataParameterModel> InputParametersCollection { get; set; } = new ObservableCollection<DataParameterModel>();
 
-        public List<UseCaseParameterModel> OutputParameters { get { return GetValue<List<UseCaseParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
+        public List<DataParameterModel> OutputParameters { get { return GetValue<List<DataParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
         [JsonIgnore]
-        public ObservableCollection<UseCaseParameterModel> OutputParametersCollection { get; set; } = new ObservableCollection<UseCaseParameterModel>();
+        public ObservableCollection<DataParameterModel> OutputParametersCollection { get; set; } = new ObservableCollection<DataParameterModel>();
 
     }
 }

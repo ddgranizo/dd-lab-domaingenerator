@@ -87,8 +87,10 @@
                             <materialDesign:PackIcon Kind="Close" Width="15" Height="15"/>
                         </Button>
                     </Grid>
+                        
+                   
 
-                    <Grid Grid.Row="1" Visibility="{Binding SelectedNewAction, Converter={StaticResource NullToCollapsedConverter}}">
+                    <Grid Grid.Row="2" Visibility="{Binding SelectedNewAction, Converter={StaticResource NullToCollapsedConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
@@ -119,9 +121,10 @@
         <materialDesign:DialogHost x:Name="GenericFormDialog" IsOpen="{Binding IsGenericFormDialogOpen}" Grid.RowSpan="3" Panel.ZIndex="1000" d:DesignWidth="0" d:DesignHeight="0" >
             <materialDesign:DialogHost.DialogContent>
                 <Grid Margin="10" Width="400" Height="400">
-                    <ScrollViewer>
-                        <usrinput:GenericFormControlView FormModel="{Binding GenericFormRequestModel}" InitialValues="{Binding GenericFormRequestInitialValues}" OnConfirmedValues="GenericFormControlView_OnConfirmedValues" OnCanceledValues="GenericFormControlView_OnCanceledValues"/>
-                    </ScrollViewer>
+                    <usrinput:GenericFormControlView 
+                        FormModel="{Binding GenericFormRequestModel}" 
+                        OnConfirmedValues="GenericFormControlView_OnConfirmedValues" 
+                        OnCanceledValues="GenericFormControlView_OnCanceledValues"/>
                 </Grid>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
@@ -134,6 +137,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <GroupBox Header="Project definition" Margin="3" Grid.Column="0">
@@ -141,10 +145,15 @@
                         <usr:ProjectControlView ProjectState="{Binding ProjectStateModel}"  EventManager="{Binding EventManager}"/>
                     </ScrollViewer>
                 </GroupBox>
-                <GroupBox Header="{Binding SelectedUseCase.Name, StringFormat='Use case editor: {0}',TargetNullValue='Null', FallbackValue='Null'}" Margin="3" Grid.Column="1" Visibility="{Binding CurrentDetailView, Converter={StaticResource DetailViewSelectorToCollapsedConverter}, ConverterParameter='UseCase'}">
+                <GridSplitter HorizontalAlignment="Right" 
+                      VerticalAlignment="Stretch" 
+                      Grid.Column="1" ResizeBehavior="PreviousAndNext"
+                      Width="10" Background="#FFBCBCBC"/>
+                <GroupBox Header="{Binding SelectedUseCase.Name, StringFormat='Use case editor {0}', TargetNullValue='Null', FallbackValue='Null'}" Margin="3" Grid.Column="2" Visibility="{Binding CurrentDetailView, Converter={StaticResource DetailViewSelectorToCollapsedConverter}, ConverterParameter='UseCase'}">
                     <usrusecase:UseCaseEditorControlView UseCase="{Binding SelectedUseCase}"  ValueChanged="UseCaseEditorControlView_ValueChanged" EventManager="{Binding EventManager}"/>
                 </GroupBox>
             </Grid>
+            
         </GroupBox>
 
         <StatusBar Grid.Row="3">

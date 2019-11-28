@@ -54,14 +54,16 @@ namespace UIClient.UserControls.Inputs
             remove { RemoveHandler(OnCanceledValuesEvent, value); }
         }
 
-        public void RaiseOnCancelledValuesEvent()
+        public void RaiseOnCanceledValues()
         {
-            RoutedEventArgs args = new OnGenericFormCanceledValuesEventArgs()
+            RoutedEventArgs args = new RoutedEventArgs()
             {
             };
             args.RoutedEvent = OnCanceledValuesEvent;
             RaiseEvent(args);
         }
+
+
 
         public GenericFormModel FormModel
         {
@@ -75,31 +77,11 @@ namespace UIClient.UserControls.Inputs
             }
         }
 
-        public Dictionary<string, object> InitialValues
-        {
-            get
-            {
-                return (Dictionary<string, object>)GetValue(InitialValuesProperty);
-            }
-            set
-            {
-                SetValue(InitialValuesProperty, value);
-            }
-        }
-
+      
 		public static readonly DependencyProperty FormModelProperty =
                       DependencyProperty.Register(
                           nameof(FormModel),
                           typeof(GenericFormModel),
-                          typeof(GenericFormControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-		public static readonly DependencyProperty InitialValuesProperty =
-                      DependencyProperty.Register(
-                          nameof(InitialValues),
-                          typeof(Dictionary<string, object>),
                           typeof(GenericFormControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
@@ -121,10 +103,6 @@ namespace UIClient.UserControls.Inputs
             {
                 v.SetFormModel((GenericFormModel)e.NewValue);
             }
-			else if (e.Property.Name == nameof(InitialValues))
-            {
-                v.SetInitialValues((Dictionary<string, object>)e.NewValue);
-            }
         }
 
 		private void SetFormModel(GenericFormModel data)
@@ -132,9 +110,11 @@ namespace UIClient.UserControls.Inputs
             _viewModel.FormModel = data;
         }
 
-		private void SetInitialValues(Dictionary<string, object> data)
+
+        private void GenericFormInputControl_ValueChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.InitialValues = data;
+            var myEvent = e as ValueChangedEventArgs;
+            _viewModel.UpdateValue(myEvent.Model.Key, myEvent.Data);
         }
     }
 }

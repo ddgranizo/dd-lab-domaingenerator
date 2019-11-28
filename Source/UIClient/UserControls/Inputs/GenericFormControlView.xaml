@@ -4,14 +4,61 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:UIClient.ViewModels"
+        xmlns:conv="clr-namespace:UIClient.Converters" 
+
+        xmlns:usrinput="clr-namespace:UIClient.UserControls.Inputs"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
         <vm:GenericFormControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
-            
+            <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
+            <conv:StringToCollapsedConverter x:Key="StringToCollapsedConverter" />
+            <conv:DictionaryItemConverter x:Key="DictionaryItemConverter" />
+            <conv:EnumerableToCollapsedConverter x:Key="EnumerableToCollapsedConverter" />
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+            <conv:DetailViewSelectorToCollapsedConverter x:Key="DetailViewSelectorToCollapsedConverter" />
         </Grid.Resources>
-        
+        <Grid Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Text" Width="20" Height="20" VerticalAlignment="Center"/>
+                    <TextBlock  FontSize="15" Text="{Binding FormModel.Description}" Margin="5" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+                <Button Grid.Column="1"  Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Cancel"  Command="{Binding Source={StaticResource ViewModel}, Path=CancelCommand, Mode=OneWay}" >
+                    <materialDesign:PackIcon Kind="Close" Width="15" Height="15"/>
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" Margin="10">
+                <ItemsControl Margin="0,0,10,0" ItemsSource="{Binding FormModel.Attributes}" Grid.Row="1" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <usrinput:GenericFormInputControlView
+                                        InputModel="{Binding Path=.}"
+                                        ValueChanged="GenericFormInputControl_ValueChanged"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <Grid Grid.Row="2" Margin="6" HorizontalAlignment="Right">
+                <Button Grid.Column="1"  Margin="5,0,5,0" Height="30"  Width="30" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" ToolTip="Confirm"  Command="{Binding Source={StaticResource ViewModel}, Path=ConfirmCommand, Mode=OneWay}" >
+                    <materialDesign:PackIcon Kind="Tick" Width="15" Height="15"/>
+                </Button>
+            </Grid>
+            
+        </Grid>
     </Grid>
 </UserControl>

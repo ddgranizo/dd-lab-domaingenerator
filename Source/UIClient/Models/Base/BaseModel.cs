@@ -109,7 +109,7 @@ namespace UIClient.Models.Base
             Commands.Add(command);
         }
 
-        protected void RaiseCanExecuteCommandChanged(object param = null)
+        public void RaiseCanExecuteCommandChanged(object param = null)
         {
             foreach (var command in Commands)
             {

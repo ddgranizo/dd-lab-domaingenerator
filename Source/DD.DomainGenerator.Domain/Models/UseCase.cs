@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static DD.DomainGenerator.Definitions;
 
 namespace DD.DomainGenerator.Models
 {
@@ -33,15 +34,16 @@ namespace DD.DomainGenerator.Models
         public string DisplayName { get; set; }
         public string Description { get; set; }
 
-        public List<UseCaseParameter> InputParameters { get; set; }
-        public List<UseCaseParameter> OutputParameters { get; set; }
+        public List<DataParameter> InputParameters { get; set; }
+        public List<DataParameter> OutputParameters { get; set; }
 
-        public ExecutionSequence ExecutionSequence { get; set; }
+        public UseCaseExecution Execution { get; set; }
 
         public UseCase()
         {
-            InputParameters = new List<UseCaseParameter>();
-            OutputParameters = new List<UseCaseParameter>();
+            InputParameters = new List<DataParameter>();
+            OutputParameters = new List<DataParameter>();
+            Execution = new UseCaseExecution(this);
         }
 
         public UseCase(string name)
@@ -60,42 +62,33 @@ namespace DD.DomainGenerator.Models
             IsCustom = false;
             if (type == UseCaseTypes.RetrieveByPk)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
-                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+                InputParameters.Add(new DataParameter(DomainInputType.Guid, "Id"));
+                OutputParameters.Add(new DataParameter(DomainInputType.DomainEntity, "Entity"));
             }
             else if(type == UseCaseTypes.RetrieveByUn)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.String, "Name"));
-                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+                InputParameters.Add(new DataParameter(DomainInputType.String, "Name"));
+                OutputParameters.Add(new DataParameter(DomainInputType.DomainEntity, "Entity"));
             }
             else if (type == UseCaseTypes.Create)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
-                OutputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
+                InputParameters.Add(new DataParameter(DomainInputType.DomainEntity, "Entity"));
+                OutputParameters.Add(new DataParameter(DomainInputType.Guid, "Id"));
             }
             else if (type == UseCaseTypes.Update)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.DomainEntity, "Entity"));
+                InputParameters.Add(new DataParameter(DomainInputType.DomainEntity, "Entity"));
             }
             else if (type == UseCaseTypes.DeleteByPk)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.Guid, "Id"));
+                InputParameters.Add(new DataParameter(DomainInputType.Guid, "Id"));
             }
             else if (type == UseCaseTypes.DeleteByUn)
             {
-                InputParameters.Add(new UseCaseParameter(UseCaseParameter.InputType.String, "Name"));
+                InputParameters.Add(new DataParameter(DomainInputType.String, "Name"));
             }
         }
 
-
-        public UseCase(UseCaseTypes type, Schema schema)
-            : this()
-        {
-            Type = type;
-            Name = type.ToString();
-            Schema = schema ?? throw new ArgumentNullException(nameof(schema));
-            IsCustom = false;
-        }
 
         public static List<string> GetUseCaseTypesList()
         {
@@ -116,5 +109,8 @@ namespace DD.DomainGenerator.Models
             }
             throw new Exception($"Can't find type named {type}");
         }
+
+
+        
     }
 }

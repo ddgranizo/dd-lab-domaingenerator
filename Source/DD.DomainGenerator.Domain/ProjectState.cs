@@ -29,16 +29,44 @@ namespace DD.DomainGenerator
         }
 
 
+        public List<UseCase> GetAllUseCases()
+        {
+            return Domains
+                .SelectMany(k => k.Schemas)
+                .SelectMany(k => k.UseCases)
+                .ToList();
+        }
+
+        public List<RepositoryMethod> GetAllRepositoriesMethods()
+        {
+            return Domains
+                .SelectMany(k => k.Schemas)
+                .SelectMany(k => k.Repositories)
+                .SelectMany(k => k.RepositoryMethods)
+                .ToList();
+        }
+
+
+        public List<Repository> GetAllRepositories()
+        {
+            return Domains
+                .SelectMany(k => k.Schemas)
+                .SelectMany(k=>k.Repositories)
+                .ToList();
+        }
+
+
         public List<Schema> GetAllSchemas()
         {
-            return Domains.SelectMany(k=>k.Schemas).ToList();
+            return Domains
+                .SelectMany(k=>k.Schemas)
+                .ToList();
         }
 
         public List<Domain> GetAllDomains()
         {
             return Domains;
         }
-
 
         public Schema GetSchema(string name)
         {

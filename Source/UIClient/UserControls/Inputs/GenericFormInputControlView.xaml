@@ -1,0 +1,51 @@
+<UserControl x:Class="UIClient.UserControls.Inputs.GenericFormInputControlView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:UIClient.ViewModels"
+            xmlns:conv="clr-namespace:UIClient.Converters"
+        xmlns:userinputs="clr-namespace:UIClient.UserControls.Inputs"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:GenericFormInputControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}" Margin="3">
+        <Grid.Resources>
+            <conv:DataTypeToCollapsedConverter x:Key="DataTypeToCollapsedConverter" />
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Center" Text="{Binding InputModel.DisplayName}" ToolTip="{Binding InputModel.Description}" VerticalAlignment="Center"></TextBlock>
+        <Grid Grid.Column="1" VerticalAlignment="Center">
+
+            <userinputs:StringInputControlView
+                Visibility="{Binding InputModel.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=String}"
+                DefaultValue="{Binding DefaultStringValue}"
+                Sugestions="{Binding Suggestions}"
+                ValueChanged="StringInputControlView_ValueChanged"/>
+
+            <userinputs:BooleanInputControlView
+                Visibility="{Binding InputModel.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Boolean}"
+                DefaultValue="{Binding DefaultBoolValue}"
+
+                ValueChanged="BooleanInputControlView_ValueChanged"/>
+
+            <userinputs:IntegerInputControlView
+                Visibility="{Binding InputModel.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Integer}"
+                DefaultValue="{Binding DefaultIntValue}"
+                ValueChanged="IntegerInputControlView_ValueChanged"/>
+
+            <userinputs:DecimalInputControlView
+                Visibility="{Binding InputModel.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Decimal}"
+                DefaultValue="{Binding DefaultDecimalValue}"
+                ValueChanged="DecimalInputControlView_ValueChanged"/>
+
+            <userinputs:PasswordInputControlView
+                Visibility="{Binding InputModel.Type, Converter={StaticResource DataTypeToCollapsedConverter}, ConverterParameter=Password}"
+                ValueChanged="PasswordInputControlView_ValueChanged"/>
+        </Grid>
+    </Grid>
+</UserControl>

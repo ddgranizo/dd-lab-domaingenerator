@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UIClient.Models.Base;
+using UIClient.Utilities;
+using static DD.DomainGenerator.Definitions;
 
 namespace UIClient.Models
 {
@@ -13,12 +15,6 @@ namespace UIClient.Models
         public DomainModel Domain { get { return GetValue<DomainModel>(); } set { SetValue(value); } }
         public SchemaModel Schema { get { return GetValue<SchemaModel>(); } set { SetValue(value); } }
 
-        public string GetTypeDisplayName(UseCaseParameter.InputType type)
-        {
-            return type == UseCaseParameter.InputType.DomainEntity
-                            ? Schema.Name
-                            : type.ToString();
-        }
 
 
         public string Namespace
@@ -49,7 +45,7 @@ namespace UIClient.Models
         {
             get
             {
-                return string.Join(",", UseCase.InputParameters.Select(k => $"{GetTypeDisplayName(k.Type)} {k.Name}"));
+                return string.Join(",", UseCase.InputParameters.Select(k => $"{StringFormats.GetTypeDisplayName(k.Type, Schema.Name)} {k.Name}"));
             }
         }
 
@@ -57,30 +53,7 @@ namespace UIClient.Models
         {
             get
             {
-                if (UseCase.OutputParameters.Count == 0)
-                {
-                    return "Void";
-                }
-                var outputParameter = UseCase.OutputParameters.First();
-                if (outputParameter.Type == UseCaseParameter.InputType.DomainEntity)
-                {
-                    return Schema.Name;
-                }
-                else if (outputParameter.Type == UseCaseParameter.InputType.Enumerable)
-                {
-                    var enumerableType = GetTypeDisplayName(outputParameter.EnumerableType);
-                    return $"IEnumerable<{enumerableType}>";
-                }
-                else if (outputParameter.Type == UseCaseParameter.InputType.Dictionary)
-                {
-                    var keyType = GetTypeDisplayName(outputParameter.DictionaryKeyType);
-                    var valueType = GetTypeDisplayName(outputParameter.DictionaryValueType);
-                    return $"Dictionary<{keyType}, {valueType}>";
-                }
-                else
-                {
-                    return outputParameter.Type.ToString();
-                }
+                return StringFormats.GetDataParametersDisplayName(UseCase.OutputParameters, Schema.Name);
             }
         }
     }

@@ -11,8 +11,8 @@ namespace UIClient.Profiles
     {
         public SchemaViewProfile()
         {
-            CreateMap<View, ViewModel>();
-            CreateMap<ViewModel, View>();
+            CreateMap<RepositoryMethod, RepositoryMethodModel>();
+            CreateMap<RepositoryMethodModel, RepositoryMethod>();
         }
     }
 }

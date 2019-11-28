@@ -94,25 +94,36 @@ namespace DD.DomainGenerator.Models
                 || useCase.Type == UseCase.UseCaseTypes.DeleteByUn
                 || useCase.Type == UseCase.UseCaseTypes.RetrieveByPk
                 || useCase.Type == UseCase.UseCaseTypes.RetrieveByUn
-                //|| useCase.Type == UseCase.UseCaseTypes.RetrieveMultiple
                 || useCase.Type == UseCase.UseCaseTypes.Update))
             {
                 throw new Exception("Repeated use case");
             }
 
-            //if (useCase.Schema != null)
-            //{
-            //    var repeatedIntersection = repeatedCrud
-            //        .Where(k => k.Schema?.Name == useCase.Schema.Name);
-            //    if (repeatedIntersection.Count() > 0
-            //        && (useCase.Type == UseCase.UseCaseTypes.RetrieveMultipleIntersection))
-            //    {
-            //        throw new Exception("Repeated use case");
-            //    }
-            //}
-
             UseCases.Add(useCase);
         }
+
+
+
+        public List<UseCase> GetAllUseCases()
+        {
+            return UseCases
+                .ToList();
+        }
+
+        public List<RepositoryMethod> GetAllRepositoriesMethods()
+        {
+            return Repositories
+                .SelectMany(k => k.RepositoryMethods)
+                .ToList();
+        }
+
+
+        public List<Repository> GetAllRepositories()
+        {
+            return Repositories
+                .ToList();
+        }
+
 
     }
 }

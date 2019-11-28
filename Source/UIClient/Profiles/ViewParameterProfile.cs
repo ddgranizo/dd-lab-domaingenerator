@@ -13,8 +13,8 @@ namespace UIClient.Profiles
     {
         public ViewParameterProfile()
         {
-            CreateMap<ViewParameter, ViewParameterModel>();
-            CreateMap<ViewParameterModel, ViewParameter>();
+            CreateMap<RepositoryMethodParameter, RepositoryMethodParameterModel>();
+            CreateMap<RepositoryMethodParameterModel, RepositoryMethodParameter>();
         }
     }
 }

@@ -23,11 +23,11 @@ namespace UIClient.UserControls
 {
     public partial class UseCaseParameterControlView : UserControl
     {
-        public UseCaseParameterModel UseCaseParameter
+        public DataParameterModel UseCaseParameter
         {
             get
             {
-                return (UseCaseParameterModel)GetValue(UseCaseParameterProperty);
+                return (DataParameterModel)GetValue(UseCaseParameterProperty);
             }
             set
             {
@@ -50,7 +50,7 @@ namespace UIClient.UserControls
 		public static readonly DependencyProperty UseCaseParameterProperty =
                       DependencyProperty.Register(
                           nameof(UseCaseParameter),
-                          typeof(UseCaseParameterModel),
+                          typeof(DataParameterModel),
                           typeof(UseCaseParameterControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
@@ -79,7 +79,7 @@ namespace UIClient.UserControls
 			UseCaseParameterControlView v = d as UseCaseParameterControlView;
 			if (e.Property.Name == nameof(UseCaseParameter))
             {
-                v.SetUseCaseParameter((UseCaseParameterModel)e.NewValue);
+                v.SetUseCaseParameter((DataParameterModel)e.NewValue);
             }
 			else if (e.Property.Name == nameof(EventManager))
             {
@@ -87,7 +87,7 @@ namespace UIClient.UserControls
             }
         }
 
-		private void SetUseCaseParameter(UseCaseParameterModel data)
+		private void SetUseCaseParameter(DataParameterModel data)
         {
             _viewModel.UseCaseParameter = data;
         }

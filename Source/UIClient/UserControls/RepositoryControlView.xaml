@@ -21,18 +21,17 @@
                 <usr:HierarchyItemControlView Text="{Binding Repository.Name, StringFormat='Name={0}'}"  Icon="FormatAlignJustify"/>
                 <usr:HierarchyItemControlView Text="{Binding Repository.IsCustom, StringFormat='IsCustom={0}'}" Icon="FormatAlignJustify"/>
 
-                <usr:HierarchyItemControlView Text="Views" Icon="TableRow" IsCollapsible="True" CollapsedChanged="Views_CollapsedChanged"/>
-                <Grid Visibility="{Binding IsViewsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
-                    <ItemsControl  ItemsSource="{Binding Repository.ViewsCollection}" Grid.Row="0" >
+                <usr:HierarchyItemControlView Text="Methods" Icon="TableRow" IsCollapsible="True" CollapsedChanged="Methods_CollapsedChanged"/>
+                <Grid Visibility="{Binding IsMethodsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Margin="7,0,0,0">
+                    <ItemsControl  ItemsSource="{Binding Repository.RepositoryMethodsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <usr:ViewControlView SchemaView="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:RepositoryControlView}}"/>
+                                <usr:RepositoryMethodControlView RepositoryMethod="{Binding Path=.}" EventManager="{Binding EventManager, RelativeSource={RelativeSource AncestorType=usr:RepositoryControlView}}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </Grid>
             </StackPanel>
-            
         </StackPanel>
     </Grid>
 </UserControl>

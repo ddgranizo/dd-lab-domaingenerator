@@ -38,7 +38,7 @@ namespace DD.DomainGenerator.Actions.Schemas
             {
                 throw new Exception($"Can't find any schema named '{schemaName}'");
             }
-            schema.GetDefaultRepository().AddView(new View(name, true));
+            schema.GetDefaultRepository().AddRepositoryMethod(new RepositoryMethod(UseCase.UseCaseTypes.Custom, name, true));
             OverrideOutputParameter(ViewNameParameter.Name, name);
         }
     }

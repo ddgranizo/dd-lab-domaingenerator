@@ -61,13 +61,13 @@ namespace DD.DomainGenerator.Actions.Schemas.UseCases
             //        ?? throw new Exception($"Can't find any intersection schema named '{intersectionSchemaName}'");
             //    intersectionSchemaModel = intersectionSchema;
             //}
-            var caseUse = new UseCase(type, intersectionSchemaModel);
-            var authorization = GetBoolParameterValue(parameters, NeedsAthorizationParameter);
-            //if (authorization)
-            //{
-            //    caseUse.NeedsAuthorization = true;
-            //}
-            schema.AddUseCase(caseUse);
+            //var caseUse = new UseCase(type, intersectionSchemaModel);
+            //var authorization = GetBoolParameterValue(parameters, NeedsAthorizationParameter);
+            ////if (authorization)
+            ////{
+            ////    caseUse.NeedsAuthorization = true;
+            ////}
+            //schema.AddUseCase(caseUse);
             OverrideOutputParameter(SchemaNameParameter.Name, schemaName);
         }
     }

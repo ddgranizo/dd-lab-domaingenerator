@@ -8,7 +8,7 @@ using UIClient.ViewModels;
 
 namespace UIClient.Commands
 {
-    
+
     public class AddUseCaseEditorParameterCommand : RelayCommand
     {
         public enum ParameterDirection
@@ -24,22 +24,54 @@ namespace UIClient.Commands
                 try
                 {
                     var requestModel = new GenericFormModel("Add new parameter");
-                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String, "type", "Type", "Type of the parameter", UseCaseParameter.GetUseCaseParameterTypesList().ToArray());
-                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String, "name", "Name", "Name of the parameter");
-                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String, "enumerabletype", "Enumerable type", "If type=Enumerable, this is the type of the enumerable", UseCaseParameter.GetUseCaseParameterTypesList().ToArray());
-                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String, "dictionarykeytype", "Dictionary key type", "If type=Dictionary, this is the type of the key", UseCaseParameter.GetUseCaseParameterTypesList().ToArray());
-                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String, "dictionaryvaluetype", "Dictionary value type", "If type=Dictionary, this is the type of the value", UseCaseParameter.GetUseCaseParameterTypesList().ToArray());
+                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String,
+                        Definitions.UseCaseEditorDefinitions.UseCaseModelAttibutes.Type,
+                        "Type",
+                        "Type of the parameter",
+                        DataParameter.GetUseCaseParameterTypesList().ToArray());
+                    requestModel.AddAttribute(
+                        ActionParameterDefinition.TypeValue.String,
+                        Definitions.UseCaseEditorDefinitions.UseCaseModelAttibutes.Name,
+                        "Name",
+                        "Name of the parameter");
+                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String,
+                        Definitions.UseCaseEditorDefinitions.UseCaseModelAttibutes.EnumerableType,
+                        "Enumerable type",
+                        "If type=Enumerable, this is the type of the enumerable",
+                        DataParameter.GetUseCaseParameterTypesList().ToArray());
+                    requestModel.AddAttribute(
+                        ActionParameterDefinition.TypeValue.String,
+                        Definitions.UseCaseEditorDefinitions.UseCaseModelAttibutes.DictionaryKeyType,
+                        "Dictionary key type",
+                        "If type=Dictionary, this is the type of the key",
+                        DataParameter.GetUseCaseParameterTypesList().ToArray());
+                    requestModel.AddAttribute(ActionParameterDefinition.TypeValue.String,
+                        Definitions.UseCaseEditorDefinitions.UseCaseModelAttibutes.DictionaryValueType,
+                        "Dictionary value type",
+                        "If type=Dictionary, this is the type of the value",
+                        DataParameter.GetUseCaseParameterTypesList().ToArray());
                     vm.GenericFormRequestId = Guid.NewGuid();
+                    if (direction == ParameterDirection.Input)
+                    {
+                        vm.CurrentFormInputActionType = UseCaseEditorControlViewModel.ActionType.AddInputParameter;
+                    }
+                    else if (direction == ParameterDirection.Output)
+                    {
+                        vm.CurrentFormInputActionType = UseCaseEditorControlViewModel.ActionType.AddOutputParameter;
+                    }
                     vm.EventManager.RaiseOnGenericFormInputRequestedEvent(vm.GenericFormRequestId, requestModel);
+                    vm.RaiseCanExecuteCommandChanged();
                 }
                 catch (Exception ex)
                 {
                     vm.RaiseError(ex.Message);
                 }
+            }, data =>
+            {
+                return direction == ParameterDirection.Input || 
+                    (direction == ParameterDirection.Output && vm.UseCase?.OutputParameters.Count == 0);
             });
         }
 
-
     }
-
 }

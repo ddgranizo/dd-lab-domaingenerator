@@ -53,7 +53,7 @@
                     <TextBlock VerticalAlignment="Center" Margin="5,0,5,0">Search</TextBlock>
                     <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding SearchText, Delay=400, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </Grid>
-                <ScrollViewer>
+                <ScrollViewer Margin="4">
                     <ItemsControl  ItemsSource="{Binding FilteredUseCaseListItemsCollection}" Grid.Row="0" >
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

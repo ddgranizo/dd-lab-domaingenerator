@@ -40,5 +40,38 @@ namespace DD.DomainGenerator.Models
                 ?? throw new Exception($"This domain doesn't contain schema with name 'schemaName'");
             Schemas.Remove(existing);
         }
+
+
+        public List<UseCase> GetAllUseCases()
+        {
+            return Schemas
+                .SelectMany(k => k.UseCases)
+                .ToList();
+        }
+
+        public List<RepositoryMethod> GetAllRepositoriesMethods()
+        {
+            return Schemas
+                .SelectMany(k => k.Repositories)
+                .SelectMany(k => k.RepositoryMethods)
+                .ToList();
+        }
+
+
+        public List<Repository> GetAllRepositories()
+        {
+            return  Schemas
+                .SelectMany(k => k.Repositories)
+                .ToList();
+        }
+
+
+        public List<Schema> GetAllSchemas()
+        {
+            return Schemas
+                .ToList();
+        }
+
+      
     }
 }
