@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using UIClient.Models.Base;
+using UIClient.Utilities;
 
 namespace UIClient.Models
 {
     public class UseCaseExecutionModel : BaseModel
     {
-
         public UseCaseModel UseCase { get { return GetValue<UseCaseModel>(); } set { SetValue(value); } }
         public bool IsRootExecutionSentence { get { return GetValue<bool>(); } set { SetValue(value); } }
         public UseCaseExecutionContextModel ExecutionContext { get { return GetValue<UseCaseExecutionContextModel>(); } set { SetValue(value); } }
@@ -17,5 +17,7 @@ namespace UIClient.Models
         public ObservableCollection<UseCaseExecutionSentenceModel> ExecutionSentencesCollection { get; set; } = new ObservableCollection<UseCaseExecutionSentenceModel>();
 
         public UseCaseLinkOutputExecutionParameterModel OutputParameter { get { return GetValue<UseCaseLinkOutputExecutionParameterModel>(); } set { SetValue(value); } }
+
+      
     }
 }

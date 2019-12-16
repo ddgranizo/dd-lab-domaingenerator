@@ -12,6 +12,10 @@ namespace DD.DomainGenerator.Models
         public List<UseCaseLinkExecutionParameter> ContextLinkParameters { get; set; }
         public List<UseCaseLinkOutputExecutionParameter> ContextOutputParameters { get; set; }
 
+        public UseCaseExecutionSentence()
+        {
+        }
+
         public UseCaseExecutionSentence(
             ExecutionSentenceBase executionSentence,
             List<UseCaseLinkInputExecutionParameter> contextInputParameters,
@@ -19,7 +23,8 @@ namespace DD.DomainGenerator.Models
         {
             ExecutionSentence = executionSentence 
                 ?? throw new ArgumentNullException(nameof(executionSentence));
-            ContextInputParameters = contextInputParameters ?? throw new ArgumentNullException(nameof(contextInputParameters));
+            ContextInputParameters = contextInputParameters 
+                ?? throw new ArgumentNullException(nameof(contextInputParameters));
             ContextLinkParameters = contextParameters
                 ?? throw new ArgumentNullException(nameof(contextParameters));
         }

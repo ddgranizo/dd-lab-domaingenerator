@@ -34,6 +34,7 @@ namespace DD.DomainGenerator.Models
         public bool IsAutoIncremental { get; set; }
         public Schema ForeingSchema { get; set; }
         public bool IsCustom { get; set; }
+
         public SchemaProperty()
         {
         }

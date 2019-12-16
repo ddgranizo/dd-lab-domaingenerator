@@ -20,6 +20,10 @@ namespace DD.DomainGenerator.Models
         public object ConstantValue { get; set; }
         public bool IsFromUseCase { get; set; }
 
+        public UseCaseExecutionContextParameter()
+        {
+        }
+
         public UseCaseExecutionContextParameter(ParameterDirection direction,
             DataParameter parameter,
             ExecutionSentenceBase source,

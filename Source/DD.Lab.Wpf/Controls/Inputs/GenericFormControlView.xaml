@@ -1,0 +1,38 @@
+<UserControl x:Class="DD.Lab.Wpf.Controls.Inputs.GenericFormControlView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:DD.Lab.Wpf.Viewmodels.Inputs"
+        xmlns:conv="clr-namespace:DD.Lab.Wpf.Converters" 
+
+        xmlns:usrinput="clr-namespace:DD.Lab.Wpf.Controls.Inputs"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:GenericFormControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.Resources>
+            <conv:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
+            <conv:StringToCollapsedConverter x:Key="StringToCollapsedConverter" />
+            <conv:DictionaryItemConverter x:Key="DictionaryItemConverter" />
+            <conv:EnumerableToCollapsedConverter x:Key="EnumerableToCollapsedConverter" />
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        </Grid.Resources>
+        <Grid Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                <ItemsControl  ItemsSource="{Binding FormModel.Attributes}" Grid.Row="0" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <usrinput:GenericFormInputControlView 
+                                        InputModel="{Binding Path=.}"
+                                        ValueChanged="GenericFormInputControl_ValueChanged"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>

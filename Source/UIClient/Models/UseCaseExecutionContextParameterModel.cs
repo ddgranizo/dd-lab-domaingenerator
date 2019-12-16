@@ -1,4 +1,5 @@
 ﻿using UIClient.Models.Base;
+using UIClient.Models.Sentences.Base;
 using static DD.DomainGenerator.Models.UseCaseExecutionContextParameter;
 
 namespace UIClient.Models

@@ -11,10 +11,9 @@ namespace DD.DomainGenerator.Sentences.Base
         {
             ExecuteRepositoryMethod = 10,
             ExecuteService = 11,
-
-
-            SetUseCaseOutputParameter = 99,
         }
+
+        public Dictionary<string, object> Values { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -22,6 +21,9 @@ namespace DD.DomainGenerator.Sentences.Base
 
         public List<UseCaseExecutionContextParameter> InputContextParameters { get; set; }
         public List<UseCaseExecutionContextParameter> OutputContextParameters { get; set; }
+
+
+
         public ExecutionSentenceBase(string name, string description, ExecutionSentenceType type)
         {
             Name = name;
@@ -29,6 +31,19 @@ namespace DD.DomainGenerator.Sentences.Base
             Type = type;
             InputContextParameters = new List<UseCaseExecutionContextParameter>();
             OutputContextParameters = new List<UseCaseExecutionContextParameter>();
+            Values = new Dictionary<string, object>();
+        }
+
+        public void AddValue(string key, object value)
+        {
+            if (Values.ContainsKey(key))
+            {
+                Values[key] = value;
+            }
+            else
+            {
+                Values.Add(key, value);
+            }
         }
 
         public void AddInputContextParameter(params DataParameter[] parameters)

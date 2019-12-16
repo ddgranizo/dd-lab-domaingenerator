@@ -12,6 +12,7 @@ namespace DD.DomainGenerator.Services.Implementations
             var settings = new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                //TypeNameHandling = TypeNameHandling.None
             };
             return JsonConvert.DeserializeObject<T>(json, settings);
         }
@@ -21,6 +22,7 @@ namespace DD.DomainGenerator.Services.Implementations
             var settings = new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                //TypeNameHandling = TypeNameHandling.None
             };
             return JsonConvert.SerializeObject(instance, Formatting.Indented, settings);
         }

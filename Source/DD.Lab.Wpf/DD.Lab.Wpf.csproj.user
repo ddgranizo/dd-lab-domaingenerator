@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Windows\InputTextMessageBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\Inputs\BooleanInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\DecimalInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\GenericFormControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\GenericFormInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\IntegerInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\PasswordInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\Inputs\StringInputControlView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\MultipleAssociationWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\OkCancelMessageBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\InputTextMessageBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

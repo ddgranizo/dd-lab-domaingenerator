@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UIClient.Models.Base;
+using UIClient.Models.Sentences.Base;
+using UIClient.Utilities;
 
 namespace UIClient.Models
 {
     public class UseCaseExecutionSentenceModel : BaseModel
     {
-        public ExecutionSentenceBaseModel ExecutionSentence { get { return GetValue<ExecutionSentenceBaseModel>(); } set { SetValue(value); } }
-
+        public ExecutionSentenceBaseModel ExecutionSentence { get { return GetValue<ExecutionSentenceBaseModel>(); } set { SetValue(value, UpdatedExecutionSentence); } }
+        public ExecutionSentenceBaseModel ExecutionSentenceTyped { get { return GetValue<ExecutionSentenceBaseModel>(); } set { SetValue(value); } }
 
         public List<UseCaseLinkInputExecutionParameterModel> ContextInputParameters { get { return GetValue<List<UseCaseLinkInputExecutionParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, ContextInputParametersCollection); } }
         public ObservableCollection<UseCaseLinkInputExecutionParameterModel> ContextInputParametersCollection { get; set; } = new ObservableCollection<UseCaseLinkInputExecutionParameterModel>();
@@ -18,5 +20,10 @@ namespace UIClient.Models
         public List<UseCaseLinkOutputExecutionParameterModel> ContextOutputParameters { get { return GetValue<List<UseCaseLinkOutputExecutionParameterModel>>(); } set { SetValue(value); UpdateListToCollection(value, ContextOutputParametersCollection); } }
         public ObservableCollection<UseCaseLinkOutputExecutionParameterModel> ContextOutputParametersCollection { get; set; } = new ObservableCollection<UseCaseLinkOutputExecutionParameterModel>();
 
+
+        private void UpdatedExecutionSentence(ExecutionSentenceBaseModel sentence)
+        {
+            //ExecutionSentenceTyped = SentenceModelFactory.ConvertSentenceWithInnerType(sentence);
+        }
     }
 }

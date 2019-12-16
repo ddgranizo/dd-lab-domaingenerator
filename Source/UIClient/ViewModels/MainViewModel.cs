@@ -32,8 +32,6 @@ namespace UIClient.ViewModels
             UseCase = 10,
         }
 
-       
-
         public string LastFileLoaded { get; set; }
         public ProjectState ProjectState { get; set; }
         public bool IsActionDialogOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
@@ -376,6 +374,7 @@ namespace UIClient.ViewModels
                 mc.AddProfile(new UseCaseLinkOutputExecutionParameterProfile());
                 mc.AddProfile(new UseCaseExecutionContextParameterProfile());
                 mc.AddProfile(new UseCaseExecutionSentenceProfile());
+
             });
         }
 

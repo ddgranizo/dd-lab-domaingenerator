@@ -25,6 +25,11 @@ namespace DD.DomainGenerator.Sentences
             Repository = repository ?? throw new ArgumentNullException(nameof(repository));
             Method = method ?? throw new ArgumentNullException(nameof(method));
 
+            AddValue(nameof(Domain), Domain);
+            AddValue(nameof(Schema), Schema);
+            AddValue(nameof(Repository), Repository);
+            AddValue(nameof(Method), Method);
+
             AddInputContextParameter(method.InputParameters.ToArray());
             AddOutputContextParameter(Method.OutputParameters.First());
         }
@@ -34,15 +39,5 @@ namespace DD.DomainGenerator.Sentences
         public Repository Repository { get; }
         public RepositoryMethod Method { get; }
 
-
-        public override bool CanExecuteSentenceWithAvailableParameters(List<UseCaseExecutionContextParameter> parameters)
-        {
-            bool isOk = true;
-            foreach (var item in Method.InputParameters)
-            {
-
-            }
-            return isOk;
-        }
     }
 }
