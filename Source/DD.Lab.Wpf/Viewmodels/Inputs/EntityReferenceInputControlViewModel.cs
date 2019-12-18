@@ -30,8 +30,6 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
         private EntityReferenceInputControlView _view;
 
 
-
-
         public EntityReferenceInputControlViewModel()
         {
             InitializeCommands();

@@ -40,24 +40,44 @@ namespace DD.Lab.GenericUI.Core
         }
 
 
-        public void RegisterNewCreateWorkflow(string entity, int order, Action<WorkflowInputParameter> action)
+        public void RegisterNewCreateWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
         {
             CreateWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewUpdateWorkflow(string entity, int order, Action<WorkflowInputParameter> action)
+        public void RegisterNewUpdateWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
         {
             UpdateWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewDeleteWorkflow(string entity, int order, Action<WorkflowInputParameter> action)
+        public void RegisterNewDeleteWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
         {
             DeleteWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewAssociatekflow(string entity, int order, Action<WorkflowInputParameter> action)
+        public void RegisterNewAssociatekflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
         {
             AssociateWorkflow.Add(new WorkflowDefinition(entity, order, action));
+        }
+
+        public void RegisterNewCreateWorkflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        {
+            CreateWorkflows.Add(new WorkflowDefinition(entity, action));
+        }
+
+        public void RegisterNewUpdateWorkflow(string entity,  Action<GenericManager, WorkflowInputParameter> action)
+        {
+            UpdateWorkflows.Add(new WorkflowDefinition(entity, action));
+        }
+
+        public void RegisterNewDeleteWorkflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        {
+            DeleteWorkflows.Add(new WorkflowDefinition(entity,  action));
+        }
+
+        public void RegisterNewAssociatekflow(string entity,  Action<GenericManager, WorkflowInputParameter> action)
+        {
+            AssociateWorkflow.Add(new WorkflowDefinition(entity, action));
         }
 
 
@@ -83,7 +103,7 @@ namespace DD.Lab.GenericUI.Core
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(workflowInput);
+                    item.Action.Invoke(this, workflowInput);
                 }
             }
             return id;
@@ -101,7 +121,7 @@ namespace DD.Lab.GenericUI.Core
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(workflowInput);
+                    item.Action.Invoke(this, workflowInput);
                 }
             }
             
@@ -133,10 +153,9 @@ namespace DD.Lab.GenericUI.Core
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(workflowInput);
+                    item.Action.Invoke(this, workflowInput);
                 }
             }
-            
         }
 
         public void Disassociate(string firstEntity, Guid firstId, string intersectionEntity, string secondEntity, Guid secondId)
@@ -160,7 +179,7 @@ namespace DD.Lab.GenericUI.Core
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(workflowInput);
+                    item.Action.Invoke(this, workflowInput);
                 }
             }
             return id;

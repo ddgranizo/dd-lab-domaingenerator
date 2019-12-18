@@ -34,6 +34,5 @@
                 </ItemsControl>
             </ScrollViewer>
         </GroupBox>
-        
     </Grid>
 </UserControl>

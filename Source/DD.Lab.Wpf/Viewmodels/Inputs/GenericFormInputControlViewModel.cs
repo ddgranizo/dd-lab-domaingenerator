@@ -16,7 +16,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class GenericFormInputControlViewModel : BaseViewModel
     {
-		public GenericFormInputModel InputModel { get { return GetValue<GenericFormInputModel>(); } set { SetValue(value, UpdatedInputModel); } }
+        public GenericFormInputModel InputModel { get { return GetValue<GenericFormInputModel>(); } set { SetValue(value, UpdatedInputModel); } }
 
         public OptionSetValue DefaultOptionSetValue { get { return GetValue<OptionSetValue>(); } set { SetValue(value); } }
 
@@ -40,14 +40,14 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 
         private GenericFormInputControlView _view;
 
-		public GenericFormInputControlViewModel()
+        public GenericFormInputControlViewModel()
         {
-			
+
         }
 
         public void Initialize(GenericFormInputControlView v)
         {
-			_view = v;
+            _view = v;
         }
 
         private void UpdatedInputModel(GenericFormInputModel model)
@@ -97,7 +97,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
                 else if (model.Type == GenericFormInputModel.TypeValue.OptionSet)
                 {
                     DefaultOptionSetValue = (OptionSetValue)model.DefaultValue;
-                    
+
                 }
                 else if (model.Type == GenericFormInputModel.TypeValue.State)
                 {
@@ -114,10 +114,61 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
                 SetOptionSetSuggestions(model);
             }
 
+
+            _view.ClearControl();
             if (model.Type == GenericFormInputModel.TypeValue.String)
             {
-                SetStringSuggestions(model);
+                _view.AddStringControl(DefaultStringValue, Suggestions);
             }
+            else if (model.Type == GenericFormInputModel.TypeValue.Bool)
+            {
+                _view.AddBooleanControl(DefaultBoolValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.Decimal)
+            {
+                _view.AddDecimalControl(DefaultDecimalValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.Double)
+            {
+                _view.AddDoubleControl(DefaultDoubleValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.Int)
+            {
+                _view.AddIntegerControl(DefaultIntValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.Password)
+            {
+                _view.AddPasswordControl();
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.MultilineString)
+            {
+                _view.AddMultilineStringControl(DefaultStringValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.Guid)
+            {
+                _view.AddGuidControl(DefaultStringValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.DateTime)
+            {
+                _view.AddDateTimeControl(DefaultDateTimeValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.EntityReference)
+            {
+                _view.AddEntityReferenceControl(DefaultEntityReferenceValue);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.OptionSet)
+            {
+                _view.AddOptionSetControl(DefaultOptionSetValue, OptionSetOptions);
+            }
+            else if (model.Type == GenericFormInputModel.TypeValue.State)
+            {
+                _view.AddOptionSetControl(DefaultOptionSetValue, OptionSetOptions);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
         }
 
         private void SetOptionSetSuggestions(GenericFormInputModel model)

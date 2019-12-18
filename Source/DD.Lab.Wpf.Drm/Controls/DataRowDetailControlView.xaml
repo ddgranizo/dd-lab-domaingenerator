@@ -1,0 +1,88 @@
+<UserControl x:Class="DD.Lab.Wpf.Drm.Controls.DataRowDetailControlView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:conv="clr-namespace:DD.Lab.Wpf.Converters;assembly=DD.Lab.Wpf"   
+        xmlns:localconv="clr-namespace:DD.Lab.Wpf.Drm.Converters"   
+        xmlns:localcontrol="clr-namespace:DD.Lab.Wpf.Drm.Controls" 
+        xmlns:control="clr-namespace:DD.Lab.Wpf.Controls.Inputs;assembly=DD.Lab.Wpf" 
+		xmlns:vm="clr-namespace:DD.Lab.Wpf.Drm.Viewmodels"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:DataRowDetailControlViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.Resources>
+            <localconv:DetailModeToCollapseConverter x:Key="DetailModeToCollapseConverter" />
+            <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" >
+            <StackPanel Orientation="Horizontal">
+                <Button Margin="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Save"  Command="{Binding Source={StaticResource ViewModel}, Path=SaveCommand, Mode=OneWay}" >
+                    Save
+                </Button>
+                <Button Margin="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Delete"  Visibility="{Binding Mode, Converter={StaticResource DetailModeToCollapseConverter}, ConverterParameter=Updating}" Command="{Binding Source={StaticResource ViewModel}, Path=DeleteCommand, Mode=OneWay}" >
+                    Delete
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Text="{Binding Values[Name]}"
+                Visibility="{Binding Mode, Converter={StaticResource DetailModeToCollapseConverter}, ConverterParameter=Update}" />
+
+            <TextBlock 
+                Margin="10"
+                FontSize="18"
+                FontWeight="Bold"
+                Text="{Binding Entity.DisplayName, StringFormat='New {0}'}"
+                Visibility="{Binding Mode, Converter={StaticResource DetailModeToCollapseConverter}, ConverterParameter=Creating}" />
+
+            <ScrollViewer Grid.Row="1" >
+                <control:GenericFormControlView FormModel="{Binding FormModel}" ValueSetChanged="GenericFormControlView_ValueSetChanged"/>
+            </ScrollViewer>
+            <Grid Grid.Row="2" Visibility="{Binding Mode, Converter={StaticResource DetailModeToCollapseConverter}, ConverterParameter=Updating}">
+                <TabControl ItemsSource="{Binding CurrentEntityRelationshipsCollection}">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding Relationship.IsManyToMany,Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
+                                    <TextBlock Text="{Binding RelatedEntityDisplayName, StringFormat='Related {0}(s)'}"/>
+                                    <TextBlock Text="{Binding RelatedAttributeDisplayName, StringFormat=' by attr {0}'}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding Relationship.IsManyToMany,Converter={StaticResource BoolToCollapsedConverter}}">
+                                    <TextBlock Text="{Binding IntersectionDisplayableEntity, StringFormat='Related {0}(s)'}"/>
+                                    <TextBlock Text="{Binding Relationship.IntersectionName, StringFormat=' by intersection entity {0}'}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <localcontrol:DataSetGridControlView 
+                                Entity="{Binding RelatedEntity}" 
+                                FilterRelationship="{Binding Relationship}"
+                                FilterRelationshipId="{Binding MainEntityId}"
+                                GenericManager="{Binding RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=GenericManager, Mode=OneWay}" 
+                                Relationships="{Binding RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=Relationships, Mode=OneWay}"
+                                GenericEventManager="{Binding  RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=GenericEventManager, Mode=OneWay}"
+                                />            
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

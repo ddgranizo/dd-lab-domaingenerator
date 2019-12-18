@@ -23,7 +23,6 @@ namespace DD.Lab.Wpf.Controls.Inputs
 
 
 
-
     public partial class EntityReferenceInputControlView : UserControl
     {
 

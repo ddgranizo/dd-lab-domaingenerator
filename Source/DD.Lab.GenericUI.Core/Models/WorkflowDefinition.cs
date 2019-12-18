@@ -9,9 +9,9 @@ namespace DD.Lab.GenericUI.Core.Models
     {
         public string EntityLogicalName { get; set; }
         public int Order { get; set; }
-        public Action<WorkflowInputParameter> Action { get; }
+        public Action<GenericManager, WorkflowInputParameter> Action { get; }
 
-        public WorkflowDefinition(string entityLogicalName, int order, Action<WorkflowInputParameter> action)
+        public WorkflowDefinition(string entityLogicalName, int order, Action<GenericManager, WorkflowInputParameter> action)
         {
             if (string.IsNullOrEmpty(entityLogicalName))
             {
@@ -20,7 +20,13 @@ namespace DD.Lab.GenericUI.Core.Models
 
             EntityLogicalName = entityLogicalName;
             Order = order;
-            Action = action ?? throw new ArgumentNullException(nameof(action));
+            Action = action;
+        }
+
+        public WorkflowDefinition(string entityLogicalName, Action<GenericManager, WorkflowInputParameter> action)
+            : this(entityLogicalName, 0, action)
+        {
+            
         }
     }
 }

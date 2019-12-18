@@ -67,7 +67,6 @@ namespace DD.Lab.Wpf.Controls.Inputs
                               BindsTwoWayByDefault = true,
                           });
 
-
 		private readonly GenericFormInputControlViewModel _viewModel = null;
 
         public GenericFormInputControlView()
@@ -139,5 +138,139 @@ namespace DD.Lab.Wpf.Controls.Inputs
             var myEvent = e as PasswordValueChangedEventArgs;
             RaiseValueChangedEvent(InputModel, myEvent.Value);
         }
+
+
+        private void DateTimeInputControlView_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as DateTimeValueChangedEventArgs;
+            RaiseValueChangedEvent(InputModel, myEvent.Value);
+        }
+
+
+        public void ClearControl()
+        {
+            TheControlGrid.Children.Clear();
+        }
+
+
+        public void AddStringControl(string defaultValue, List<string> suggestions)
+        {
+            var control = new StringInputControlView
+            {
+                DefaultValue = defaultValue,
+                Sugestions = suggestions,
+                IsReadOnly = false,
+                IsMultiline = false
+            };
+            control.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddMultilineStringControl(string defaultValue)
+        {
+            var control = new StringInputControlView
+            {
+                DefaultValue = defaultValue,
+                IsReadOnly = false,
+                IsMultiline = true
+            };
+            control.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddGuidControl(string defaultValue)
+        {
+            var control = new StringInputControlView
+            {
+                DefaultValue = defaultValue,
+                IsReadOnly = true,
+                IsMultiline = false
+            };
+            control.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddBooleanControl(bool defaultValue)
+        {
+            var control = new BooleanInputControlView
+            {
+                DefaultValue = defaultValue,
+            };
+            control.ValueChanged += BooleanInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddIntegerControl(int defaultValue)
+        {
+            var control = new IntegerInputControlView
+            {
+                DefaultValue = defaultValue,
+            };
+            control.ValueChanged += IntegerInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddDecimalControl(decimal defaultValue)
+        {
+            var control = new DecimalInputControlView
+            {
+                DefaultValue = defaultValue,
+            };
+            control.ValueChanged += DecimalInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddDoubleControl(double defaultValue)
+        {
+            var control = new DoubleInputControlView
+            {
+                DefaultValue = defaultValue,
+            };
+            control.ValueChanged += DoubleInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddPasswordControl()
+        {
+            var control = new PasswordInputControlView
+            {
+            };
+            control.ValueChanged += PasswordInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddDateTimeControl(DateTime defaultValue)
+        {
+            var control = new DateTimeInputControlView
+            {
+                DefaultValue = defaultValue,
+            };
+            control.ValueChanged += DateTimeInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddEntityReferenceControl(EntityReferenceValue defaultValue)
+        {
+            var control = new EntityReferenceInputControlView
+            {
+                DefaultValue = defaultValue,
+                InputModel = _viewModel.InputModel,
+            };
+            control.ValueChanged += EntityReferenceInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+        public void AddOptionSetControl(OptionSetValue defaultValue, List<OptionSetValue> options)
+        {
+            var control = new OptionSetInputControlView
+            {
+                DefaultValue = defaultValue,
+                Options = options,
+            };
+            control.ValueChanged += OptionSetInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(control);
+        }
+
+
     }
 }

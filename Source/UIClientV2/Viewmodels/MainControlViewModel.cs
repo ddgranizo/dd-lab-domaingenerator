@@ -40,6 +40,7 @@ namespace UIClientV2.Viewmodels
         public StoredGenericValuesService StoredDataModel { get; }
         public GenericManager GenericManager { get; }
         public BusinessEventManager BusinessEventManager { get; }
+        public BusinessWorkflowManager BusinessWorkflowManager { get; set; }
         private MainControlView _view;
 
         public ViewType CurrentViewType { get { return GetValue<ViewType>(); } set { SetValue(value); } }
@@ -62,6 +63,7 @@ namespace UIClientV2.Viewmodels
         public MainControlViewModel()
         {
             GenericManager = new GenericManager();
+            BusinessWorkflowManager = new BusinessWorkflowManager(GenericManager);
             FileService = new FileService();
             JsonParserService = new JsonParserService();
             StoredMetadataModel = new StoredMetadataSchemaService(JsonParserService, FileService);

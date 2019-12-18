@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DD.Lab.GenericUI.Core\DD.Lab.GenericUI.Core.csproj" />
     <ProjectReference Include="..\DD.Lab.Services\DD.Lab.Services.System.csproj" />
     <ProjectReference Include="..\DD.Lab.Wpf\DD.Lab.Wpf.csproj" />
   </ItemGroup>

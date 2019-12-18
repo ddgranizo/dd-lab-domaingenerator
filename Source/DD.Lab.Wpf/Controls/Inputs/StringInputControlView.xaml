@@ -16,6 +16,7 @@
         <Grid.Resources>
 
         </Grid.Resources>
+        
         <ComboBox ItemsSource="{Binding Sugestions}" SelectedItem="{Binding SelectedSugestion}" Visibility="{Binding Sugestions, Converter={StaticResource EnumerableToCollapsedConverter}}"></ComboBox>
 
         <Grid>
