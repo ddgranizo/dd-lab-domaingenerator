@@ -71,12 +71,15 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
             GenericEventManager = new GenericEventManager();
             GenericEventManager.OnCreateRequested += BusinessEventManager_OnCreateRequested;
+            GenericEventManager.OnCreatedEntity += GenericEventManager_OnCreatedEntity;
             GenericEventManager.OnUpdatedEntity += BusinessEventManager_OnUpdatedEntity;
             GenericEventManager.OnSelectedEntity += BusinessEventManager_OnSelectedEntity;
             GenericEventManager.OnDeletedEntity += BusinessEventManager_OnDeletedEntity;
+
             InitializeCommands();
         }
 
+   
 
         private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
         {
@@ -96,6 +99,13 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         }
 
         private void BusinessEventManager_OnUpdatedEntity(object sender, Events.EntityEventArgs eventArgs)
+        {
+            var entity = eventArgs.Entity;
+            var entityValues = GenericManager.Retrieve(entity.LogicalName, eventArgs.Id);
+            SetUpdateEntityMode(eventArgs.Entity, entityValues.Values);
+        }
+
+        private void GenericEventManager_OnCreatedEntity(object sender, Events.EntityEventArgs eventArgs)
         {
             var entity = eventArgs.Entity;
             var entityValues = GenericManager.Retrieve(entity.LogicalName, eventArgs.Id);

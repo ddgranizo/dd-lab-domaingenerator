@@ -33,9 +33,9 @@ namespace DD.Lab.Wpf.Drm
             OnDeletedEntity?.Invoke(this, new EntityEventArgs(entity, id));
         }
 
-        public void RaiseOnCreatedEntity(Entity entity, Dictionary<string, object> values)
+        public void RaiseOnCreatedEntity(Entity entity, Guid id)
         {
-            OnCreatedEntity?.Invoke(this, new EntityEventArgs(entity, values));
+            OnCreatedEntity?.Invoke(this, new EntityEventArgs(entity, id));
         }
 
         public void RaiseOnCreateRequested(Entity entity, Dictionary<string, object> initialValues)

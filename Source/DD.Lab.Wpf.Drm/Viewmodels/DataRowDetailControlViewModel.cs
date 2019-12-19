@@ -76,11 +76,11 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 if (Mode == DetailMode.Creating)
                 {
                     var id = GenericManager.Create(Entity.LogicalName, Values);
-                    var newData = GenericManager.Retrieve(Entity.LogicalName, id);
-                    Id = id;
-                    Values = newData.Values;
-                    Mode = DetailMode.Updating;
-                    GenericEventManager.RaiseOnCreatedEntity(Entity, newData.Values);
+                    //var newData = GenericManager.Retrieve(Entity.LogicalName, id);
+                    //Id = id;
+                    //Values = newData.Values;
+                    //Mode = DetailMode.Updating;
+                    GenericEventManager.RaiseOnCreatedEntity(Entity, id);
                 }
                 else if (Mode == DetailMode.Updating)
                 {

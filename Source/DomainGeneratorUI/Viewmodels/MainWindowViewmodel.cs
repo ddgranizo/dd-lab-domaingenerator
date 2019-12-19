@@ -58,7 +58,6 @@ namespace DomainGeneratorUI.Viewmodels
             model.AddRelationship(new Repository(), new RepositoryMethod());
             model.AddRelationship(new RepositoryMethod(), new MethodParameter());
 
-
             model.AddManyTwoManyRelationship(new Property(), new Model());
 
             //var currentModel = StoredMetadataModel
