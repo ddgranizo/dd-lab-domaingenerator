@@ -23,5 +23,6 @@ namespace DD.Lab.Wpf.Drm
             }
             return $"{secondEntity}Id";
         }
+
     }
 }

@@ -8,6 +8,8 @@ using System.Text;
 using DomainGeneratorUI.Extensions;
 using DomainGeneratorUI.Windows;
 using DD.Lab.Wpf.ViewModels.Base;
+using DD.Lab.Wpf.Drm.Models;
+using DomainGeneratorUI.Models;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -30,21 +32,50 @@ namespace DomainGeneratorUI.Viewmodels
             JsonParserService = new JsonParserService();
             StoredMetadataModel = new StoredMetadataSchemaService(JsonParserService, FileService);
             StoredDataModel = new StoredGenericValuesService(JsonParserService, FileService);
-            
-            var currentModel = StoredMetadataModel
-                .GetStoredData()
-                .CompleteModel();
 
-            GenericManager.InitializeModel(currentModel);
+            var model = new MetadataModel();
+            model.AddEntity(new Project());
+            model.AddEntity(new Domain());
+            model.AddEntity(new Setting());
+            model.AddEntity(new Models.Environment());
+            model.AddEntity(new Schema());
+            model.AddEntity(new Property());
+            model.AddEntity(new Model());
+            model.AddEntity(new Repository());
+            model.AddEntity(new UseCase());
+            model.AddEntity(new RepositoryMethod());
+            model.AddEntity(new MethodParameter());
+
+            model.AddRelationship(new Project(), new Domain());
+            model.AddRelationship(new Project(), new Setting());
+            model.AddRelationship(new Project(), new Models.Environment());
+            model.AddRelationship(new Domain(), new Schema());
+            model.AddRelationship(new Schema(), new Property());
+            model.AddRelationship(new Schema(), new Property(), "ForeingSchemaId");
+            model.AddRelationship(new Schema(), new Model());
+            model.AddRelationship(new Schema(), new Repository());
+            model.AddRelationship(new Schema(), new UseCase());
+            model.AddRelationship(new Repository(), new RepositoryMethod());
+            model.AddRelationship(new RepositoryMethod(), new MethodParameter());
+
+
+            model.AddManyTwoManyRelationship(new Property(), new Model());
+
+            //var currentModel = StoredMetadataModel
+            //    .GetStoredData()
+            //    .CompleteModel();
+
+            GenericManager.InitializeModel(model);
 
             GenericManager.CreateHandler = new CreateService(StoredDataModel);
             GenericManager.UpdateHandler = new UpdateService(StoredDataModel);
-            GenericManager.DeleteHandler = new DeleteService(StoredDataModel);
+            GenericManager.DeleteHandler = new DeleteService(StoredDataModel, model, true);
             GenericManager.RetrieveHandler = new RetrieveService(StoredDataModel);
             GenericManager.RetrieveAllHandler = new RetrieveAllService(StoredDataModel);
             GenericManager.AssociateHandler = new AssociateService(StoredDataModel);
             GenericManager.DisassociateHandler = new DisassociateService(StoredDataModel);
             GenericManager.RetrieveAllAssociatedHandler = new RetrieveAllAssociatedService(StoredDataModel);
+            
         }
 
         private MainWindow _view;

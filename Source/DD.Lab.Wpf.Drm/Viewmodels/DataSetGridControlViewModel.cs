@@ -112,7 +112,6 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                     }
                     GetValues();
                 }
-
             });
 
             RegisterCommand(AddNewRelatedCommand);

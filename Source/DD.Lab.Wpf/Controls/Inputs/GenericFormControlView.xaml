@@ -24,15 +24,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-                <ItemsControl  ItemsSource="{Binding FormModel.Attributes}" Grid.Row="0" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <usrinput:GenericFormInputControlView 
-                                        InputModel="{Binding Path=.}"
-                                        ValueChanged="GenericFormInputControl_ValueChanged"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <ItemsControl  ItemsSource="{Binding FormModel.Attributes}" Grid.Row="0" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <usrinput:GenericFormInputControlView 
+                                    InputModel="{Binding Path=.}"
+                                    ValueChanged="GenericFormInputControl_ValueChanged"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Grid>
 </UserControl>

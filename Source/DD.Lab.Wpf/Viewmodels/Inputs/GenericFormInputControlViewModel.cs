@@ -68,7 +68,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
                 }
                 else if (model.Type == GenericFormInputModel.TypeValue.Int)
                 {
-                    DefaultIntValue = (int)model.DefaultValue;
+                    int valueInt =  model.DefaultValue is Int64
+                        ? Convert.ToInt32(model.DefaultValue)
+                        : (int)model.DefaultValue;
+                    DefaultIntValue = valueInt;
                 }
                 else if (model.Type == GenericFormInputModel.TypeValue.Password)
                 {

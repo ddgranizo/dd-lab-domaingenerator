@@ -21,5 +21,6 @@ namespace DD.Lab.Wpf.Drm.Models
             RelatedEntity = relatedEntity;
             RelatedAttribute = relatedAttribute;
         }
+        
     }
 }

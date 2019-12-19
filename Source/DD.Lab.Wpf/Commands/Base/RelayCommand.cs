@@ -68,7 +68,7 @@ namespace DD.Lab.Wpf.Commands.Base
                 }
                 _execute(parameter);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

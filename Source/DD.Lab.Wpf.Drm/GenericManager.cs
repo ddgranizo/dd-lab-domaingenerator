@@ -41,7 +41,6 @@ namespace DD.Lab.Wpf.Drm
             UpdateWorkflows = new List<WorkflowDefinition>();
             DeleteWorkflows = new List<WorkflowDefinition>();
             AssociateWorkflow = new List<WorkflowDefinition>();
-
         }
 
 

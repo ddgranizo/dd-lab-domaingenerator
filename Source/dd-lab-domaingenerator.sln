@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Lab.Wpf", "DD.Lab.Wpf\DD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Lab.Services.System", "DD.Lab.Services\DD.Lab.Services.System.csproj", "{8255810A-FAC9-4999-81F8-7F4E67CD4C12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainGeneratorUI", "DomainGeneratorUI\DomainGeneratorUI.csproj", "{05B5615F-8394-4E0F-B0F7-5399D1509D7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainGeneratorUI", "DomainGeneratorUI\DomainGeneratorUI.csproj", "{05B5615F-8394-4E0F-B0F7-5399D1509D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD.Lab.Wpf.Drm", "DD.Lab.Wpf.Drm\DD.Lab.Wpf.Drm.csproj", "{9D45C7A3-6473-4E40-8A5E-54D58A2C5570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DD.Lab.Wpf.Drm", "DD.Lab.Wpf.Drm\DD.Lab.Wpf.Drm.csproj", "{9D45C7A3-6473-4E40-8A5E-54D58A2C5570}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIClient", "UIClient\UIClient.csproj", "{673205D2-2519-4775-8997-89296BEF6E21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9D45C7A3-6473-4E40-8A5E-54D58A2C5570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D45C7A3-6473-4E40-8A5E-54D58A2C5570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D45C7A3-6473-4E40-8A5E-54D58A2C5570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673205D2-2519-4775-8997-89296BEF6E21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673205D2-2519-4775-8997-89296BEF6E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673205D2-2519-4775-8997-89296BEF6E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673205D2-2519-4775-8997-89296BEF6E21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
