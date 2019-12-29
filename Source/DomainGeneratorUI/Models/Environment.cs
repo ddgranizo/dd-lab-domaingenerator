@@ -9,6 +9,8 @@ namespace DomainGeneratorUI.Models
 {
     public class Environment
     {
+        public const string LogicalName = "Environment";
+
         public Guid Id { get; set; }
 
         [Required]

@@ -12,4 +12,9 @@
     <ProjectReference Include="..\DD.Lab.Wpf\DD.Lab.Wpf.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\UseCases\" />
+    <Folder Include="Workflows\Utilities\" />
+  </ItemGroup>
+
 </Project>

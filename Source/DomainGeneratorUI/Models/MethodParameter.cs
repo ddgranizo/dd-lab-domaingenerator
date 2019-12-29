@@ -10,6 +10,8 @@ namespace DomainGeneratorUI.Models
 {
     public class MethodParameter
     {
+        public const string LogicalName = "MethodParameter";
+
         public enum ParameterDirection
         {
             Input = 1,

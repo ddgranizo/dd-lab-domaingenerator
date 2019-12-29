@@ -10,6 +10,8 @@ namespace DomainGeneratorUI.Models
 {
     public class Setting
     {
+        public const string LogicalName = "Setting";
+
         public Guid Id { get; set; }
 
         [Required]

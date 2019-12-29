@@ -10,13 +10,15 @@ namespace DomainGeneratorUI.Models
 {
     public class Property
     {
+        public const string LogicalName = "Property";
 
         public enum PropertyType
         {
             PrimaryKey = 1,
             State = 2,
             Status = 3,
-            ForeingKey = 4,
+            EntityReference = 4,
+            //MultiEntityReference = 5,
             Boolean = 10,
             Integer = 11,
             Decimal = 12,
@@ -29,7 +31,6 @@ namespace DomainGeneratorUI.Models
             Password = 99,
         }
 
-
         public Guid Id { get; set; }
 
         [Required]
@@ -41,9 +42,8 @@ namespace DomainGeneratorUI.Models
         [EnumAtrribute(EnumName = nameof(PropertyType))]
         public OptionSetValue Type { get; set; }
 
-        [Description("Foreing Schema if Type = ForeignKey")]
-        public EntityReferenceValue ForeingSchemaId { get; set; }
-
+        //[Description("Foreing Schema if Type = ForeignKey")]
+        //public EntityReferenceValue EntityReferenceSchemaId { get; set; }
 
         [Description("Is PrimaryKey")]
         public bool IsPrimaryKey { get; set; }

@@ -6,6 +6,7 @@ namespace DD.Lab.Wpf.Models.Inputs
 {
     public class EntityReferenceValue
     {
+
         public EntityReferenceValue(Guid id, string displayName)
         {
             Id = id;
@@ -23,7 +24,5 @@ namespace DD.Lab.Wpf.Models.Inputs
 
         public Guid Id { get; set; }
         public string DisplayName { get; set; }
-
-
     }
 }

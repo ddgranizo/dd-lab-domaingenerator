@@ -10,6 +10,8 @@ namespace DomainGeneratorUI.Models
 {
     public class UseCase
     {
+        public const string LogicalName = "UseCase";
+
         public enum UseCaseType
         {
             RetrieveByPk = 1,
@@ -25,7 +27,6 @@ namespace DomainGeneratorUI.Models
             Custom = 99,
         }
 
-
         public Guid Id { get; set; }
 
         [Required]
@@ -37,16 +38,17 @@ namespace DomainGeneratorUI.Models
         [EnumAtrribute(EnumName = nameof(UseCaseType))]
         public OptionSetValue Type { get; set; }
 
-
         [Required]
         [Description("Display name")]
         public string DisplayName { get; set; }
-
 
         [Required]
         [Description("Description")]
         public string Description { get; set; }
 
+        [Description("Use case definition")]
+        [CustomContentAttribute(ModuleName = "UseCaseContentModule")]
+        public string Content { get; set; }
 
         [Required]
         [Description("Schema")]

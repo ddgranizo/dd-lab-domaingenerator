@@ -39,8 +39,8 @@ namespace DD.Lab.Wpf.Drm.Models
             var dic = new Dictionary<string, object>();
             foreach (var item in typeof(T).GetProperties())
             {
-                var value = dic.ContainsKey(item.Name)
-                        ? dic[item.Name]
+                var value = values.ContainsKey(item.Name)
+                        ? values[item.Name]
                         : null;
                 SetPropValue(instance, item.Name, value);
             }

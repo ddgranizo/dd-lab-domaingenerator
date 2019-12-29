@@ -25,7 +25,6 @@ namespace DomainGeneratorUI.Viewmodels
 
         public MainWindowViewmodel()
         {
-
             GenericManager = new GenericManager();
             BusinessWorkflowManager = new BusinessWorkflowManager(GenericManager);
             FileService = new FileService();
@@ -51,7 +50,7 @@ namespace DomainGeneratorUI.Viewmodels
             model.AddRelationship(new Project(), new Models.Environment());
             model.AddRelationship(new Domain(), new Schema());
             model.AddRelationship(new Schema(), new Property());
-            model.AddRelationship(new Schema(), new Property(), "ForeingSchemaId");
+            //model.AddRelationship(new Schema(), new Property(), nameof(Property.EntityReferenceSchemaId));
             model.AddRelationship(new Schema(), new Model());
             model.AddRelationship(new Schema(), new Repository());
             model.AddRelationship(new Schema(), new UseCase());
@@ -59,10 +58,8 @@ namespace DomainGeneratorUI.Viewmodels
             model.AddRelationship(new RepositoryMethod(), new MethodParameter());
 
             model.AddManyTwoManyRelationship(new Property(), new Model());
+            model.AddManyTwoManyRelationship(new Property(), new Schema(), "ReferencedSchema");
 
-            //var currentModel = StoredMetadataModel
-            //    .GetStoredData()
-            //    .CompleteModel();
 
             GenericManager.InitializeModel(model);
 

@@ -8,6 +8,8 @@ namespace DomainGeneratorUI.Models
 {
     public class Project
     {
+        public const string LogicalName = "Project";
+
         public Guid Id { get; set; }
 
         [Required]

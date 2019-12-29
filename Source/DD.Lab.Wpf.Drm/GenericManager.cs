@@ -44,42 +44,42 @@ namespace DD.Lab.Wpf.Drm
         }
 
 
-        public void RegisterNewCreateWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewCreateWorkflow(string entity, int order, IWorkflowAction action)
         {
             CreateWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewUpdateWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewUpdateWorkflow(string entity, int order, IWorkflowAction action)
         {
             UpdateWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewDeleteWorkflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewDeleteWorkflow(string entity, int order, IWorkflowAction action)
         {
             DeleteWorkflows.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewAssociatekflow(string entity, int order, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewAssociatekflow(string entity, int order, IWorkflowAction action)
         {
             AssociateWorkflow.Add(new WorkflowDefinition(entity, order, action));
         }
 
-        public void RegisterNewCreateWorkflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewCreateWorkflow(string entity, IWorkflowAction action)
         {
             CreateWorkflows.Add(new WorkflowDefinition(entity, action));
         }
 
-        public void RegisterNewUpdateWorkflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewUpdateWorkflow(string entity, IWorkflowAction action)
         {
             UpdateWorkflows.Add(new WorkflowDefinition(entity, action));
         }
 
-        public void RegisterNewDeleteWorkflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewDeleteWorkflow(string entity, IWorkflowAction action)
         {
             DeleteWorkflows.Add(new WorkflowDefinition(entity, action));
         }
 
-        public void RegisterNewAssociatekflow(string entity, Action<GenericManager, WorkflowInputParameter> action)
+        public void RegisterNewAssociatekflow(string entity, IWorkflowAction action)
         {
             AssociateWorkflow.Add(new WorkflowDefinition(entity, action));
         }
@@ -107,7 +107,7 @@ namespace DD.Lab.Wpf.Drm
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(this, workflowInput);
+                    item.Action.Execute(this, workflowInput);
                 }
             }
             return id;
@@ -125,7 +125,7 @@ namespace DD.Lab.Wpf.Drm
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(this, workflowInput);
+                    item.Action.Execute(this, workflowInput);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace DD.Lab.Wpf.Drm
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(this, workflowInput);
+                    item.Action.Execute(this, workflowInput);
                 }
             }
         }
@@ -183,7 +183,7 @@ namespace DD.Lab.Wpf.Drm
             {
                 if (item.Action != null)
                 {
-                    item.Action.Invoke(this, workflowInput);
+                    item.Action.Execute(this, workflowInput);
                 }
             }
             return id;

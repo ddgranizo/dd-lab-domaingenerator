@@ -26,18 +26,21 @@ namespace DD.Lab.Wpf.Drm.Models
             State = 50,
 
             EntityReference = 90,
+            //MultiEntityReference = 91,
+
         }
 
         public Attribute()
         {
         }
 
-
         public bool IsMandatory { get; set; }
         public AttributeType Type { get; set; }
         public string LogicalName { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
+        public bool IsCustomAttribute { get; set; }
+        public string CustomModule { get; set; }
         public List<OptionSetValue> Options { get; set; }
 
         public string ReferencedEntity { get; set; }
@@ -95,8 +98,8 @@ namespace DD.Lab.Wpf.Drm.Models
                 }
                 return options.Select(k => new OptionSetValue()
                 {
-                    DisplayName = GetCustomNameAttributes<string>(k, "DisplayName"),
-                    Value = GetCustomNameAttributes<int>(k, "Value")
+                    DisplayName = GetCustomNameAttributes<string>(k, nameof(OptionSetAtrribute.DisplayName)),
+                    Value = GetCustomNameAttributes<int>(k, nameof(OptionSetAtrribute.Value) )
                 }).ToList();
             }
 
@@ -127,6 +130,23 @@ namespace DD.Lab.Wpf.Drm.Models
             return attr.ConstructorArguments.First().Value.ToString();
         }
 
+
+        public static string GetCustomModuleFromPropertyInfo(PropertyInfo propertyInfo)
+        {
+            var attr = GetCustomAttributeType<CustomContentAttribute>(propertyInfo);
+            if (attr == null)
+            {
+                return null;
+            }
+            return GetCustomNameAttributes<string>(attr, nameof(CustomContentAttribute.ModuleName));
+        }
+
+
+        public static bool GetIsCustomContentFromPropertyInfo(PropertyInfo propertyInfo)
+        {
+            var attr = GetCustomAttributeType<CustomContentAttribute>(propertyInfo);
+            return attr != null;
+        }
 
         public static bool GetMandatoryFromPropertyInfo(PropertyInfo propertyInfo)
         {
@@ -161,6 +181,10 @@ namespace DD.Lab.Wpf.Drm.Models
             {
                 return AttributeType.EntityReference;
             }
+            //else if (propertyInfo.PropertyType.Name == "MultiEntityReferenceValue")
+            //{
+            //    return AttributeType.MultiEntityReference;
+            //}
             else if (propertyInfo.PropertyType.Name == "OptionSetValue")
             {
                 return AttributeType.OptionSet;

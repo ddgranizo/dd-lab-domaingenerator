@@ -9,6 +9,8 @@ namespace DomainGeneratorUI.Models
 {
     public class Schema
     {
+        public const string LogicalName = "Schema";
+
         public Guid Id { get; set; }
 
         [Required]

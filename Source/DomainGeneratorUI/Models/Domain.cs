@@ -9,6 +9,9 @@ namespace DomainGeneratorUI.Models
 {
     public class Domain
     {
+
+        public const string LogicalName = "Domain";
+
         public Guid Id { get; set; }
 
         [Required]

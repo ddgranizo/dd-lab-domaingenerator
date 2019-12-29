@@ -29,10 +29,15 @@ namespace DD.Lab.Wpf.Drm.Models
                 var type = Attribute.GetAttributeTypeFromPropertyInfo(item);
                 var isMandatory = Attribute.GetMandatoryFromPropertyInfo(item);
                 var description = Attribute.GetDescriptionFromPropertyInfo(item);
-                var attribute = new Attribute(type, item.Name, item.Name, description ?? item.Name, isMandatory);
+                var isCustom = Attribute.GetIsCustomContentFromPropertyInfo(item);
+                var attribute = new Attribute(type, item.Name, item.Name, description ?? item.Name, isMandatory) { IsCustomAttribute = isCustom };
                 if (type == Attribute.AttributeType.OptionSet)
                 {
                     attribute.Options = Attribute.GetOptionsFromPropertyInfo(instance.GetType(), item);
+                }
+                if (isCustom)
+                {
+                    attribute.CustomModule = Attribute.GetCustomModuleFromPropertyInfo(item);
                 }
                 entity.Attributes.Add(attribute);
             }
@@ -64,7 +69,7 @@ namespace DD.Lab.Wpf.Drm.Models
             Relationships.Add(new Relationship(mainEntity, referencedEntity, realReferencedAttribute));
         }
 
-        public void AddManyTwoManyRelationship<U, V>(U firstInstance, V secondInstance)
+        public void AddManyTwoManyRelationship<U, V>(U firstInstance, V secondInstance, string attributeIntersectionName = "")
         {
             var firstEntity = firstInstance.GetType().Name;
             var firstEntityObject = Entities.FirstOrDefault(l => l.LogicalName == firstEntity);
@@ -78,7 +83,7 @@ namespace DD.Lab.Wpf.Drm.Models
             {
                 throw new Exception("Add both entities first");
             }
-            var intersectionName = $"{firstEntity}{secondEntity}";
+            var intersectionName = $"{firstEntity}{secondEntity}{attributeIntersectionName}";
             Relationships.Add(new Relationship(firstEntity, secondEntity, null)
                 {
                     IsManyToMany = true,
