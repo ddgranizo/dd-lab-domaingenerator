@@ -22,12 +22,12 @@ using System.Windows.Shapes;
 namespace DD.Lab.Wpf.Drm.Controls
 {
 
-    public partial class DataSetGridControlView : UserControl
+    public partial class DrmGridControlView : UserControl
     {
 
         public static readonly RoutedEvent SelectedDataRowEvent =
                     EventManager.RegisterRoutedEvent(nameof(SelectedDataRow), RoutingStrategy.Bubble,
-                    typeof(RoutedEventHandler), typeof(DataSetGridControlView));
+                    typeof(RoutedEventHandler), typeof(DrmGridControlView));
 
         public event RoutedEventHandler SelectedDataRow
         {
@@ -125,7 +125,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(FilterRelationshipId),
                           typeof(Guid),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -134,7 +134,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(FilterRelationship),
                           typeof(Relationship),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -143,7 +143,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Relationships),
                           typeof(List<Relationship>),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -152,7 +152,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Entity),
                           typeof(Entity),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -162,7 +162,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(GenericManager),
                           typeof(GenericManager),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -172,23 +172,23 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(GenericEventManager),
                           typeof(GenericEventManager),
-                          typeof(DataSetGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
 
-        private readonly DataSetGridControlViewModel _viewModel = null;
+        private readonly DrmGridControlViewModel _viewModel = null;
 
-        public DataSetGridControlView()
+        public DrmGridControlView()
         {
             InitializeComponent();
-            _viewModel = Resources["ViewModel"] as DataSetGridControlViewModel;
+            _viewModel = Resources["ViewModel"] as DrmGridControlViewModel;
             _viewModel.Initialize(this);
         }
 
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            DataSetGridControlView v = d as DataSetGridControlView;
+            DrmGridControlView v = d as DrmGridControlView;
             if (e.Property.Name == nameof(Entity))
             {
                 v.SetEntity((Entity)e.NewValue);

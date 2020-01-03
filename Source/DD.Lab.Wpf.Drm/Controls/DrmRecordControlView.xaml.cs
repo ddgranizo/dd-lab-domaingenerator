@@ -22,7 +22,7 @@ using static DD.Lab.Wpf.Drm.Viewmodels.DrmControlViewModel;
 namespace DD.Lab.Wpf.Drm.Controls
 {
 
-    public partial class DataRowDetailControlView : UserControl
+    public partial class DrmRecordControlView : UserControl
     {
 
         public DetailMode Mode
@@ -116,7 +116,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Entities),
                           typeof(List<Entity>),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -126,7 +126,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Relationships),
                           typeof(List<Relationship>),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -136,7 +136,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Mode),
                           typeof(DetailMode),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -146,7 +146,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(Entity),
                           typeof(Entity),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -156,7 +156,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(GenericManager),
                           typeof(GenericManager),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -166,7 +166,7 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(GenericEventManager),
                           typeof(GenericEventManager),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
@@ -176,25 +176,25 @@ namespace DD.Lab.Wpf.Drm.Controls
                       DependencyProperty.Register(
                           nameof(InitialValues),
                           typeof(Dictionary<string, object>),
-                          typeof(DataRowDetailControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
                           {
                               BindsTwoWayByDefault = true,
                           });
 
 
 
-        private readonly DataRowDetailControlViewModel _viewModel = null;
+        private readonly DrmRecordViewModel _viewModel = null;
 
-        public DataRowDetailControlView()
+        public DrmRecordControlView()
         {
             InitializeComponent();
-            _viewModel = Resources["ViewModel"] as DataRowDetailControlViewModel;
+            _viewModel = Resources["ViewModel"] as DrmRecordViewModel;
             _viewModel.Initialize(this);
         }
 
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            DataRowDetailControlView v = d as DataRowDetailControlView;
+            DrmRecordControlView v = d as DrmRecordControlView;
             if (e.Property.Name == nameof(Entity))
             {
                 v.SetEntity((Entity)e.NewValue);

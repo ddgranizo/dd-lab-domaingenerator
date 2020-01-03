@@ -22,7 +22,7 @@ using System.Xml.Serialization;
 
 namespace DD.Lab.Wpf.Drm.Viewmodels
 {
-    public class DataSetGridControlViewModel : BaseViewModel
+    public class DrmGridControlViewModel : BaseViewModel
     {
         public Entity Entity { get { return GetValue<Entity>(); } set { SetValue(value, UpdatedEntity); } }
 
@@ -56,9 +56,9 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public ICommand AddNewRelatedCommand { get; set; }
         public ICommand AssociateCommand { get; set; }
 
-        private DataSetGridControlView _view;
+        private DrmGridControlView _view;
 
-        public DataSetGridControlViewModel()
+        public DrmGridControlViewModel()
         {
             InitializeCommands();
         }
@@ -150,7 +150,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             GetValues();
         }
 
-        public void Initialize(DataSetGridControlView v)
+        public void Initialize(DrmGridControlView v)
         {
             _view = v;
         }

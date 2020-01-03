@@ -22,7 +22,7 @@ using static DD.Lab.Wpf.Drm.Viewmodels.DrmControlViewModel;
 
 namespace DD.Lab.Wpf.Drm.Viewmodels
 {
-    public class DataRowDetailControlViewModel : BaseViewModel
+    public class DrmRecordViewModel : BaseViewModel
     {
         public DetailMode Mode { get { return GetValue<DetailMode>(); } set { SetValue(value); } }
 
@@ -59,16 +59,16 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         public Guid Id { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
-        private DataRowDetailControlView _view;
+        private DrmRecordControlView _view;
 
-        public DataRowDetailControlViewModel()
+        public DrmRecordViewModel()
         {
             Values = new Dictionary<string, object>();
             IsCompleted = false;
             InitializeCommands();
         }
 
-        public void Initialize(DataRowDetailControlView v)
+        public void Initialize(DrmRecordControlView v)
         {
             _view = v;
         }

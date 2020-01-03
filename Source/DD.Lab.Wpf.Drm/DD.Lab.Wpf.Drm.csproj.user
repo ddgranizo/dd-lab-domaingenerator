@@ -2,10 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Page Update="Controls\DataRowDetailControlView.xaml">
+    <Page Update="Controls\DrmRecordControlView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Controls\DataSetGridControlView.xaml">
+    <Page Update="Controls\DrmGridControlView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\DrmControlView.xaml">

@@ -32,7 +32,7 @@
 
         </StackPanel>
         <Grid Grid.Row="1" Visibility="{Binding IsVisibleList, Converter={StaticResource BoolToCollapsedConverter}}">
-            <localcontrol:DataSetGridControlView 
+            <localcontrol:DrmGridControlView 
                         Entity="{Binding CurrentEntity}" 
                         GenericManager="{Binding GenericManager, Mode=OneWay}" 
                         Relationships="{Binding Relationships}"
@@ -40,7 +40,7 @@
         </Grid>
         <Grid Grid.Row="1" Visibility="{Binding CurrentViewType, Converter={StaticResource MainControlViewTypeToCollapseConverter}, ConverterParameter='Detail'}">
             
-            <localcontrol:DataRowDetailControlView 
+            <localcontrol:DrmRecordControlView 
                 Mode="{Binding CurrentDetailMode}"
                 Entity="{Binding CurrentEntity}"
                 Relationships="{Binding Relationships}"
