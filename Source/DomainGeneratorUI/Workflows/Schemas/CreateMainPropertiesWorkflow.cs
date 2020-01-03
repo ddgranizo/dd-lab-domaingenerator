@@ -55,12 +55,25 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 CreateUserAttributes(manager);
             }
 
+            CreateMainModel(manager, schemaName);
 
+            //CreateCrudServices(manager);
+        }
+
+        private void CreateMainModel(GenericManager manager, string name)
+        {
+            var model = new Model()
+            {
+                AllProperties = true,
+                SchemaId = SchemaEntityReference,
+                IsMainModel = true,
+                Name = name,
+            };
+            manager.Create(Model.LogicalName, Entity.EntityToDictionary(model));
         }
 
         private void CreateCrudServices(GenericManager manager)
         {
-
             var createMehtodId = CreateRepositoryMethod(manager, "Create",
                 RepositoryMethod.RepositoryMethodType.Create,
                 new MethodParameter[] {
@@ -107,10 +120,6 @@ namespace DomainGeneratorUI.Workflows.Schemas
                     Name = "Entity",
                     Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
                 });
-
-
-
-
         }
 
 
@@ -133,7 +142,6 @@ namespace DomainGeneratorUI.Workflows.Schemas
             };
             manager.Create(Property.LogicalName, Entity.EntityToDictionary(createdByProperty));
             manager.Create(Property.LogicalName, Entity.EntityToDictionary(modifiedByProperty));
-
 
             CreateDefaultViewRepositoryMethod(manager, "GetByCreatedBy", new MethodParameter[] {
                 new MethodParameter(){
@@ -297,7 +305,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
             };
-            var methodId = genericManager.Create(Property.LogicalName, Entity.EntityToDictionary(method));
+            var methodId = genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
             _ = CreateDefaultViewOutputMethodParameters(genericManager, methodId, methodName);
 
             foreach (var item in inputParameters)

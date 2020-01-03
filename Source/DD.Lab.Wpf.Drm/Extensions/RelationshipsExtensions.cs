@@ -13,7 +13,6 @@ namespace DD.Lab.Wpf.Drm.Extensions
             var data = new SubGridRelationshipData();
             data.Relationship = relationship;
             data.MainEntityId = mainEntityId;
-
             var otherContextEntityLogicalName = contextEntity.LogicalName == relationship.MainEntity
                     ? relationship.RelatedEntity
                     : relationship.MainEntity;

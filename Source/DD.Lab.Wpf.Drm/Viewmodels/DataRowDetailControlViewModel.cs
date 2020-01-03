@@ -49,6 +49,13 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public List<SubGridRelationshipData> CurrentEntityRelationships { get { return GetValue<List<SubGridRelationshipData>>(); } set { SetValue(value); UpdateListToCollection(value, CurrentEntityRelationshipsCollection); } }
         public ObservableCollection<SubGridRelationshipData> CurrentEntityRelationshipsCollection { get; set; } = new ObservableCollection<SubGridRelationshipData>();
 
+        public SubGridRelationshipData SelectedEntityRelationship { get { return GetValue<SubGridRelationshipData>(); } set { SetValue(value, UpdatedSelectedEntityRelationship); } }
+        
+        
+        public Relationship SelectedRelatedRelationship { get { return GetValue<Relationship>(); } set { SetValue(value); } }
+        public Entity SelectedRelatedEntity { get { return GetValue<Entity>(); } set { SetValue(value); } }
+        public Guid SelectedRelatedMainEntityId { get { return GetValue<Guid>(); } set { SetValue(value); } }
+
 
         public Guid Id { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
@@ -152,6 +159,22 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             SetRelationships();
         }
 
+
+        private void UpdatedSelectedEntityRelationship(SubGridRelationshipData data)
+        {
+            if (data != null)
+            {
+                SelectedRelatedRelationship = null;
+                SelectedRelatedEntity = null;
+                SelectedRelatedMainEntityId = Guid.Empty;
+
+                SelectedRelatedMainEntityId = data.MainEntityId;
+                SelectedRelatedRelationship = data.Relationship;
+                SelectedRelatedEntity = data.RelatedEntity;
+            }
+            
+        }
+
         private void SetRelationships()
         {
             if (Entities != null && Relationships != null && Entity != null && Id != Guid.Empty)
@@ -160,7 +183,12 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                                .Where(k => !k.IsManyToMany && k.MainEntity == Entity.LogicalName
                                            || k.IsManyToMany && (k.MainEntity == Entity.LogicalName || k.RelatedEntity == Entity.LogicalName))
                                .Select(k => k.ToSubGridRelationshipData(Entity, Entities, Id))
+                               .OrderBy(k=>k.GetDisplayableRelationshipName())
                                .ToList();
+                if (CurrentEntityRelationships.Any())
+                {
+                    SelectedEntityRelationship = CurrentEntityRelationshipsCollection.First();
+                }
             }
         }
 

@@ -26,8 +26,6 @@
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <drm:DrmControlView 
             GenericManager="{Binding GenericManager, Mode=OneWay}"
-            
-            
             />
     </Grid>
 </Window>

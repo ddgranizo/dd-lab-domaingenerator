@@ -70,7 +70,7 @@ namespace DD.Lab.Wpf.Commands.Base
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             finally
             {

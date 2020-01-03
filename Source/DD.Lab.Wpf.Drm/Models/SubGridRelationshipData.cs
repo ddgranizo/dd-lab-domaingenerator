@@ -14,5 +14,22 @@ namespace DD.Lab.Wpf.Drm.Models
         public string RelatedAttributeDisplayName { get; set; }
         public string MainEntityDisplayName { get; set; }
         public string IntersectionDisplayableEntity { get; set; }
+
+        public string GetDisplayableRelationshipName()
+        {
+            if (Relationship == null)
+            {
+                return null;
+            }
+            if (Relationship.IsManyToMany)
+            {
+                return $"[N:M] Related {IntersectionDisplayableEntity}(s) by attr {RelatedAttributeDisplayName}";
+            }
+            else
+            {
+                return $"[1:N] Related {RelatedEntityDisplayName}(s) by intersection entity {Relationship.IntersectionName}";
+            }
+        }
+      
     }
 }

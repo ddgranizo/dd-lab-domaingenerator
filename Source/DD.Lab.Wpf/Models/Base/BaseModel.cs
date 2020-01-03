@@ -109,7 +109,7 @@ namespace DD.Lab.Wpf.Models.Base
             return targetCollection;
         }
 
-        internal void RaisePropertyChange(params string[] raiseOtherProperties)
+        public void RaisePropertyChange(params string[] raiseOtherProperties)
         {
             foreach (var item in raiseOtherProperties)
             {
@@ -117,7 +117,7 @@ namespace DD.Lab.Wpf.Models.Base
             }
         }
 
-        internal void RaiseAllPropertiesChange()
+        public void RaiseAllPropertiesChange()
         {
             foreach (var item in _values)
             {

@@ -36,10 +36,10 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
 
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
-        
+
         private DD.Lab.Wpf.Drm.Controls.DrmControlView _view;
 
-        public ViewType CurrentViewType { get { return GetValue<ViewType>(); } set { SetValue(value); } }
+        public ViewType CurrentViewType { get { return GetValue<ViewType>(); } set { SetValue(value); RaisePropertyChange(nameof(IsVisibleList)); } }
         public DetailMode CurrentDetailMode { get { return GetValue<DetailMode>(); } set { SetValue(value); } }
 
         public Entity CurrentEntity { get { return GetValue<Entity>(); } set { SetValue(value, UpdatedCurrentEntity); } }
@@ -53,6 +53,15 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         public List<Relationship> Relationships { get { return GetValue<List<Relationship>>(); } set { SetValue(value); UpdateListToCollection(value, RelationshipsCollection); } }
         public ObservableCollection<Relationship> RelationshipsCollection { get; set; } = new ObservableCollection<Relationship>();
+
+
+        public bool IsVisibleList
+        {
+            get
+            {
+                return CurrentViewType == ViewType.List;
+            }
+        }
 
 
         public DrmControlViewModel()
@@ -79,7 +88,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             InitializeCommands();
         }
 
-   
+
 
         private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
         {
