@@ -51,6 +51,9 @@ namespace DomainGeneratorUI.Services
 
             var returnInstance = new DataSet();
             returnInstance.Values = relatedRecordValues;
+
+            returnInstance.EntityLogicalName = intersectionEntity;
+
             return returnInstance;
         }
     }

@@ -181,7 +181,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             {
                 IsVisibleGridRibbon = true;
                 IsVisibleSubGridRibbon = false;
-                var data = new DataSet();
+                var data = new DataSet(Entity.LogicalName);
                 data = GenericManager.RetrieveAll(Entity.LogicalName);
 
                 if (FilterRelationsip != null && FilterRelationsipId != Guid.Empty)
@@ -223,7 +223,10 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void UpdatedDataSet(DataSet model)
         {
-            DisplayableDataSetModel = model.ToDisplayableDataSet();
+            if (model.EntityLogicalName == Entity.LogicalName)
+            {
+                DisplayableDataSetModel = model.ToDisplayableDataSet(Entity);
+            }
         }
 
         private void UpdatedFilterRelationship(Relationship relationship)

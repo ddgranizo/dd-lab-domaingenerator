@@ -26,6 +26,7 @@ namespace DomainGeneratorUI.Services
             {
                 item.Values["Id"] = item.Id;
             }
+            currentValues.EntityLogicalName = entity;
             return currentValues;
         }
     }
