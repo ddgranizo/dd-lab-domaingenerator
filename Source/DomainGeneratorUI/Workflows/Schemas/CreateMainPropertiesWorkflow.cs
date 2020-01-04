@@ -29,12 +29,12 @@ namespace DomainGeneratorUI.Workflows.Schemas
             var record = manager.Retrieve("Schema", id);
             var schemaObject = Entity.DictionartyToEntity<Schema>(record.Values);
             var schemaName = schemaObject.Name;
-            SchemaEntityReference = new EntityReferenceValue(id, schemaName);
+            SchemaEntityReference = new EntityReferenceValue(id, Schema.LogicalName, schemaName);
 
 
             var repositoryName = $"I{schemaObject.Name}MainRepository";
             var repositoryId = CreateMainRepository(manager, repositoryName);
-            RepositoryEntityReference = new EntityReferenceValue(repositoryId, repositoryName);
+            RepositoryEntityReference = new EntityReferenceValue(repositoryId, Repository.LogicalName, repositoryName);
 
             CreateIdAttribute(manager);
             CreateNameAttribute(manager);
@@ -282,14 +282,14 @@ namespace DomainGeneratorUI.Workflows.Schemas
 
             foreach (var item in inputParameters)
             {
-                item.RepositoryMethodId = new EntityReferenceValue(methodId, methodName);
+                item.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
                 item.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Input);
                 _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(item));
             }
 
             if (outputParameter == null)
             {
-                outputParameter.RepositoryMethodId = new EntityReferenceValue(methodId, methodName);
+                outputParameter.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
                 outputParameter.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Output);
                 _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(outputParameter));
             }
@@ -310,7 +310,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
 
             foreach (var item in inputParameters)
             {
-                item.RepositoryMethodId = new EntityReferenceValue(methodId, methodName);
+                item.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
                 item.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Input);
                 _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(item));
             }
@@ -342,7 +342,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 EnumerableType = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
                 Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Output),
                 Name = "Collection",
-                RepositoryMethodId = new EntityReferenceValue(methodId, methodName),
+                RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName),
             };
             return genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(parameter));
         }

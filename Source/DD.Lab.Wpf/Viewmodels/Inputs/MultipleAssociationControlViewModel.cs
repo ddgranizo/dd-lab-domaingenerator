@@ -17,6 +17,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class MultipleAssociationControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
         public List<EntityReferenceValue> AvailableValues { get { return GetValue<List<EntityReferenceValue>>(); } set { SetValue(value, UpdatedAvailableValues); } }
 

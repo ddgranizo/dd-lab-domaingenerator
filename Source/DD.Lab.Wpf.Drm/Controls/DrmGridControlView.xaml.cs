@@ -120,6 +120,23 @@ namespace DD.Lab.Wpf.Drm.Controls
             }
         }
 
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
         public static readonly DependencyProperty FilterRelationshipIdProperty =
                       DependencyProperty.Register(
@@ -213,6 +230,16 @@ namespace DD.Lab.Wpf.Drm.Controls
             {
                 v.SetFilterRelationshipId((Guid)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
+        }
+
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
         private void SetEntity(Entity data)

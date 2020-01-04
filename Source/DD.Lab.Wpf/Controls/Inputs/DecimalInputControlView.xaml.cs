@@ -55,8 +55,25 @@ namespace DD.Lab.Wpf.Controls.Inputs
                 SetValue(DefaultValueProperty, value);
             }
         }
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
 
-		public static readonly DependencyProperty DefaultValueProperty =
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(DecimalInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty DefaultValueProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
                           typeof(decimal),
@@ -81,11 +98,20 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetDefaultValue((decimal)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(decimal data)
         {
             _viewModel.DefaultValue = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
     }
 }

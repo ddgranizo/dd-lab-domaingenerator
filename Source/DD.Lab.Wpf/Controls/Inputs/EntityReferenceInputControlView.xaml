@@ -16,10 +16,15 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <ComboBox Grid.Column="0" ItemsSource="{Binding EntityReferencesCollection}" SelectedItem="{Binding CurrentEntityReference}" DisplayMemberPath="DisplayName"/>
         <Button Grid.Column="1" Margin="4,0,0,0" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Delete current value"  Command="{Binding Source={StaticResource ViewModel}, Path=DeleteEntityReferenceCommand, Mode=OneWay}"  Padding="5">
             <materialDesign:PackIcon Kind="Delete"/>
+        </Button>
+
+        <Button Grid.Column="2" Margin="4,0,0,0" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Open record"  Command="{Binding Source={StaticResource ViewModel}, Path=OpenRecordCommand, Mode=OneWay}"  Padding="5">
+            <materialDesign:PackIcon Kind="NavigateNext"/>
         </Button>
     </Grid>
 </UserControl>

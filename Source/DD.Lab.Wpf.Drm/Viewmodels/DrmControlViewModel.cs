@@ -33,6 +33,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         }
 
         public GenericEventManager GenericEventManager { get { return GetValue<GenericEventManager>(); } set { SetValue(value); } }
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
 
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
@@ -53,6 +54,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         public List<Relationship> Relationships { get { return GetValue<List<Relationship>>(); } set { SetValue(value); UpdateListToCollection(value, RelationshipsCollection); } }
         public ObservableCollection<Relationship> RelationshipsCollection { get; set; } = new ObservableCollection<Relationship>();
+
 
 
         public bool IsVisibleList
@@ -85,9 +87,16 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             GenericEventManager.OnSelectedEntity += BusinessEventManager_OnSelectedEntity;
             GenericEventManager.OnDeletedEntity += BusinessEventManager_OnDeletedEntity;
 
+
+            WpfEventManager = new WpfEventManager();
+            WpfEventManager.OnEntityReferenceInputLeftClicked += WpfEventManager_OnEntityReferenceInputLeftClicked;
             InitializeCommands();
         }
 
+        private void WpfEventManager_OnEntityReferenceInputLeftClicked(object sender, Wpf.Events.WpfEntityReferenceClickEventArgs args)
+        {
+            GenericEventManager.RaiseOnSelectedEntity(Entities.First(k=>k.LogicalName == args.EntityLogicalName), args.Id);
+        }
 
 
         private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)

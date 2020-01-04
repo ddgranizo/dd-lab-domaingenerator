@@ -66,8 +66,26 @@ namespace DD.Lab.Wpf.Controls.Inputs
                               BindsTwoWayByDefault = true,
                           });
 
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
 
-		private readonly BooleanInputControlViewModel _viewModel = null;
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(BooleanInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+
+        private readonly BooleanInputControlViewModel _viewModel = null;
 
         public BooleanInputControlView()
         {
@@ -83,11 +101,20 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetDefaultValue((bool)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(bool data)
         {
             _viewModel.DefaultValue = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
     }
 }

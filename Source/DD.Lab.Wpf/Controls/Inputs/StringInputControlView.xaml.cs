@@ -94,6 +94,25 @@ namespace DD.Lab.Wpf.Controls.Inputs
         }
 
 
+
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
         public static readonly DependencyProperty IsMultilineProperty =
                       DependencyProperty.Register(
                           nameof(IsMultiline),
@@ -161,6 +180,10 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetIsReadOnly((bool)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(string data)
@@ -181,6 +204,11 @@ namespace DD.Lab.Wpf.Controls.Inputs
         private void SetIsMultiline(bool data)
         {
             _viewModel.IsMultiline = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
     }

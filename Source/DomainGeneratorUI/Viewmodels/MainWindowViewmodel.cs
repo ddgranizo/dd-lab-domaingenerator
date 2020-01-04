@@ -60,7 +60,7 @@ namespace DomainGeneratorUI.Viewmodels
             model.AddManyTwoManyRelationship(new Property(), new Model());
             model.AddManyTwoManyRelationship(new Property(), new Schema(), "ReferencedSchema");
 
-
+           
             GenericManager.InitializeModel(model);
 
             GenericManager.CreateHandler = new CreateService(StoredDataModel);
@@ -71,6 +71,8 @@ namespace DomainGeneratorUI.Viewmodels
             GenericManager.AssociateHandler = new AssociateService(StoredDataModel);
             GenericManager.DisassociateHandler = new DisassociateService(StoredDataModel);
             GenericManager.RetrieveAllAssociatedHandler = new RetrieveAllAssociatedService(StoredDataModel);
+
+
             
         }
 

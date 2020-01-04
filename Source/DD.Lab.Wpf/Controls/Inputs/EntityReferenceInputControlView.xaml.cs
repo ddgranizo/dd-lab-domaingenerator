@@ -70,7 +70,25 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
-		public static readonly DependencyProperty EntityReferenceProperty =
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(EntityReferenceInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty EntityReferenceProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
                           typeof(EntityReferenceValue),
@@ -110,6 +128,10 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetInputModel((GenericFormInputModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetEntityReference(EntityReferenceValue data)
@@ -120,6 +142,11 @@ namespace DD.Lab.Wpf.Controls.Inputs
 		private void SetInputModel(GenericFormInputModel data)
         {
             _viewModel.InputModel = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace DD.Lab.Wpf.Drm.Services.Implementations
         public EntityReferenceValue[] GetFirstPageValues()
         {
             return RetrieveAllService.Execute(EntityLogicalName).Values
-                    .Select(k => new EntityReferenceValue() { Id = k.Id, DisplayName = GetRowDisplayName(k.Values) })
+                    .Select(k => new EntityReferenceValue() { Id = k.Id, LogicalName = EntityLogicalName, DisplayName = GetRowDisplayName(k.Values) })
                     .OrderBy(k => k.DisplayName)
                     .ToArray();
         }
@@ -36,7 +36,7 @@ namespace DD.Lab.Wpf.Drm.Services.Implementations
         public EntityReferenceValue GetValue(Guid id)
         {
             var record = RetrieveService.Execute(EntityLogicalName, id);
-            return new EntityReferenceValue() { Id = record.Id, DisplayName = GetRowDisplayName(record.Values) };
+            return new EntityReferenceValue() { Id = record.Id, LogicalName = EntityLogicalName, DisplayName = GetRowDisplayName(record.Values) };
         }
 
         public EntityReferenceValue[] SearchValues(string searchText)
@@ -51,7 +51,7 @@ namespace DD.Lab.Wpf.Drm.Services.Implementations
                         var name = GetRowDisplayName(k.Values);
                         return string.IsNullOrEmpty(name) && name.ToLower().IndexOf(searchText.ToLower()) > -1;
                     })
-                   .Select(k => new EntityReferenceValue() { Id = k.Id, DisplayName = GetRowDisplayName(k.Values) })
+                   .Select(k => new EntityReferenceValue() { Id = k.Id, LogicalName = EntityLogicalName, DisplayName = GetRowDisplayName(k.Values) })
                    .OrderBy(k => k.DisplayName)
                    .ToArray();
         }

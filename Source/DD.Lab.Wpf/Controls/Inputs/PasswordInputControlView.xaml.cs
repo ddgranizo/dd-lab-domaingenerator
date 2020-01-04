@@ -45,13 +45,47 @@ namespace DD.Lab.Wpf.Controls.Inputs
         }
 
 
-		private readonly PasswordInputControlViewModel _viewModel = null;
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(PasswordInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+
+        private readonly PasswordInputControlViewModel _viewModel = null;
 
         public PasswordInputControlView()
         {
             InitializeComponent();
 			_viewModel = Resources["ViewModel"] as PasswordInputControlViewModel;
 			_viewModel.Initialize(this);
+        }
+
+
+        private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            PasswordInputControlView v = d as PasswordInputControlView;
+            if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

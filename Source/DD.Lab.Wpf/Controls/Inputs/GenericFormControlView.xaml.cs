@@ -58,6 +58,24 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(GenericFormControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
         public static readonly DependencyProperty FormModelProperty =
                       DependencyProperty.Register(
                           nameof(FormModel),
@@ -83,11 +101,21 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetFormModel((GenericFormModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
+
         }
 
         private void SetFormModel(GenericFormModel data)
         {
             _viewModel.FormModel = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
         private void GenericFormInputControl_ValueChanged(object sender, RoutedEventArgs e)

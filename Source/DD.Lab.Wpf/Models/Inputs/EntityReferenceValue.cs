@@ -7,9 +7,10 @@ namespace DD.Lab.Wpf.Models.Inputs
     public class EntityReferenceValue
     {
 
-        public EntityReferenceValue(Guid id, string displayName)
+        public EntityReferenceValue(Guid id, string logicalName, string displayName)
         {
             Id = id;
+            LogicalName = logicalName ?? throw new ArgumentNullException(nameof(logicalName));
             DisplayName = displayName;
         }
 
@@ -23,6 +24,7 @@ namespace DD.Lab.Wpf.Models.Inputs
         }
 
         public Guid Id { get; set; }
+        public string LogicalName { get; set; }
         public string DisplayName { get; set; }
     }
 }

@@ -68,6 +68,24 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(OptionSetInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
         public static readonly DependencyProperty DefaultValueProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
@@ -107,6 +125,10 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetOptions((List<OptionSetValue>)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
         private void SetDefaultValue(OptionSetValue data)
@@ -117,6 +139,11 @@ namespace DD.Lab.Wpf.Controls.Inputs
         private void SetOptions(List<OptionSetValue> data)
         {
             _viewModel.Options = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
     }

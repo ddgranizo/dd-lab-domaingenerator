@@ -17,7 +17,11 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class GenericFormControlViewModel : BaseViewModel
     {
-		public GenericFormModel FormModel { get { return GetValue<GenericFormModel>(); } set { SetValue(value, UpdatedFormModel); } }
+
+
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+        public GenericFormModel FormModel { get { return GetValue<GenericFormModel>(); } set { SetValue(value, UpdatedFormModel); } }
 
 
         public List<GenericFormInputModel> Attributes { get { return GetValue<List<GenericFormInputModel>>(); } set { SetValue(value); UpdateListToCollection(value, AttributesCollection); } }

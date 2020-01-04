@@ -35,6 +35,8 @@
             <localcontrol:DrmGridControlView 
                         Entity="{Binding CurrentEntity}" 
                         GenericManager="{Binding GenericManager, Mode=OneWay}" 
+                        WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
+
                         Relationships="{Binding Relationships}"
                         GenericEventManager="{Binding GenericEventManager, Mode=OneWay}"/>
         </Grid>
@@ -47,6 +49,7 @@
                 InitialValues="{Binding InitialValues}"
                 Entities="{Binding Entities}"
                 GenericManager="{Binding GenericManager, Mode=OneWay}" 
+                WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
                 GenericEventManager="{Binding GenericEventManager, Mode=OneWay}" />
         </Grid>
         <StatusBar Grid.Row="2">

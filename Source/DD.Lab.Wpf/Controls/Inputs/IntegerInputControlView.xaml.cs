@@ -57,7 +57,25 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
-		public static readonly DependencyProperty DefaultValueProperty =
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(IntegerInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty DefaultValueProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
                           typeof(int),
@@ -82,6 +100,10 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetDefaultValue((int)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(int data)
@@ -98,6 +120,11 @@ namespace DD.Lab.Wpf.Controls.Inputs
         private static bool IsTextAllowed(string text)
         {
             return !_regex.IsMatch(text);
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class StringInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
         public bool IsReadOnly { get { return GetValue<bool>(); } set { SetValue(value); } }
         public bool IsMultiline { get { return GetValue<bool>(); } set { SetValue(value); } }

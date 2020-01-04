@@ -24,6 +24,10 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 {
     public class DrmRecordViewModel : BaseViewModel
     {
+
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
         public DetailMode Mode { get { return GetValue<DetailMode>(); } set { SetValue(value); } }
 
         public Entity Entity { get { return GetValue<Entity>(); } set { SetValue(value, UpdatedEntity); } }
@@ -50,16 +54,19 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public ObservableCollection<SubGridRelationshipData> CurrentEntityRelationshipsCollection { get; set; } = new ObservableCollection<SubGridRelationshipData>();
 
         public SubGridRelationshipData SelectedEntityRelationship { get { return GetValue<SubGridRelationshipData>(); } set { SetValue(value, UpdatedSelectedEntityRelationship); } }
-        
-        
+
+
         public Relationship SelectedRelatedRelationship { get { return GetValue<Relationship>(); } set { SetValue(value); } }
         public Entity SelectedRelatedEntity { get { return GetValue<Entity>(); } set { SetValue(value); } }
         public Guid SelectedRelatedMainEntityId { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
 
+        private bool _isInstantiated = false;
+
         public Guid Id { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
         private DrmRecordControlView _view;
+
 
         public DrmRecordViewModel()
         {
@@ -172,7 +179,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 SelectedRelatedRelationship = data.Relationship;
                 SelectedRelatedEntity = data.RelatedEntity;
             }
-            
+
         }
 
         private void SetRelationships()
@@ -183,7 +190,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                                .Where(k => !k.IsManyToMany && k.MainEntity == Entity.LogicalName
                                            || k.IsManyToMany && (k.MainEntity == Entity.LogicalName || k.RelatedEntity == Entity.LogicalName))
                                .Select(k => k.ToSubGridRelationshipData(Entity, Entities, Id))
-                               .OrderBy(k=>k.GetDisplayableRelationshipName())
+                               .OrderBy(k => k.GetDisplayableRelationshipName())
                                .ToList();
                 if (CurrentEntityRelationships.Any())
                 {
@@ -209,6 +216,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         {
             if (Entity != null && GenericManager != null)
             {
+
                 GenericFormModel model = new GenericFormModel(string.Empty);
                 foreach (var item in Entity.Attributes)
                 {
@@ -229,7 +237,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                     if (type == GenericFormInputModel.TypeValue.EntityReference)
                     {
                         var relatedEntity = Relationships.First(k => k.RelatedEntity == Entity.LogicalName && k.RelatedAttribute == attribute.Key);
-                        attribute.EntityReferenceSuggestionHandler = 
+                        attribute.EntityReferenceSuggestionHandler =
                             new EntityReferenceHandler(relatedEntity.MainEntity, GenericManager.RetrieveAllHandler, GenericManager.RetrieveHandler);
                     }
                     else if (type == GenericFormInputModel.TypeValue.OptionSet)
@@ -253,6 +261,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             }
         }
 
+        
         private GenericFormInputModel.TypeValue GetTypeFromAttribute(Models.Attribute attribute)
         {
             if (attribute.Type == Models.Attribute.AttributeType.Bool)

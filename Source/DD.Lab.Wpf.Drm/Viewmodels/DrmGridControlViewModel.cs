@@ -24,6 +24,9 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 {
     public class DrmGridControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
         public Entity Entity { get { return GetValue<Entity>(); } set { SetValue(value, UpdatedEntity); } }
 
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value, UpdatedGenericManager); } }
@@ -73,7 +76,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             AddNewRelatedCommand = new RelayCommand((data) =>
             {
                 var initialValues = new Dictionary<string, object>();
-                initialValues.Add(FilterRelationsip.RelatedAttribute, new EntityReferenceValue() { Id = FilterRelationsipId });
+                initialValues.Add(FilterRelationsip.RelatedAttribute, new EntityReferenceValue() { Id = FilterRelationsipId, LogicalName = FilterRelationsip.RelatedEntity});
                 GenericEventManager.RaiseOnCreateRequested(Entity, initialValues);
             });
 
@@ -83,12 +86,12 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 var availableValues = GenericManager.RetrieveAll(FirstEntityAssociation);
                 var availablesEntityReferences = availableValues
                     .Values
-                    .Select(k => new EntityReferenceValue() { Id = k.Id, DisplayName = (string)k.Values["Name"] })
+                    .Select(k => new EntityReferenceValue() { Id = k.Id, LogicalName = FirstEntityAssociation, DisplayName = (string)k.Values["Name"] })
                     .ToList();
 
                 var initialEntityReferences = DataSetModel
                     .Values
-                    .Select(k => new EntityReferenceValue() { Id = k.Id, DisplayName = (string)k.Values["Name"] })
+                    .Select(k => new EntityReferenceValue() { Id = k.Id, LogicalName = FirstEntityAssociation, DisplayName = (string)k.Values["Name"] })
                     .ToList();
 
                 var associateWindow = new MultipleAssociationWindow(

@@ -18,6 +18,9 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class EntityReferenceInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
         public EntityReferenceValue EntityReference { get { return GetValue<EntityReferenceValue>(); } set { SetValue(value, UpdatedEntityReference); } }
 
         public GenericFormInputModel InputModel { get { return GetValue<GenericFormInputModel>(); } set { SetValue(value, UpdatedInputModel); } }
@@ -36,6 +39,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
         }
 
         public ICommand DeleteEntityReferenceCommand { get; set; }
+        public ICommand OpenRecordCommand { get; set; }
         private void InitializeCommands()
         {
             DeleteEntityReferenceCommand = new RelayCommand((data) =>
@@ -47,7 +51,16 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
                 return CurrentEntityReference != null;
             });
 
+            OpenRecordCommand = new RelayCommand((data) =>
+            {
+                WpfEventManager.RaiseOnInputClicked(this, CurrentEntityReference.LogicalName, CurrentEntityReference.Id);
+            }, (data) =>
+            {
+                return CurrentEntityReference != null;
+            });
+
             RegisterCommand(DeleteEntityReferenceCommand);
+            RegisterCommand(OpenRecordCommand);
         }
 
         public void Initialize(EntityReferenceInputControlView v)

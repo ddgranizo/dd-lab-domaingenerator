@@ -59,7 +59,25 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
-		public static readonly DependencyProperty DefaultValueProperty =
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(DoubleInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty DefaultValueProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
                           typeof(double),
@@ -86,11 +104,20 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetDefaultValue((double)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(double data)
         {
             _viewModel.DefaultValue = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
     }
 }

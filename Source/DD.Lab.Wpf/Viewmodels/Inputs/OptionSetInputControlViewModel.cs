@@ -17,7 +17,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class OptionSetInputControlViewModel : BaseViewModel
     {
-		public OptionSetValue DefaultValue { get { return GetValue<OptionSetValue>(); } set { SetValue(value, UpdatedDefaultValue); } }
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
+        public OptionSetValue DefaultValue { get { return GetValue<OptionSetValue>(); } set { SetValue(value, UpdatedDefaultValue); } }
 
 		public List<OptionSetValue> Options { get { return GetValue<List<OptionSetValue>>(); } set { SetValue(value, UpdatedOptionsValue); } }
 

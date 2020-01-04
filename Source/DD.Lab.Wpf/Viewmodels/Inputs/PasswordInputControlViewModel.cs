@@ -15,6 +15,9 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class PasswordInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
         public string Value { get { return GetValue<string>(); } set { SetValue(value, UpdatedValue); } }
 
         private PasswordInputControlView _view;

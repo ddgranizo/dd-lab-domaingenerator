@@ -111,6 +111,23 @@ namespace DD.Lab.Wpf.Drm.Controls
             }
         }
 
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
         public static readonly DependencyProperty EntitiesProperty =
                       DependencyProperty.Register(
@@ -223,7 +240,16 @@ namespace DD.Lab.Wpf.Drm.Controls
             {
                 v.SetEntities((List<Entity>)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
 
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
         private void SetMode(DetailMode data)

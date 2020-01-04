@@ -16,8 +16,9 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class DoubleInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
-		public double DefaultValue { get { return GetValue<double>(); } set { SetValue(value, SetDefaultValue); } }
+        public double DefaultValue { get { return GetValue<double>(); } set { SetValue(value, SetDefaultValue); } }
         public string Value { get { return GetValue<string>(); } set { SetValue(value, UpdatedValue); } }
 
 

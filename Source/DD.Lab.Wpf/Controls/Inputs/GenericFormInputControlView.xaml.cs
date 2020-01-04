@@ -58,7 +58,35 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
-		public static readonly DependencyProperty InputModelProperty =
+        public WpfEventManager WpfEventManager
+        {
+            get
+            {
+                return (WpfEventManager)GetValue(WpfEventManagerProperty);
+            }
+            set
+            {
+                SetValue(WpfEventManagerProperty, value);
+            }
+        }
+
+        public StringInputControlView StringInputControl { get; private set; }
+        public BooleanInputControlView BooleanInputControl { get; private set; }
+        public IntegerInputControlView IntegerInputControl { get; private set; }
+        public DecimalInputControlView DecimalInputControl { get; private set; }
+        public DoubleInputControlView DoubleInputControl { get; private set; }
+        public PasswordInputControlView PasswordInputControl { get; private set; }
+        public DateTimeInputControlView DateTimeInputControl { get; private set; }
+        public EntityReferenceInputControlView EntityReferenceInputControl { get; private set; }
+        public OptionSetInputControlView OptionSetInputControl { get; private set; }
+
+        public static readonly DependencyProperty WpfEventManagerProperty =
+                      DependencyProperty.Register(
+                          nameof(WpfEventManager),
+                          typeof(WpfEventManager),
+                          typeof(GenericFormInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty InputModelProperty =
                       DependencyProperty.Register(
                           nameof(InputModel),
                           typeof(GenericFormInputModel),
@@ -83,11 +111,20 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetInputModel((GenericFormInputModel)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
         }
 
 		private void SetInputModel(GenericFormInputModel data)
         {
             _viewModel.InputModel = data;
+        }
+
+        private void SetWpfEventManager(WpfEventManager data)
+        {
+            _viewModel.WpfEventManager = data;
         }
 
 
@@ -153,122 +190,133 @@ namespace DD.Lab.Wpf.Controls.Inputs
         }
 
 
-        public void AddStringControl(string defaultValue, List<string> suggestions)
+        public void AddStringControl(WpfEventManager wpfEventManager, string defaultValue, List<string> suggestions)
         {
-            var control = new StringInputControlView
+            StringInputControl = new StringInputControlView
             {
                 DefaultValue = defaultValue,
                 Sugestions = suggestions,
                 IsReadOnly = false,
-                IsMultiline = false
+                IsMultiline = false,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += StringInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            StringInputControl.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(StringInputControl);
         }
 
-        public void AddMultilineStringControl(string defaultValue)
+        public void AddMultilineStringControl(WpfEventManager wpfEventManager, string defaultValue)
         {
-            var control = new StringInputControlView
+            StringInputControl = new StringInputControlView
             {
                 DefaultValue = defaultValue,
                 IsReadOnly = false,
-                IsMultiline = true
+                IsMultiline = true,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += StringInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            StringInputControl.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(StringInputControl);
         }
 
-        public void AddGuidControl(string defaultValue)
+        public void AddGuidControl(WpfEventManager wpfEventManager, string defaultValue)
         {
-            var control = new StringInputControlView
+            var StringInputControl = new StringInputControlView
             {
                 DefaultValue = defaultValue,
                 IsReadOnly = true,
-                IsMultiline = false
+                IsMultiline = false,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += StringInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            StringInputControl.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(StringInputControl);
         }
 
-        public void AddBooleanControl(bool defaultValue)
+        public void AddBooleanControl(WpfEventManager wpfEventManager, bool defaultValue)
         {
-            var control = new BooleanInputControlView
+            BooleanInputControl = new BooleanInputControlView
             {
                 DefaultValue = defaultValue,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += BooleanInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            BooleanInputControl.ValueChanged += BooleanInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(BooleanInputControl);
         }
 
-        public void AddIntegerControl(int defaultValue)
+        public void AddIntegerControl(WpfEventManager wpfEventManager, int defaultValue)
         {
-            var control = new IntegerInputControlView
+            IntegerInputControl = new IntegerInputControlView
             {
                 DefaultValue = defaultValue,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += IntegerInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            IntegerInputControl.ValueChanged += IntegerInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(IntegerInputControl);
         }
 
-        public void AddDecimalControl(decimal defaultValue)
+        public void AddDecimalControl(WpfEventManager wpfEventManager, decimal defaultValue)
         {
-            var control = new DecimalInputControlView
+            DecimalInputControl = new DecimalInputControlView
             {
                 DefaultValue = defaultValue,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += DecimalInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            DecimalInputControl.ValueChanged += DecimalInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(DecimalInputControl);
         }
 
-        public void AddDoubleControl(double defaultValue)
+        public void AddDoubleControl(WpfEventManager wpfEventManager, double defaultValue)
         {
-            var control = new DoubleInputControlView
+            DoubleInputControl = new DoubleInputControlView
             {
                 DefaultValue = defaultValue,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += DoubleInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            DoubleInputControl.ValueChanged += DoubleInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(DoubleInputControl);
         }
 
-        public void AddPasswordControl()
+        public void AddPasswordControl(WpfEventManager wpfEventManager)
         {
-            var control = new PasswordInputControlView
+            PasswordInputControl = new PasswordInputControlView
             {
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += PasswordInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            PasswordInputControl.ValueChanged += PasswordInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(PasswordInputControl);
         }
 
-        public void AddDateTimeControl(DateTime defaultValue)
+        public void AddDateTimeControl(WpfEventManager wpfEventManager, DateTime defaultValue)
         {
-            var control = new DateTimeInputControlView
+            DateTimeInputControl = new DateTimeInputControlView
             {
                 DefaultValue = defaultValue,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += DateTimeInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            DateTimeInputControl.ValueChanged += DateTimeInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(DateTimeInputControl);
         }
 
-        public void AddEntityReferenceControl(EntityReferenceValue defaultValue)
+        public void AddEntityReferenceControl(WpfEventManager wpfEventManager, EntityReferenceValue defaultValue)
         {
-            var control = new EntityReferenceInputControlView
+            EntityReferenceInputControl = new EntityReferenceInputControlView
             {
                 DefaultValue = defaultValue,
                 InputModel = _viewModel.InputModel,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += EntityReferenceInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            EntityReferenceInputControl.ValueChanged += EntityReferenceInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(EntityReferenceInputControl);
         }
 
-        public void AddOptionSetControl(OptionSetValue defaultValue, List<OptionSetValue> options)
+        public void AddOptionSetControl(WpfEventManager wpfEventManager, OptionSetValue defaultValue, List<OptionSetValue> options)
         {
-            var control = new OptionSetInputControlView
+            OptionSetInputControl = new OptionSetInputControlView
             {
                 DefaultValue = defaultValue,
                 Options = options,
+                WpfEventManager = wpfEventManager,
             };
-            control.ValueChanged += OptionSetInputControlView_ValueChanged;
-            TheControlGrid.Children.Add(control);
+            OptionSetInputControl.ValueChanged += OptionSetInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(OptionSetInputControl);
         }
 
 

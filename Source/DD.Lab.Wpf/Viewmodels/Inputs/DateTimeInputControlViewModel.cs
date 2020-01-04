@@ -16,7 +16,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class DateTimeInputControlViewModel : BaseViewModel
     {
-		public DateTime DefaultValue { get { return GetValue<DateTime>(); } set { SetValue(value); } }
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
+        public DateTime DefaultValue { get { return GetValue<DateTime>(); } set { SetValue(value); } }
 
 		private DateTimeInputControlView _view;
 

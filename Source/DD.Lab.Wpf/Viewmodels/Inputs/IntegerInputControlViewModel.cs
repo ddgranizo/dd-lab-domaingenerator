@@ -15,7 +15,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class IntegerInputControlViewModel : BaseViewModel
     {
-		public int DefaultValue { get { return GetValue<int>(); } set { SetValue(value, SetDefaultValue); } }
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
+        public int DefaultValue { get { return GetValue<int>(); } set { SetValue(value, SetDefaultValue); } }
         public string Value {  get { return GetValue<string>(); }  set { SetValue(value, UpdatedValue); } }
 
         private IntegerInputControlView _view;

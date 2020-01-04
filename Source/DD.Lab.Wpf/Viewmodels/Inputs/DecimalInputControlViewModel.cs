@@ -15,6 +15,9 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class DecimalInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+
+
         public decimal DefaultValue { get { return GetValue<decimal>(); } set { SetValue(value, SetDefaultValue); } }
         public string Value { get { return GetValue<string>(); } set { SetValue(value, UpdatedValue); } }
 

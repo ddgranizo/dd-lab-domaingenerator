@@ -15,8 +15,9 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 {
     public class BooleanInputControlViewModel : BaseViewModel
     {
+        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
-		public bool DefaultValue { get { return GetValue<bool>(); } set { SetValue(value, SetDefaultValue); } }
+        public bool DefaultValue { get { return GetValue<bool>(); } set { SetValue(value, SetDefaultValue); } }
         public bool Value { get { return GetValue<bool>(); } set { SetValue(value, UpdatedValue); } }
 
         private BooleanInputControlView _view;
