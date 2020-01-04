@@ -4,12 +4,12 @@ using System.Text;
 
 namespace DD.Lab.Wpf.Drm.Models.Data
 {
-    public class DataRowModel
+    public class DataRecord
     {
         public Guid Id { get; set; }
         public Dictionary<string, object> Values { get; set; }
 
-        public DataRowModel(Guid id, Dictionary<string, object> values)
+        public DataRecord(Guid id, Dictionary<string, object> values)
         {
             Id = id;
             Values = values ?? throw new ArgumentNullException(nameof(values));

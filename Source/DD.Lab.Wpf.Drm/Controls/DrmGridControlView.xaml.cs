@@ -35,7 +35,7 @@ namespace DD.Lab.Wpf.Drm.Controls
             remove { RemoveHandler(SelectedDataRowEvent, value); }
         }
 
-        public void RaiseSelectedDataRowEvent(DataRowModel data)
+        public void RaiseSelectedDataRowEvent(DataRecord data)
         {
             RoutedEventArgs args = new SelectedDataRowEventArgs()
             {
@@ -120,6 +120,18 @@ namespace DD.Lab.Wpf.Drm.Controls
             }
         }
 
+        public string FilterRelationshipRecordDisplayName
+        {
+            get
+            {
+                return (string)GetValue(FilterRelationshipRecordDisplayNameProperty);
+            }
+            set
+            {
+                SetValue(FilterRelationshipRecordDisplayNameProperty, value);
+            }
+        }
+
         public WpfEventManager WpfEventManager
         {
             get
@@ -131,6 +143,12 @@ namespace DD.Lab.Wpf.Drm.Controls
                 SetValue(WpfEventManagerProperty, value);
             }
         }
+
+        public static readonly DependencyProperty FilterRelationshipRecordDisplayNameProperty =
+                      DependencyProperty.Register(
+                          nameof(FilterRelationshipRecordDisplayName),
+                          typeof(string),
+                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
         public static readonly DependencyProperty WpfEventManagerProperty =
                       DependencyProperty.Register(
@@ -234,6 +252,10 @@ namespace DD.Lab.Wpf.Drm.Controls
             {
                 v.SetWpfEventManager((WpfEventManager)e.NewValue);
             }
+            else if (e.Property.Name == nameof(FilterRelationshipRecordDisplayName))
+            {
+                v.SetFilterRelationshipRecordDisplayName((string)e.NewValue);
+            }
         }
 
 
@@ -271,6 +293,13 @@ namespace DD.Lab.Wpf.Drm.Controls
         {
             _viewModel.FilterRelationsipId = relationshipId;
         }
+
+
+        private void SetFilterRelationshipRecordDisplayName(string data)
+        {
+            _viewModel.FilterRelationshipRecordDisplayName = data;
+        }
+
 
         public void UpdateColumns(List<Models.Attribute> attributes)
         {
@@ -312,7 +341,7 @@ namespace DD.Lab.Wpf.Drm.Controls
         private void DataMainGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataMainGrid.SelectedItem == null) return;
-            var selectedDataRow = DataMainGrid.SelectedItem as DataRowModel;
+            var selectedDataRow = DataMainGrid.SelectedItem as DataRecord;
             _viewModel.SelectedDataRow(selectedDataRow);
         }
     }

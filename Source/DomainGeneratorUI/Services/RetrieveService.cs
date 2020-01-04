@@ -17,7 +17,7 @@ namespace DomainGeneratorUI.Services
 
         public StoredGenericValuesService GenericValuesService { get; }
 
-        public DataRowModel Execute(string entity, Guid id)
+        public DataRecord Execute(string entity, Guid id)
         {
             GenericValuesService.SetContextFile(entity);
             var currentValues = GenericValuesService.GetStoredData();

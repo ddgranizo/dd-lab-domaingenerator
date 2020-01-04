@@ -7,6 +7,6 @@ namespace DD.Lab.Wpf.Drm.Services
 {
     public interface IRetrieveAll
     {
-        DataSetModel Execute(string entity);
+        DataSet Execute(string entity);
     }
 }

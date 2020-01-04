@@ -7,6 +7,6 @@ namespace DD.Lab.Wpf.Drm.Services
 {
     public interface IRetrieveAllAssociated
     {
-        DataSetModel Execute(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity);
+        DataSet Execute(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity);
     }
 }

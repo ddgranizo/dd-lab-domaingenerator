@@ -8,7 +8,7 @@ using System.Text;
 namespace DomainGeneratorUI.Services
 {
 
-    public class StoredGenericValuesService : BaseStoredJsonData<DataSetModel>
+    public class StoredGenericValuesService : BaseStoredJsonData<DataSet>
     {
         public const string DataFolder = Definitions.StoreDataPathName;
         public const string DataFileBase = Definitions.StoreGenericDataFileName;

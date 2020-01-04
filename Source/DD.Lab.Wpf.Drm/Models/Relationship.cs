@@ -11,6 +11,7 @@ namespace DD.Lab.Wpf.Drm.Models
         public string RelatedAttribute { get; set; }
         public bool IsManyToMany { get; set; }
         public string IntersectionName { get; set; }
+        public string MainEntityDisplayName { get; set; }
         public Relationship()
         {
         }

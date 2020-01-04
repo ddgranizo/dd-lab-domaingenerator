@@ -9,7 +9,7 @@ namespace DD.Lab.Wpf.Drm.Events
 {
     public class SelectedDataRowEventArgs : RoutedEventArgs
     {
-        public DataRowModel Data { get; set; }
+        public DataRecord Data { get; set; }
     }
 
 }

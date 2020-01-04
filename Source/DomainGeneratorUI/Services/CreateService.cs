@@ -30,7 +30,7 @@ namespace DomainGeneratorUI.Services
 
             GenericValuesService.SetContextFile(entity);
             var currentValues = GenericValuesService.GetStoredData();
-            currentValues.Values.Add(new DataRowModel(newId, values));
+            currentValues.Values.Add(new DataRecord(newId, values));
             GenericValuesService.SaveStoredData(currentValues);
             return newId;
         }

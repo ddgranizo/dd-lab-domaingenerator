@@ -7,6 +7,6 @@ namespace DD.Lab.Wpf.Drm.Services
 {
     public interface IRetrieve
     {
-        DataRowModel Execute(string entity, Guid id);
+        DataRecord Execute(string entity, Guid id);
     }
 }

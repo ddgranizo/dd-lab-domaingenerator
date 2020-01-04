@@ -8,12 +8,12 @@ namespace DD.Lab.Wpf.Drm.Extensions
 {
     public static class DataSetModelExtensions
     {
-        public static DataSetModel ToDisplayableDataSet(this DataSetModel dataSetModel)
+        public static DataSet ToDisplayableDataSet(this DataSet dataSetModel)
         {
-            var set = new DataSetModel();
+            var set = new DataSet();
             foreach (var row in dataSetModel.Values)
             {
-                var rowModel = new DataRowModel(row.Id, new Dictionary<string, object>());
+                var rowModel = new DataRecord(row.Id, new Dictionary<string, object>());
                 foreach (var item in row.Values)
                 {
                     rowModel.Values.Add(item.Key, GenericObjectToDisplayable(item.Value));

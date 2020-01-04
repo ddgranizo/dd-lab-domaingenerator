@@ -8,11 +8,17 @@ namespace DD.Lab.Wpf.Drm.Extensions
 {
     public static class RelationshipsExtensions
     {
-        public static SubGridRelationshipData ToSubGridRelationshipData(this Relationship relationship, Entity contextEntity, List<Entity> entities, Guid mainEntityId)
+        public static SubGridRelationshipData ToSubGridRelationshipData(
+            this Relationship relationship,
+            Entity contextEntity,
+            List<Entity> entities,
+            Guid mainEntityId,
+            string mainEntityRecordDisplayName)
         {
             var data = new SubGridRelationshipData();
             data.Relationship = relationship;
             data.MainEntityId = mainEntityId;
+            data.MainEntityRecordDisplayName = mainEntityRecordDisplayName;
             var otherContextEntityLogicalName = contextEntity.LogicalName == relationship.MainEntity
                     ? relationship.RelatedEntity
                     : relationship.MainEntity;
@@ -39,5 +45,6 @@ namespace DD.Lab.Wpf.Drm.Extensions
         {
             return entities.First(k => k.LogicalName == logicalName).DisplayName;
         }
+
     }
 }

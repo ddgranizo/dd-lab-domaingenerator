@@ -17,11 +17,11 @@ namespace DomainGeneratorUI.Services
 
         public StoredGenericValuesService GenericValuesService { get; }
 
-        public DataSetModel Execute(string entity)
+        public DataSet Execute(string entity)
         {
             GenericValuesService.SetContextFile(entity);
             var currentValues = GenericValuesService.GetStoredData()
-                    ?? new DataSetModel();
+                    ?? new DataSet();
             foreach (var item in currentValues.Values)
             {
                 item.Values["Id"] = item.Id;

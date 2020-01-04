@@ -59,9 +59,9 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public Relationship SelectedRelatedRelationship { get { return GetValue<Relationship>(); } set { SetValue(value); } }
         public Entity SelectedRelatedEntity { get { return GetValue<Entity>(); } set { SetValue(value); } }
         public Guid SelectedRelatedMainEntityId { get { return GetValue<Guid>(); } set { SetValue(value); } }
+        public string SelectedRecordDisplayName { get { return GetValue<string>(); } set { SetValue(value); } }
 
-
-        private bool _isInstantiated = false;
+        
 
         public Guid Id { get { return GetValue<Guid>(); } set { SetValue(value); } }
 
@@ -174,10 +174,13 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 SelectedRelatedRelationship = null;
                 SelectedRelatedEntity = null;
                 SelectedRelatedMainEntityId = Guid.Empty;
+                SelectedRecordDisplayName = null;
 
+                SelectedRecordDisplayName = GetRecordDisplayName();
                 SelectedRelatedMainEntityId = data.MainEntityId;
                 SelectedRelatedRelationship = data.Relationship;
                 SelectedRelatedEntity = data.RelatedEntity;
+                
             }
 
         }
@@ -189,7 +192,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 CurrentEntityRelationships = Relationships
                                .Where(k => !k.IsManyToMany && k.MainEntity == Entity.LogicalName
                                            || k.IsManyToMany && (k.MainEntity == Entity.LogicalName || k.RelatedEntity == Entity.LogicalName))
-                               .Select(k => k.ToSubGridRelationshipData(Entity, Entities, Id))
+                               .Select(k => k.ToSubGridRelationshipData(Entity, Entities, Id, GetRecordDisplayName()))
                                .OrderBy(k => k.GetDisplayableRelationshipName())
                                .ToList();
                 if (CurrentEntityRelationships.Any())
@@ -197,6 +200,13 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                     SelectedEntityRelationship = CurrentEntityRelationshipsCollection.First();
                 }
             }
+        }
+
+        private  string GetRecordDisplayName()
+        {
+            return Values.ContainsKey("Name")
+                ? (string)Values["Name"]
+                : string.Empty;
         }
 
         private void UpdatedEntity(Entity entity)

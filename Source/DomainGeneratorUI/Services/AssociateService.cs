@@ -54,7 +54,7 @@ namespace DomainGeneratorUI.Services
 
 
             GenericValuesService.SetContextFile(intersectionEntity);
-            intersectionSet.Values.Add(new DataRowModel(newId, new Dictionary<string, object>()
+            intersectionSet.Values.Add(new DataRecord(newId, new Dictionary<string, object>()
             {
                 { firstAttributeInIntersection, firstId },
                 { secondAttributeInIntersection, secondId}

@@ -101,9 +101,9 @@
                                 Entity="{Binding SelectedRelatedEntity}" 
                                 FilterRelationship="{Binding SelectedRelatedRelationship}"
                                 FilterRelationshipId="{Binding SelectedRelatedMainEntityId}"
+                                FilterRelationshipRecordDisplayName="{Binding SelectedRecordDisplayName}"
                                 GenericManager="{Binding GenericManager, Mode=OneWay}" 
                                 WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
-
                                 Relationships="{Binding Relationships, Mode=OneWay}"
                                 GenericEventManager="{Binding GenericEventManager, Mode=OneWay}"
                                 />

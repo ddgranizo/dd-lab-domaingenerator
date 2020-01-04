@@ -131,17 +131,17 @@ namespace DD.Lab.Wpf.Drm
 
         }
 
-        public DataRowModel Retrieve(string entity, Guid id)
+        public DataRecord Retrieve(string entity, Guid id)
         {
             return RetrieveHandler.Execute(entity, id);
         }
 
-        public DataSetModel RetrieveAll(string entity)
+        public DataSet RetrieveAll(string entity)
         {
             return RetrieveAllHandler.Execute(entity);
         }
 
-        public DataSetModel RetrieveAllAssociated(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity)
+        public DataSet RetrieveAllAssociated(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity)
         {
             return RetrieveAllAssociatedHandler.Execute(firstEntity, mainId, intersectionEntity, secondEntity);
         }

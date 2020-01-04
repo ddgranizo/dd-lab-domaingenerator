@@ -19,13 +19,13 @@ namespace DomainGeneratorUI.Services
         public StoredGenericValuesService GenericValuesService { get; }
 
 
-        public DataSetModel Execute(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity)
+        public DataSet Execute(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity)
         {
             var firstAttributeInIntersection = Utilities.GetFirstIntersectionAttribute(firstEntity, secondEntity);
             var secondAttributeInIntersection = Utilities.GetSecondIntersectionAttribute(firstEntity, secondEntity);
             GenericValuesService.SetContextFile(intersectionEntity);
             var currentIntersectionValues = GenericValuesService.GetStoredData()
-                    ?? new DataSetModel();
+                    ?? new DataSet();
             foreach (var item in currentIntersectionValues.Values)
             {
                 item.Values["Id"] = item.Id;
@@ -43,13 +43,13 @@ namespace DomainGeneratorUI.Services
             GenericValuesService.SetContextFile(secondEntity);
 
             var currentRelatedValues = GenericValuesService.GetStoredData()
-                    ?? new DataSetModel();
+                    ?? new DataSet();
 
             var relatedRecordValues = currentRelatedValues.Values
                     .Where(k => filteredIntersectionValues.IndexOf(k.Id) > -1)
                     .ToList();
 
-            var returnInstance = new DataSetModel();
+            var returnInstance = new DataSet();
             returnInstance.Values = relatedRecordValues;
             return returnInstance;
         }

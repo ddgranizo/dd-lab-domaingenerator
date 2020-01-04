@@ -13,6 +13,7 @@ namespace DD.Lab.Wpf.Drm.Models
         public string RelatedEntityDisplayName { get; set; }
         public string RelatedAttributeDisplayName { get; set; }
         public string MainEntityDisplayName { get; set; }
+        public string MainEntityRecordDisplayName { get; set; }
         public string IntersectionDisplayableEntity { get; set; }
 
         public string GetDisplayableRelationshipName()

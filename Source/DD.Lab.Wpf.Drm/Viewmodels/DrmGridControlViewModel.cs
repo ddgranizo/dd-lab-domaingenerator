@@ -35,10 +35,11 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         public Relationship FilterRelationsip { get { return GetValue<Relationship>(); } set { SetValue(value, UpdatedFilterRelationship); } }
         public Guid FilterRelationsipId { get { return GetValue<Guid>(); } set { SetValue(value, UpdatedFilterRelationshipId); } }
+        public string FilterRelationshipRecordDisplayName { get { return GetValue<string>(); } set { SetValue(value); } }
 
 
-        public DataSetModel DataSetModel { get { return GetValue<DataSetModel>(); } set { SetValue(value, UpdatedDataSet); } }
-        public DataSetModel DisplayableDataSetModel { get { return GetValue<DataSetModel>(); } set { SetValue(value); } }
+        public DataSet DataSetModel { get { return GetValue<DataSet>(); } set { SetValue(value, UpdatedDataSet); } }
+        public DataSet DisplayableDataSetModel { get { return GetValue<DataSet>(); } set { SetValue(value); } }
 
         public List<Relationship> Relationships { get { return GetValue<List<Relationship>>(); } set { SetValue(value); UpdateListToCollection(value, RelationshipsCollection); } }
         public ObservableCollection<Relationship> RelationshipsCollection { get; set; } = new ObservableCollection<Relationship>();
@@ -76,7 +77,12 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             AddNewRelatedCommand = new RelayCommand((data) =>
             {
                 var initialValues = new Dictionary<string, object>();
-                initialValues.Add(FilterRelationsip.RelatedAttribute, new EntityReferenceValue() { Id = FilterRelationsipId, LogicalName = FilterRelationsip.RelatedEntity});
+                initialValues.Add(FilterRelationsip.RelatedAttribute, new EntityReferenceValue()
+                {
+                    Id = FilterRelationsipId,
+                    LogicalName = FilterRelationsip.RelatedEntity,
+                    DisplayName = FilterRelationshipRecordDisplayName,
+                });
                 GenericEventManager.RaiseOnCreateRequested(Entity, initialValues);
             });
 
@@ -122,7 +128,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             RegisterCommand(AssociateCommand);
         }
 
-        public void SelectedDataRow(DataRowModel dataRowModel)
+        public void SelectedDataRow(DataRecord dataRowModel)
         {
             GenericEventManager.RaiseOnSelectedEntity(Entity, dataRowModel.Id);
         }
@@ -175,7 +181,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             {
                 IsVisibleGridRibbon = true;
                 IsVisibleSubGridRibbon = false;
-                var data = new DataSetModel();
+                var data = new DataSet();
                 data = GenericManager.RetrieveAll(Entity.LogicalName);
 
                 if (FilterRelationsip != null && FilterRelationsipId != Guid.Empty)
@@ -215,7 +221,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         }
 
 
-        private void UpdatedDataSet(DataSetModel model)
+        private void UpdatedDataSet(DataSet model)
         {
             DisplayableDataSetModel = model.ToDisplayableDataSet();
         }
