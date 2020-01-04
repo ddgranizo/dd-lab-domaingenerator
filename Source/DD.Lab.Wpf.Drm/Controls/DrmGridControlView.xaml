@@ -29,7 +29,9 @@
         <Grid Grid.Row="0" Visibility="{Binding IsVisibleSubGridRibbon, Converter={StaticResource BoolToCollapsedConverter}}">
             <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationsip.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
                 <Button Margin="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Close"  Command="{Binding Source={StaticResource ViewModel}, Path=AddNewRelatedCommand, Mode=OneWay}" >
-                    Add new related
+                    <Button.Content>
+                        <TextBlock Text="{Binding FilterRelationsip.RelatedEntity, StringFormat='Add new related {0}'}" />
+                    </Button.Content>
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationsip.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}}">

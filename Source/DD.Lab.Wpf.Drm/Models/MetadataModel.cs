@@ -51,7 +51,6 @@ namespace DD.Lab.Wpf.Drm.Models
 
         public void AddRelationship<U, V>(U mainInstance, V referencedInstance, string referencedAttribute = null)
         {
-
             var mainEntity = mainInstance.GetType().Name;
             var mainEntityObject = Entities.FirstOrDefault(l => l.LogicalName == mainEntity);
             if (mainEntityObject == null)

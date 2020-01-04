@@ -57,7 +57,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
 
             CreateMainModel(manager, schemaName);
 
-            //CreateCrudServices(manager);
+            CreateCrudServices(manager);
         }
 
         private void CreateMainModel(GenericManager manager, string name)
@@ -106,7 +106,6 @@ namespace DomainGeneratorUI.Workflows.Schemas
                     }
                 }, null);
 
-
             var retrieveMehtodId = CreateRepositoryMethod(manager, "RetrieveByPk",
                 RepositoryMethod.RepositoryMethodType.RetrieveByPk,
                 new MethodParameter[] {
@@ -120,6 +119,8 @@ namespace DomainGeneratorUI.Workflows.Schemas
                     Name = "Entity",
                     Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
                 });
+
+
         }
 
 
@@ -277,7 +278,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)type)
             };
-            var methodId = genericManager.Create(Property.LogicalName, Entity.EntityToDictionary(method));
+            var methodId = genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
             _ = CreateDefaultViewOutputMethodParameters(genericManager, methodId, methodName);
 
             foreach (var item in inputParameters)
@@ -287,7 +288,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(item));
             }
 
-            if (outputParameter == null)
+            if (outputParameter != null)
             {
                 outputParameter.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
                 outputParameter.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Output);

@@ -87,7 +87,6 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             GenericEventManager.OnSelectedEntity += BusinessEventManager_OnSelectedEntity;
             GenericEventManager.OnDeletedEntity += BusinessEventManager_OnDeletedEntity;
 
-
             WpfEventManager = new WpfEventManager();
             WpfEventManager.OnEntityReferenceInputLeftClicked += WpfEventManager_OnEntityReferenceInputLeftClicked;
             InitializeCommands();
@@ -98,12 +97,10 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             GenericEventManager.RaiseOnSelectedEntity(Entities.First(k=>k.LogicalName == args.EntityLogicalName), args.Id);
         }
 
-
         private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
         {
             SetContextEntity(eventArgs.Entity);
         }
-
 
         private void UpdatedCurrentEntity(Entity entity)
         {

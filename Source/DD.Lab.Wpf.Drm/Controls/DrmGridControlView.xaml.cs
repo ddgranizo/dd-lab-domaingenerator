@@ -277,7 +277,7 @@ namespace DD.Lab.Wpf.Drm.Controls
             List<DataGridColumn> columnsForRemove = new List<DataGridColumn>();
             foreach (var item in this.DataMainGrid.Columns)
             {
-                if (item.Header is string && (string)item.Header != "Id" && (string)item.Header != "#")
+                if (item.Header is string)
                 {
                     columnsForRemove.Add(item);
                 }
@@ -286,15 +286,27 @@ namespace DD.Lab.Wpf.Drm.Controls
             {
                 this.DataMainGrid.Columns.Remove(item);
             }
-            foreach (var item in attributes
-                        .Where(k => k.LogicalName != "Id")
-                        .OrderBy(k => k.DisplayName))
+            
+            var nameColumn = attributes.FirstOrDefault(k => k.LogicalName == "Name");
+            if (nameColumn != null)
             {
-                Binding dataBinding = new Binding();
-                dataBinding.Path = new PropertyPath($"Values[{item.LogicalName}]");
-                dataBinding.Mode = BindingMode.OneWay;
-                this.DataMainGrid.Columns.Add(new DataGridTextColumn() { Header = item.DisplayName, Binding = dataBinding, IsReadOnly = true });
+                AddColumn(nameColumn);
             }
+            var columnsForAdd = attributes
+                        .Where(k => k.LogicalName != "Id" && k.LogicalName != "Name")
+                        .OrderBy(k => k.DisplayName);
+            foreach (var column in columnsForAdd)
+            {
+                AddColumn(column);
+            }
+        }
+
+        private void AddColumn(Models.Attribute column)
+        {
+            Binding dataBinding = new Binding();
+            dataBinding.Path = new PropertyPath($"Values[{column.LogicalName}]");
+            dataBinding.Mode = BindingMode.OneWay;
+            this.DataMainGrid.Columns.Add(new DataGridTextColumn() { Header = column.DisplayName, Binding = dataBinding, IsReadOnly = true });
         }
 
         private void DataMainGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
