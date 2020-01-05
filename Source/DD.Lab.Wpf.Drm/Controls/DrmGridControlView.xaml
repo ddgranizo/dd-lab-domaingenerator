@@ -27,14 +27,14 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="0" Visibility="{Binding IsVisibleSubGridRibbon, Converter={StaticResource BoolToCollapsedConverter}}">
-            <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationsip.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
+            <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationship.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
                 <Button Margin="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Close"  Command="{Binding Source={StaticResource ViewModel}, Path=AddNewRelatedCommand, Mode=OneWay}" >
                     <Button.Content>
-                        <TextBlock Text="{Binding FilterRelationsip.RelatedEntity, StringFormat='Add new related {0}'}" />
+                        <TextBlock Text="{Binding FilterRelationship.RelatedEntity, StringFormat='Add new related {0}'}" />
                     </Button.Content>
                 </Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationsip.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}}">
+            <StackPanel Orientation="Horizontal" Visibility="{Binding FilterRelationship.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}}">
                 <Button Margin="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Close"  Command="{Binding Source={StaticResource ViewModel}, Path=AssociateCommand, Mode=OneWay}" >
                     Associate
                 </Button>
@@ -43,12 +43,12 @@
         <Grid Grid.Row="1">
             <DataGrid x:Name="DataMainGrid" ItemsSource="{Binding DisplayableDataSetModel.Values}" AutoGenerateColumns="False" MouseDoubleClick="DataMainGrid_MouseDoubleClick">
                 <DataGrid.Columns >
-                    <DataGridTextColumn Header="#" Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
+                    <!--<DataGridTextColumn Header="#" Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
                                          AncestorType={x:Type DataGridRow}}, 
                                          Converter={StaticResource IndexConverter}}"
-                                        IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}"
-                                        IsReadOnly="True"/>
+                                        IsReadOnly="True"/>-->
+                    <!--<DataGridTextColumn Header="Id" Binding="{Binding Id}"
+                                        IsReadOnly="True"/>-->
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

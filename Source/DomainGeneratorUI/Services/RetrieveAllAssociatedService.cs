@@ -36,23 +36,23 @@ namespace DomainGeneratorUI.Services
                 item.Values[secondAttributeInIntersection] = Guid.Parse((string)item.Values[secondAttributeInIntersection]);
             }
             var filteredIntersectionValues = currentIntersectionValues.Values
-                .Where(k => (Guid)k.Values[firstAttributeInIntersection] == mainId)
-                .Select(k => (Guid)k.Values[secondAttributeInIntersection])
+                .Where(k => (Guid)k.Values[secondAttributeInIntersection] == mainId)
+                .Select(k => (Guid)k.Values[firstAttributeInIntersection])
                 .ToList();
 
-            GenericValuesService.SetContextFile(secondEntity);
 
-            var currentRelatedValues = GenericValuesService.GetStoredData()
-                    ?? new DataSet();
-
-            var relatedRecordValues = currentRelatedValues.Values
-                    .Where(k => filteredIntersectionValues.IndexOf(k.Id) > -1)
-                    .ToList();
-
-            var returnInstance = new DataSet();
-            returnInstance.Values = relatedRecordValues;
-
-            returnInstance.EntityLogicalName = intersectionEntity;
+            var returnInstance = new DataSet(firstEntity);
+            if (filteredIntersectionValues.Any())
+            {
+                GenericValuesService.SetContextFile(firstEntity);
+                var currentRelatedValues = GenericValuesService.GetStoredData()
+                        ?? new DataSet();
+                var relatedRecordValues = currentRelatedValues.Values
+                        .Where(k => filteredIntersectionValues.IndexOf(k.Id) > -1)
+                        .ToList();
+                returnInstance.Values = relatedRecordValues;
+                //returnInstance.EntityLogicalName = intersectionEntity;
+            }
 
             return returnInstance;
         }

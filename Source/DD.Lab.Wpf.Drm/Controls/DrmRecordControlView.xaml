@@ -64,7 +64,6 @@
                 <control:GenericFormControlView 
                     FormModel="{Binding FormModel}"
                     WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
- 
                     ValueSetChanged="GenericFormControlView_ValueSetChanged"/>
             </ScrollViewer>
 
@@ -97,7 +96,12 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <localcontrol:DrmGridControlView  MaxHeight="400" Grid.Row="2" Margin="5"
+                    <Grid MaxHeight="400" Grid.Row="2" Margin="5">
+                        <localcontrol:DrmGridControlView 
+                            DrmGridInputData="{Binding DrmGridInputData}" />
+                    </Grid>
+                    
+                    <!--<localcontrol:DrmGridControlView  MaxHeight="400" Grid.Row="2" Margin="5"
                                 Entity="{Binding SelectedRelatedEntity}" 
                                 FilterRelationship="{Binding SelectedRelatedRelationship}"
                                 FilterRelationshipId="{Binding SelectedRelatedMainEntityId}"
@@ -106,38 +110,9 @@
                                 WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
                                 Relationships="{Binding Relationships, Mode=OneWay}"
                                 GenericEventManager="{Binding GenericEventManager, Mode=OneWay}"
-                                />
+                                />-->
                 </Grid>
-        
 
-                <!--<TabControl ItemsSource="{Binding CurrentEntityRelationshipsCollection}">
-                    <TabControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Relationship.IsManyToMany,Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
-                                    <TextBlock Text="{Binding RelatedEntityDisplayName, StringFormat='Related {0}(s)'}"/>
-                                    <TextBlock Text="{Binding RelatedAttributeDisplayName, StringFormat=' by attr {0}'}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Relationship.IsManyToMany,Converter={StaticResource BoolToCollapsedConverter}}">
-                                    <TextBlock Text="{Binding IntersectionDisplayableEntity, StringFormat='Related {0}(s)'}"/>
-                                    <TextBlock Text="{Binding Relationship.IntersectionName, StringFormat=' by intersection entity {0}'}"/>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </TabControl.ItemTemplate>
-                    <TabControl.ContentTemplate>
-                        <DataTemplate>
-                            <localcontrol:DataSetGridControlView 
-                                Entity="{Binding RelatedEntity}" 
-                                FilterRelationship="{Binding Relationship}"
-                                FilterRelationshipId="{Binding MainEntityId}"
-                                GenericManager="{Binding RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=GenericManager, Mode=OneWay}" 
-                                Relationships="{Binding RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=Relationships, Mode=OneWay}"
-                                GenericEventManager="{Binding  RelativeSource={RelativeSource AncestorType=localcontrol:DataRowDetailControlView}, Path=GenericEventManager, Mode=OneWay}"
-                                />            
-                        </DataTemplate>
-                    </TabControl.ContentTemplate>
-                </TabControl>-->
             </Grid>
         </Grid>
     </Grid>

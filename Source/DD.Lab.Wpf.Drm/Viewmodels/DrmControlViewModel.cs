@@ -32,11 +32,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             Updating = 20,
         }
 
-        public GenericEventManager GenericEventManager { get { return GetValue<GenericEventManager>(); } set { SetValue(value); } }
-        public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
 
-
-        public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
 
         private DD.Lab.Wpf.Drm.Controls.DrmControlView _view;
 
@@ -44,17 +40,17 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public DetailMode CurrentDetailMode { get { return GetValue<DetailMode>(); } set { SetValue(value); } }
 
         public Entity CurrentEntity { get { return GetValue<Entity>(); } set { SetValue(value, UpdatedCurrentEntity); } }
-        public Dictionary<string, object> InitialValues { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
-
-        public List<Dictionary<string, object>> Values { get { return GetValue<List<Dictionary<string, object>>>(); } set { SetValue(value); UpdateListToCollection(value, ValuesCollection); } }
-        public ObservableCollection<Dictionary<string, object>> ValuesCollection { get; set; } = new ObservableCollection<Dictionary<string, object>>();
 
         public List<Entity> Entities { get { return GetValue<List<Entity>>(); } set { SetValue(value); UpdateListToCollection(value, EntitiesCollection); } }
         public ObservableCollection<Entity> EntitiesCollection { get; set; } = new ObservableCollection<Entity>();
 
-        public List<Relationship> Relationships { get { return GetValue<List<Relationship>>(); } set { SetValue(value); UpdateListToCollection(value, RelationshipsCollection); } }
-        public ObservableCollection<Relationship> RelationshipsCollection { get; set; } = new ObservableCollection<Relationship>();
+        public List<Relationship> Relationships { get; set; }
+        public GenericEventManager GenericEventManager { get; set; }
+        public WpfEventManager WpfEventManager { get; set; }
 
+        public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
+        public DrmGridInputData DrmGridInputData { get { return GetValue<DrmGridInputData>(); } set { SetValue(value); } }
+        public DrmRecordInputData DrmRecordInputData { get { return GetValue<DrmRecordInputData>(); } set { SetValue(value); } }
 
 
         public bool IsVisibleList
@@ -74,10 +70,11 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 Entities = GenericManager.Model.Entities.OrderBy(k => k.DisplayName).ToList();
                 Relationships = GenericManager.Model.Relationships;
 
+                CurrentViewType = ViewType.List;
                 CurrentEntity = !string.IsNullOrEmpty(currentModel.MainEntity)
                      ? Entities.First(k => k.LogicalName == currentModel.MainEntity)
                      : Entities.First();
-                CurrentViewType = ViewType.List;
+                
             }, nameof(GenericManager)));
 
             GenericEventManager = new GenericEventManager();
@@ -99,18 +96,47 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
         {
-            SetContextEntity(eventArgs.Entity);
+            SetGridMode(eventArgs.Entity);
         }
 
         private void UpdatedCurrentEntity(Entity entity)
         {
-            CurrentViewType = ViewType.List;
+            SetGridMode(entity);
         }
 
-        private void SetContextEntity(Entity entity)
+        private void SetGridMode(Entity entity)
         {
-            CurrentEntity = null;
+            CurrentViewType = ViewType.List;
+            DrmGridInputData = null;
+            DrmGridInputData = new DrmGridInputData()
+            {
+                Entity = entity,
+                GenericEventManager = GenericEventManager,
+                GenericManager = GenericManager,
+                WpfEventManager = WpfEventManager,
+                Relationships = Relationships
+            };
+        }
+
+
+
+        private void SetRecordMode(Entity entity, DetailMode mode, Dictionary<string, object> initialValues)
+        {
             CurrentEntity = entity;
+            CurrentViewType = ViewType.Detail;
+            DrmRecordInputData = null;
+            DrmRecordInputData = new DrmRecordInputData()
+            {
+                Entities = Entities,
+                Entity = entity,
+                GenericEventManager = GenericEventManager,
+                GenericManager = GenericManager,
+                InitialValues = initialValues,
+                Mode = mode,
+                WpfEventManager = WpfEventManager,
+                Relationships = Relationships
+            };
+            
         }
 
         private void BusinessEventManager_OnUpdatedEntity(object sender, Events.EntityEventArgs eventArgs)
@@ -138,8 +164,8 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         {
             ListViewModeCommand = new RelayCommand((data) =>
             {
-                var currentEntity = CurrentEntity;
-                SetContextEntity(currentEntity);
+                CurrentViewType = ViewType.List;
+                SetGridMode(CurrentEntity);
             },
             (data) =>
             {
@@ -157,20 +183,12 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void SetCreateEntityMode(Entity entity, Dictionary<string, object> initialValues)
         {
-            SetContextEntity(entity);
-            CurrentViewType = ViewType.Detail;
-            CurrentDetailMode = DetailMode.Creating;
-            InitialValues = null;
-            InitialValues = initialValues;
+            SetRecordMode(entity, DetailMode.Creating, initialValues);
         }
 
         private void SetUpdateEntityMode(Entity entity, Dictionary<string, object> values)
         {
-            SetContextEntity(entity);
-            CurrentViewType = ViewType.Detail;
-            CurrentDetailMode = DetailMode.Updating;
-            InitialValues = null;
-            InitialValues = values;
+            SetRecordMode(entity, DetailMode.Updating, values);
         }
 
 

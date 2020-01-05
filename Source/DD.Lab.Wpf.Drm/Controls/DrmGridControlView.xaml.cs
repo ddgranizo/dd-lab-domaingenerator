@@ -45,172 +45,169 @@ namespace DD.Lab.Wpf.Drm.Controls
             RaiseEvent(args);
         }
 
-        public Entity Entity
+        //public Entity Entity
+        //{
+        //    get
+        //    {
+        //        return (Entity)GetValue(EntityProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(EntityProperty, value);
+        //    }
+        //}
+
+        //public GenericManager GenericManager
+        //{
+        //    get
+        //    {
+        //        return (GenericManager)GetValue(GenericManagerProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(GenericManagerProperty, value);
+        //    }
+        //}
+
+        public DrmGridInputData DrmGridInputData
         {
             get
             {
-                return (Entity)GetValue(EntityProperty);
+                return (DrmGridInputData)GetValue(DrmGridInputDataProperty);
             }
             set
             {
-                SetValue(EntityProperty, value);
+                SetValue(DrmGridInputDataProperty, value);
             }
         }
 
-        public GenericManager GenericManager
-        {
-            get
-            {
-                return (GenericManager)GetValue(GenericManagerProperty);
-            }
-            set
-            {
-                SetValue(GenericManagerProperty, value);
-            }
-        }
-
-        public GenericEventManager GenericEventManager
-        {
-            get
-            {
-                return (GenericEventManager)GetValue(GenericEventManagerProperty);
-            }
-            set
-            {
-                SetValue(GenericEventManagerProperty, value);
-            }
-        }
-
-        public List<Relationship> Relationships
-        {
-            get
-            {
-                return (List<Relationship>)GetValue(RelationshipsProperty);
-            }
-            set
-            {
-                SetValue(RelationshipsProperty, value);
-            }
-        }
+        //public List<Relationship> Relationships
+        //{
+        //    get
+        //    {
+        //        return (List<Relationship>)GetValue(RelationshipsProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(RelationshipsProperty, value);
+        //    }
+        //}
 
 
-        public Relationship FilterRelationship
-        {
-            get
-            {
-                return (Relationship)GetValue(FilterRelationshipProperty);
-            }
-            set
-            {
-                SetValue(FilterRelationshipProperty, value);
-            }
-        }
+        //public Relationship FilterRelationship
+        //{
+        //    get
+        //    {
+        //        return (Relationship)GetValue(FilterRelationshipProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(FilterRelationshipProperty, value);
+        //    }
+        //}
 
 
 
-        public Guid FilterRelationshipId
-        {
-            get
-            {
-                return (Guid)GetValue(FilterRelationshipIdProperty);
-            }
-            set
-            {
-                SetValue(FilterRelationshipIdProperty, value);
-            }
-        }
+        //public Guid FilterRelationshipId
+        //{
+        //    get
+        //    {
+        //        return (Guid)GetValue(FilterRelationshipIdProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(FilterRelationshipIdProperty, value);
+        //    }
+        //}
 
-        public string FilterRelationshipRecordDisplayName
-        {
-            get
-            {
-                return (string)GetValue(FilterRelationshipRecordDisplayNameProperty);
-            }
-            set
-            {
-                SetValue(FilterRelationshipRecordDisplayNameProperty, value);
-            }
-        }
+        //public string FilterRelationshipRecordDisplayName
+        //{
+        //    get
+        //    {
+        //        return (string)GetValue(FilterRelationshipRecordDisplayNameProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(FilterRelationshipRecordDisplayNameProperty, value);
+        //    }
+        //}
 
-        public WpfEventManager WpfEventManager
-        {
-            get
-            {
-                return (WpfEventManager)GetValue(WpfEventManagerProperty);
-            }
-            set
-            {
-                SetValue(WpfEventManagerProperty, value);
-            }
-        }
+        //public WpfEventManager WpfEventManager
+        //{
+        //    get
+        //    {
+        //        return (WpfEventManager)GetValue(WpfEventManagerProperty);
+        //    }
+        //    set
+        //    {
+        //        SetValue(WpfEventManagerProperty, value);
+        //    }
+        //}
 
-        public static readonly DependencyProperty FilterRelationshipRecordDisplayNameProperty =
+        //public static readonly DependencyProperty FilterRelationshipRecordDisplayNameProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(FilterRelationshipRecordDisplayName),
+        //                  typeof(string),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        //public static readonly DependencyProperty WpfEventManagerProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(WpfEventManager),
+        //                  typeof(WpfEventManager),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        //public static readonly DependencyProperty FilterRelationshipIdProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(FilterRelationshipId),
+        //                  typeof(Guid),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+        //                  {
+        //                      BindsTwoWayByDefault = true,
+        //                  });
+
+        //public static readonly DependencyProperty FilterRelationshipProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(FilterRelationship),
+        //                  typeof(Relationship),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+        //                  {
+        //                      BindsTwoWayByDefault = true,
+        //                  });
+
+        //public static readonly DependencyProperty RelationshipsProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(Relationships),
+        //                  typeof(List<Relationship>),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+        //                  {
+        //                      BindsTwoWayByDefault = true,
+        //                  });
+
+        //public static readonly DependencyProperty EntityProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(Entity),
+        //                  typeof(Entity),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+        //                  {
+        //                      BindsTwoWayByDefault = true,
+        //                  });
+
+
+        //public static readonly DependencyProperty GenericManagerProperty =
+        //              DependencyProperty.Register(
+        //                  nameof(GenericManager),
+        //                  typeof(GenericManager),
+        //                  typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
+        //                  {
+        //                      BindsTwoWayByDefault = true,
+        //                  });
+
+
+        public static readonly DependencyProperty DrmGridInputDataProperty =
                       DependencyProperty.Register(
-                          nameof(FilterRelationshipRecordDisplayName),
-                          typeof(string),
+                          nameof(DrmGridInputData),
+                          typeof(DrmGridInputData),
                           typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
-
-        public static readonly DependencyProperty WpfEventManagerProperty =
-                      DependencyProperty.Register(
-                          nameof(WpfEventManager),
-                          typeof(WpfEventManager),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
-
-        public static readonly DependencyProperty FilterRelationshipIdProperty =
-                      DependencyProperty.Register(
-                          nameof(FilterRelationshipId),
-                          typeof(Guid),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-        public static readonly DependencyProperty FilterRelationshipProperty =
-                      DependencyProperty.Register(
-                          nameof(FilterRelationship),
-                          typeof(Relationship),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-        public static readonly DependencyProperty RelationshipsProperty =
-                      DependencyProperty.Register(
-                          nameof(Relationships),
-                          typeof(List<Relationship>),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-        public static readonly DependencyProperty EntityProperty =
-                      DependencyProperty.Register(
-                          nameof(Entity),
-                          typeof(Entity),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty GenericManagerProperty =
-                      DependencyProperty.Register(
-                          nameof(GenericManager),
-                          typeof(GenericManager),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty GenericEventManagerProperty =
-                      DependencyProperty.Register(
-                          nameof(GenericEventManager),
-                          typeof(GenericEventManager),
-                          typeof(DrmGridControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
 
         private readonly DrmGridControlViewModel _viewModel = null;
 
@@ -224,81 +221,81 @@ namespace DD.Lab.Wpf.Drm.Controls
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             DrmGridControlView v = d as DrmGridControlView;
-            if (e.Property.Name == nameof(Entity))
+            if (e.Property.Name == nameof(DrmGridInputData))
             {
-                v.SetEntity((Entity)e.NewValue);
+                v.SetDrmGridInputData((DrmGridInputData)e.NewValue);
             }
-            else if (e.Property.Name == nameof(GenericManager))
-            {
-                v.SetGenericManager((GenericManager)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(GenericEventManager))
-            {
-                v.SetGenericEventManager((GenericEventManager)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(Relationships))
-            {
-                v.SetRelationships((List<Relationship>)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(FilterRelationship))
-            {
-                v.SetFilterRelationship((Relationship)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(FilterRelationshipId))
-            {
-                v.SetFilterRelationshipId((Guid)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(WpfEventManager))
-            {
-                v.SetWpfEventManager((WpfEventManager)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(FilterRelationshipRecordDisplayName))
-            {
-                v.SetFilterRelationshipRecordDisplayName((string)e.NewValue);
-            }
+            //else if (e.Property.Name == nameof(GenericManager))
+            //{
+            //    v.SetGenericManager((GenericManager)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(GenericEventManager))
+            //{
+            //    v.SetGenericEventManager((GenericEventManager)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(Relationships))
+            //{
+            //    v.SetRelationships((List<Relationship>)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(FilterRelationship))
+            //{
+            //    v.SetFilterRelationship((Relationship)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(FilterRelationshipId))
+            //{
+            //    v.SetFilterRelationshipId((Guid)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(WpfEventManager))
+            //{
+            //    v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            //}
+            //else if (e.Property.Name == nameof(FilterRelationshipRecordDisplayName))
+            //{
+            //    v.SetFilterRelationshipRecordDisplayName((string)e.NewValue);
+            //}
         }
 
 
-        private void SetWpfEventManager(WpfEventManager data)
+        //private void SetWpfEventManager(WpfEventManager data)
+        //{
+        //    _viewModel.WpfEventManager = data;
+        //}
+
+        private void SetDrmGridInputData(DrmGridInputData data)
         {
-            _viewModel.WpfEventManager = data;
+            _viewModel.DrmGridInputData = data;
         }
 
-        private void SetEntity(Entity data)
-        {
-            _viewModel.Entity = data;
-        }
+        //private void SetGenericManager(GenericManager data)
+        //{
+        //    _viewModel.GenericManager = data;
+        //}
 
-        private void SetGenericManager(GenericManager data)
-        {
-            _viewModel.GenericManager = data;
-        }
+        //private void SetGenericEventManager(GenericEventManager data)
+        //{
+        //    _viewModel.GenericEventManager = data;
+        //}
 
-        private void SetGenericEventManager(GenericEventManager data)
-        {
-            _viewModel.GenericEventManager = data;
-        }
+        //private void SetRelationships(List<Relationship> relationships)
+        //{
+        //    _viewModel.Relationships = relationships;
+        //}
 
-        private void SetRelationships(List<Relationship> relationships)
-        {
-            _viewModel.Relationships = relationships;
-        }
+        //private void SetFilterRelationship(Relationship relationship)
+        //{
+        //    _viewModel.FilterRelationsip = relationship;
+        //}
 
-        private void SetFilterRelationship(Relationship relationship)
-        {
-            _viewModel.FilterRelationsip = relationship;
-        }
-
-        private void SetFilterRelationshipId(Guid relationshipId)
-        {
-            _viewModel.FilterRelationsipId = relationshipId;
-        }
+        //private void SetFilterRelationshipId(Guid relationshipId)
+        //{
+        //    _viewModel.FilterRelationshipId = relationshipId;
+        //}
 
 
-        private void SetFilterRelationshipRecordDisplayName(string data)
-        {
-            _viewModel.FilterRelationshipRecordDisplayName = data;
-        }
+        //private void SetFilterRelationshipRecordDisplayName(string data)
+        //{
+        //    _viewModel.FilterRelationshipRecordDisplayName = data;
+        //}
 
 
         public void UpdateColumns(List<Models.Attribute> attributes)

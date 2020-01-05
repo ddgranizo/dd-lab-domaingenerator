@@ -25,180 +25,23 @@ namespace DD.Lab.Wpf.Drm.Controls
     public partial class DrmRecordControlView : UserControl
     {
 
-        public DetailMode Mode
+        public DrmRecordInputData DrmRecordInputData
         {
             get
             {
-                return (DetailMode)GetValue(ModeProperty);
+                return (DrmRecordInputData)GetValue(DrmRecordInputDataProperty);
             }
             set
             {
-                SetValue(ModeProperty, value);
+                SetValue(DrmRecordInputDataProperty, value);
             }
         }
 
-        public Entity Entity
-        {
-            get
-            {
-                return (Entity)GetValue(EntityProperty);
-            }
-            set
-            {
-                SetValue(EntityProperty, value);
-            }
-        }
-
-        public GenericManager GenericManager
-        {
-            get
-            {
-                return (GenericManager)GetValue(GenericManagerProperty);
-            }
-            set
-            {
-                SetValue(GenericManagerProperty, value);
-            }
-        }
-
-        public GenericEventManager GenericEventManager
-        {
-            get
-            {
-                return (GenericEventManager)GetValue(GenericEventManagerProperty);
-            }
-            set
-            {
-                SetValue(GenericEventManagerProperty, value);
-            }
-        }
-
-        public Dictionary<string, object> InitialValues
-        {
-            get
-            {
-                return (Dictionary<string, object>)GetValue(InitialValuesProperty);
-            }
-            set
-            {
-                SetValue(InitialValuesProperty, value);
-            }
-        }
-
-
-        public List<Entity> Entities
-        {
-            get
-            {
-                return (List<Entity>)GetValue(EntitiesProperty);
-            }
-            set
-            {
-                SetValue(EntitiesProperty, value);
-            }
-        }
-
-
-        public List<Relationship> Relationships
-        {
-            get
-            {
-                return (List<Relationship>)GetValue(RelationshipsProperty);
-            }
-            set
-            {
-                SetValue(RelationshipsProperty, value);
-            }
-        }
-
-        public WpfEventManager WpfEventManager
-        {
-            get
-            {
-                return (WpfEventManager)GetValue(WpfEventManagerProperty);
-            }
-            set
-            {
-                SetValue(WpfEventManagerProperty, value);
-            }
-        }
-
-        public static readonly DependencyProperty WpfEventManagerProperty =
+        public static readonly DependencyProperty DrmRecordInputDataProperty =
                       DependencyProperty.Register(
-                          nameof(WpfEventManager),
-                          typeof(WpfEventManager),
+                          nameof(DrmRecordInputData),
+                          typeof(DrmRecordInputData),
                           typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
-
-        public static readonly DependencyProperty EntitiesProperty =
-                      DependencyProperty.Register(
-                          nameof(Entities),
-                          typeof(List<Entity>),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty RelationshipsProperty =
-                      DependencyProperty.Register(
-                          nameof(Relationships),
-                          typeof(List<Relationship>),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty ModeProperty =
-                      DependencyProperty.Register(
-                          nameof(Mode),
-                          typeof(DetailMode),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty EntityProperty =
-                      DependencyProperty.Register(
-                          nameof(Entity),
-                          typeof(Entity),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty GenericManagerProperty =
-                      DependencyProperty.Register(
-                          nameof(GenericManager),
-                          typeof(GenericManager),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty GenericEventManagerProperty =
-                      DependencyProperty.Register(
-                          nameof(GenericEventManager),
-                          typeof(GenericEventManager),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
-        public static readonly DependencyProperty InitialValuesProperty =
-                      DependencyProperty.Register(
-                          nameof(InitialValues),
-                          typeof(Dictionary<string, object>),
-                          typeof(DrmRecordControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
-
-
 
         private readonly DrmRecordViewModel _viewModel = null;
 
@@ -212,79 +55,15 @@ namespace DD.Lab.Wpf.Drm.Controls
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             DrmRecordControlView v = d as DrmRecordControlView;
-            if (e.Property.Name == nameof(Entity))
+            if (e.Property.Name == nameof(DrmRecordInputData))
             {
-                v.SetEntity((Entity)e.NewValue);
+                v.SetDrmRecordInputData((DrmRecordInputData)e.NewValue);
             }
-            else if (e.Property.Name == nameof(GenericManager))
-            {
-                v.SetGenericManager((GenericManager)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(GenericEventManager))
-            {
-                v.SetGenericEventManager((GenericEventManager)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(InitialValues))
-            {
-                v.SetInitialValues((Dictionary<string, object>)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(Mode))
-            {
-                v.SetMode((DetailMode)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(Relationships))
-            {
-                v.SetRelationships((List<Relationship>)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(Entities))
-            {
-                v.SetEntities((List<Entity>)e.NewValue);
-            }
-            else if (e.Property.Name == nameof(WpfEventManager))
-            {
-                v.SetWpfEventManager((WpfEventManager)e.NewValue);
-            }
-
         }
 
-        private void SetWpfEventManager(WpfEventManager data)
+        private void SetDrmRecordInputData(DrmRecordInputData data)
         {
-            _viewModel.WpfEventManager = data;
-        }
-
-        private void SetMode(DetailMode data)
-        {
-            _viewModel.Mode = data;
-        }
-
-        private void SetEntity(Entity data)
-        {
-            _viewModel.Entity = data;
-        }
-
-        private void SetGenericManager(GenericManager data)
-        {
-            _viewModel.GenericManager = data;
-        }
-
-        private void SetGenericEventManager(GenericEventManager data)
-        {
-            _viewModel.GenericEventManager = data;
-        }
-
-        private void SetInitialValues(Dictionary<string, object> data)
-        {
-            _viewModel.InitialValues = data;
-        }
-
-        private void SetRelationships(List<Relationship> relationships)
-        {
-            _viewModel.Relationships = relationships;
-        }
-
-        private void SetEntities(List<Entity> entities)
-        {
-            _viewModel.Entities = entities;
+            _viewModel.DrmRecordInputData = data;
         }
 
         private void GenericFormControlView_ValueSetChanged(object sender, RoutedEventArgs e)

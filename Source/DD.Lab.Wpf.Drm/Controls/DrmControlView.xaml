@@ -33,24 +33,12 @@
         </StackPanel>
         <Grid Grid.Row="1" Visibility="{Binding IsVisibleList, Converter={StaticResource BoolToCollapsedConverter}}">
             <localcontrol:DrmGridControlView 
-                        Entity="{Binding CurrentEntity}" 
-                        GenericManager="{Binding GenericManager, Mode=OneWay}" 
-                        WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
-
-                        Relationships="{Binding Relationships}"
-                        GenericEventManager="{Binding GenericEventManager, Mode=OneWay}"/>
+                    DrmGridInputData="{Binding DrmGridInputData}" />
         </Grid>
         <Grid Grid.Row="1" Visibility="{Binding CurrentViewType, Converter={StaticResource MainControlViewTypeToCollapseConverter}, ConverterParameter='Detail'}">
             
             <localcontrol:DrmRecordControlView 
-                Mode="{Binding CurrentDetailMode}"
-                Entity="{Binding CurrentEntity}"
-                Relationships="{Binding Relationships}"
-                InitialValues="{Binding InitialValues}"
-                Entities="{Binding Entities}"
-                GenericManager="{Binding GenericManager, Mode=OneWay}" 
-                WpfEventManager="{Binding WpfEventManager, Mode=OneWay}"
-                GenericEventManager="{Binding GenericEventManager, Mode=OneWay}" />
+                DrmRecordInputData="{Binding DrmRecordInputData}" />
         </Grid>
         <StatusBar Grid.Row="2">
             <Label>Status bar</Label>
