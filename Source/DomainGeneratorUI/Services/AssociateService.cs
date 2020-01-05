@@ -22,8 +22,8 @@ namespace DomainGeneratorUI.Services
         {
             var newId = Guid.NewGuid();
 
-            var firstAttributeInIntersection = Utilities.GetFirstIntersectionAttribute(firstEntity, secondEntity);
-            var secondAttributeInIntersection = Utilities.GetSecondIntersectionAttribute(firstEntity, secondEntity);
+            var firstAttributeInIntersection = RelationshipUtility.GetFirstIntersectionAttribute(firstEntity, secondEntity);
+            var secondAttributeInIntersection = RelationshipUtility.GetSecondIntersectionAttribute(firstEntity, secondEntity);
 
             GenericValuesService.SetContextFile(intersectionEntity);
             var intersectionSet = GenericValuesService.GetStoredData();

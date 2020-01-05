@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace DD.Lab.Wpf.Events
 {
-    public class WpfClickEventArgs 
+    public class WpfClickEventArgs : EventArgs
     {
         public WpfClickEventArgs()
         {

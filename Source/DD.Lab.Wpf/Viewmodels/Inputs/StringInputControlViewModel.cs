@@ -1,3 +1,4 @@
+using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Controls.Inputs;
 using DD.Lab.Wpf.ViewModels.Base;
 using System;
@@ -16,6 +17,8 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
     public class StringInputControlViewModel : BaseViewModel
     {
         public WpfEventManager WpfEventManager { get { return GetValue<WpfEventManager>(); } set { SetValue(value); } }
+        public bool IsCustomModule { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public string CustomModuleName { get { return GetValue<string>(); } set { SetValue(value); } }
 
         public bool IsReadOnly { get { return GetValue<bool>(); } set { SetValue(value); } }
         public bool IsMultiline { get { return GetValue<bool>(); } set { SetValue(value); } }
@@ -30,9 +33,22 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 
         private StringInputControlView _view;
 
+
         public StringInputControlViewModel()
         {
+            InitializeCommands();
+        }
 
+
+        public ICommand EditCustomModuleCommand { get; set; }
+        private void InitializeCommands()
+        {
+            EditCustomModuleCommand = new RelayCommand((input) =>
+            {
+                var newContent = WpfEventManager.RaiseOnCustomModuleClicked(this, CustomModuleName, Value);
+                Value = newContent;
+            });
+            RegisterCommand(EditCustomModuleCommand);
         }
 
         public void Initialize(StringInputControlView v)
@@ -65,7 +81,7 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 
         private void CheckIfValueIsInSugestions(string value)
         {
-            if (!string.IsNullOrEmpty(value) && Sugestions!= null && Sugestions.Count > 0)
+            if (!string.IsNullOrEmpty(value) && Sugestions != null && Sugestions.Count > 0)
             {
                 var itemInSugestion = Sugestions.FirstOrDefault(k => k.ToLower() == value.ToLower());
                 if (itemInSugestion != null)

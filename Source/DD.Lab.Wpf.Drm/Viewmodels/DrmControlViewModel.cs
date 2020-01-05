@@ -86,7 +86,13 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
             WpfEventManager = new WpfEventManager();
             WpfEventManager.OnEntityReferenceInputLeftClicked += WpfEventManager_OnEntityReferenceInputLeftClicked;
+            WpfEventManager.OnCustomModuleEditingRequest += WpfEventManager_OnCustomModuleEditingRequest;
             InitializeCommands();
+        }
+
+        private void WpfEventManager_OnCustomModuleEditingRequest(object sender, Wpf.Events.WpfCustomModuleEventArgs args)
+        {
+            GenericManager.RaiseOnCustomModuleContentEditRequested(sender, args);
         }
 
         private void WpfEventManager_OnEntityReferenceInputLeftClicked(object sender, Wpf.Events.WpfEntityReferenceClickEventArgs args)

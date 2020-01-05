@@ -190,6 +190,21 @@ namespace DD.Lab.Wpf.Controls.Inputs
         }
 
 
+        public void AddCustomModuleControl(WpfEventManager wpfEventManager, string defaultValue, string customModuleName)
+        {
+            StringInputControl = new StringInputControlView
+            {
+                DefaultValue = defaultValue,
+                IsReadOnly = false,
+                IsMultiline = true,
+                IsCustomModule = true,
+                WpfEventManager = wpfEventManager,
+                CustomModuleName = customModuleName,
+            };
+            StringInputControl.ValueChanged += StringInputControlView_ValueChanged;
+            TheControlGrid.Children.Add(StringInputControl);
+        }
+
         public void AddStringControl(WpfEventManager wpfEventManager, string defaultValue, List<string> suggestions)
         {
             StringInputControl = new StringInputControlView

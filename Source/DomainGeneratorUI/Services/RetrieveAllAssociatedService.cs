@@ -21,8 +21,8 @@ namespace DomainGeneratorUI.Services
 
         public DataSet Execute(string firstEntity, Guid mainId, string intersectionEntity, string secondEntity)
         {
-            var firstAttributeInIntersection = Utilities.GetFirstIntersectionAttribute(firstEntity, secondEntity);
-            var secondAttributeInIntersection = Utilities.GetSecondIntersectionAttribute(firstEntity, secondEntity);
+            var firstAttributeInIntersection = RelationshipUtility.GetFirstIntersectionAttribute(firstEntity, secondEntity);
+            var secondAttributeInIntersection = RelationshipUtility.GetSecondIntersectionAttribute(firstEntity, secondEntity);
             GenericValuesService.SetContextFile(intersectionEntity);
             var currentIntersectionValues = GenericValuesService.GetStoredData()
                     ?? new DataSet();

@@ -46,7 +46,6 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
         public string SecondEntityAssociation { get { return GetValue<string>(); } set { SetValue(value); } }
 
 
-        private bool _eventSuscribed = false;
 
         public ICommand CreateCommand { get; set; }
         public ICommand AddNewRelatedCommand { get; set; }

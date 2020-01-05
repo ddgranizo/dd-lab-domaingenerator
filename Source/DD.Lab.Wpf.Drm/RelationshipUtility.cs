@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DD.Lab.Wpf.Drm
 {
-    public static class Utilities
+    public static class RelationshipUtility
     {
         public static string GetFirstIntersectionAttribute(string firstEntity, string secondEntity)
         {

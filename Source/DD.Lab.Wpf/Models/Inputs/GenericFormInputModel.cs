@@ -46,5 +46,8 @@ namespace DD.Lab.Wpf.Models.Inputs
         public IEntityReferenceSuggestionHandler EntityReferenceSuggestionHandler { get; set; }
         public OptionSetValue[] OptionSetValueOptions { get; set; }
         public object DefaultValue { get; set; }
+
+        public bool IsCustomModule { get; set; }
+        public string CustomModuleName { get; set; }
     }
 }

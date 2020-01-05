@@ -5,6 +5,9 @@ using DD.Lab.Wpf.Drm.Services;
 using DD.Lab.Wpf.Models.Inputs;
 using DomainGeneratorUI.Extensions;
 using DomainGeneratorUI.Models;
+using DomainGeneratorUI.Models.Methods;
+using DomainGeneratorUI.Models.RepositoryMethods;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -79,13 +82,13 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 new MethodParameter[] {
                     new MethodParameter(){
                         Name = "Entity",
-                        Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
+                        Type = MethodParameter.ParameterInputType.Entity,
                     }
                 },
                 new MethodParameter()
                 {
                     Name = "Id",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                    Type = MethodParameter.ParameterInputType.Guid,
                 });
 
             var updateMehtodId = CreateRepositoryMethod(manager, "Update",
@@ -93,7 +96,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 new MethodParameter[] {
                     new MethodParameter(){
                         Name = "Entity",
-                        Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
+                        Type = MethodParameter.ParameterInputType.Entity,
                     }
                 }, null);
 
@@ -102,7 +105,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 new MethodParameter[] {
                     new MethodParameter(){
                         Name = "Id",
-                        Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                        Type = MethodParameter.ParameterInputType.Guid,
                     }
                 }, null);
 
@@ -112,12 +115,12 @@ namespace DomainGeneratorUI.Workflows.Schemas
                     new MethodParameter()
                 {
                     Name = "Id",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                    Type = MethodParameter.ParameterInputType.Guid,
                 }},
                 new MethodParameter()
                 {
                     Name = "Entity",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
+                    Type = MethodParameter.ParameterInputType.Entity,
                 });
 
 
@@ -130,7 +133,6 @@ namespace DomainGeneratorUI.Workflows.Schemas
             {
                 Name = "CreatedBy",
                 Type = new OptionSetValue((int)Property.PropertyType.EntityReference),
-                //EntityReferenceSchemaId = UserEntityReference,
                 SchemaId = SchemaEntityReference
             };
             manager.Create(Property.LogicalName, Entity.EntityToDictionary(createdByProperty));
@@ -138,7 +140,6 @@ namespace DomainGeneratorUI.Workflows.Schemas
             {
                 Name = "ModifiedBy",
                 Type = new OptionSetValue((int)Property.PropertyType.EntityReference),
-                //EntityReferenceSchemaId = UserEntityReference,
                 SchemaId = SchemaEntityReference
             };
             manager.Create(Property.LogicalName, Entity.EntityToDictionary(createdByProperty));
@@ -147,14 +148,14 @@ namespace DomainGeneratorUI.Workflows.Schemas
             CreateDefaultViewRepositoryMethod(manager, "GetByCreatedBy", new MethodParameter[] {
                 new MethodParameter(){
                     Name = "Id",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                    Type = MethodParameter.ParameterInputType.Guid
                 }
             });
 
             CreateDefaultViewRepositoryMethod(manager, "GetByModifiedBy", new MethodParameter[] {
                 new MethodParameter(){
                     Name = "Id",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                    Type = MethodParameter.ParameterInputType.Guid,
                 }
             });
         }
@@ -166,14 +167,13 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = "Owner",
                 Type = new OptionSetValue((int)Property.PropertyType.EntityReference),
                 SchemaId = SchemaEntityReference,
-                //EntityReferenceSchemaId = UserEntityReference,
             };
             manager.Create(Property.LogicalName, Entity.EntityToDictionary(ownerProperty));
 
             CreateDefaultViewRepositoryMethod(manager, "GetByOwner", new MethodParameter[] {
                 new MethodParameter(){
                     Name = "Id",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Guid),
+                    Type = MethodParameter.ParameterInputType.Guid
                 }
             });
         }
@@ -259,7 +259,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
             CreateDefaultViewRepositoryMethod(genericManager, "GetByCreatedOnAtYear", new MethodParameter[] {
                 new MethodParameter(){
                     Name = "Year",
-                    Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Integer),
+                    Type = MethodParameter.ParameterInputType.Integer
                 }
             });
             //TODO other methods
@@ -272,80 +272,66 @@ namespace DomainGeneratorUI.Workflows.Schemas
             MethodParameter[] inputParameters,
             MethodParameter outputParameter)
         {
-            var method = new RepositoryMethod()
-            {
-                Name = methodName,
-                RepositoryId = RepositoryEntityReference,
-                Type = new OptionSetValue((int)type)
-            };
-            var methodId = genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
-            _ = CreateDefaultViewOutputMethodParameters(genericManager, methodId, methodName);
+            var content = new RepositoryMethodContent();
 
             foreach (var item in inputParameters)
             {
-                item.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
-                item.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Input);
-                _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(item));
+                item.Direction = MethodParameter.ParameterDirection.Input;
             }
 
             if (outputParameter != null)
             {
-                outputParameter.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
-                outputParameter.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Output);
-                _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(outputParameter));
+                outputParameter.Direction = MethodParameter.ParameterDirection.Output;
+                content.Parameteters.Add(outputParameter);
             }
+            content.Parameteters.AddRange(inputParameters);
 
-            return methodId;
+            var method = new RepositoryMethod()
+            {
+                Name = methodName,
+                RepositoryId = RepositoryEntityReference,
+                Type = new OptionSetValue((int)type),
+                Content = JsonConvert.SerializeObject(content),
+            };
+
+            return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
         }
 
         private Guid CreateDefaultViewRepositoryMethod(GenericManager genericManager, string methodName, MethodParameter[] inputParameters)
         {
+            var content = new RepositoryMethodContent()
+                    .AddDefaultOutputViewParameter();
+            foreach (var item in inputParameters)
+            {
+                item.Direction = MethodParameter.ParameterDirection.Input;
+            }
+            content.Parameteters.AddRange(inputParameters);
+
             var method = new RepositoryMethod()
             {
                 Name = methodName,
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
+                Content = JsonConvert.SerializeObject(content),
             };
-            var methodId = genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
-            _ = CreateDefaultViewOutputMethodParameters(genericManager, methodId, methodName);
 
-            foreach (var item in inputParameters)
-            {
-                item.RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName);
-                item.Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Input);
-                _ = genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(item));
-            }
-
-            return methodId;
+            return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
         }
 
 
         private Guid CreateDefaultZeroInputsViewRepositoryMethod(GenericManager genericManager, string methodName)
         {
+            var content = new RepositoryMethodContent()
+                    .AddDefaultOutputViewParameter();
             var method = new RepositoryMethod()
             {
                 Name = methodName,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
                 RepositoryId = RepositoryEntityReference,
+                Content = JsonConvert.SerializeObject(content),
             };
-            var methodId = genericManager.Create(Repository.LogicalName, Entity.EntityToDictionary(method));
-            _ = CreateDefaultViewOutputMethodParameters(genericManager, methodId, methodName);
-            return methodId;
+            return genericManager.Create(Repository.LogicalName, Entity.EntityToDictionary(method));
         }
 
-
-
-        private Guid CreateDefaultViewOutputMethodParameters(GenericManager genericManager, Guid methodId, string methodName)
-        {
-            var parameter = new MethodParameter()
-            {
-                Type = new OptionSetValue((int)MethodParameter.ParameterInputType.Enumerable),
-                EnumerableType = new OptionSetValue((int)MethodParameter.ParameterInputType.Entity),
-                Direction = new OptionSetValue((int)MethodParameter.ParameterDirection.Output),
-                Name = "Collection",
-                RepositoryMethodId = new EntityReferenceValue(methodId, RepositoryMethod.LogicalName, methodName),
-            };
-            return genericManager.Create(MethodParameter.LogicalName, Entity.EntityToDictionary(parameter));
-        }
     }
 }

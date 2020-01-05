@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using static DomainGeneratorUI.Definitions;
 
 namespace DomainGeneratorUI.Models
 {
@@ -47,7 +48,7 @@ namespace DomainGeneratorUI.Models
         public string Description { get; set; }
 
         [Description("Use case definition")]
-        [CustomContentAttribute(ModuleName = "UseCaseContentModule")]
+        [CustomContentAttribute(ModuleName = CustomModules.UseCaseContentModule)]
         public string Content { get; set; }
 
         [Required]

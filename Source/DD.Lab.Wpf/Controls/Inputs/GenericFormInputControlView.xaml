@@ -21,9 +21,10 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock HorizontalAlignment="Center" Text="{Binding InputModel.DisplayName}" ToolTip="{Binding InputModel.Description}" VerticalAlignment="Bottom"></TextBlock>
+        <TextBlock HorizontalAlignment="Center" Text="{Binding InputModel.DisplayName}" ToolTip="{Binding InputModel.Description}" VerticalAlignment="Bottom" />
         <Grid Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" x:Name="TheControlGrid">
 
         </Grid>

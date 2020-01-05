@@ -107,6 +107,43 @@ namespace DD.Lab.Wpf.Controls.Inputs
             }
         }
 
+
+        public bool IsCustomModule
+        {
+            get
+            {
+                return (bool)GetValue(IsCustomModuleProperty);
+            }
+            set
+            {
+                SetValue(IsCustomModuleProperty, value);
+            }
+        }
+
+        public string CustomModuleName
+        {
+            get
+            {
+                return (string)GetValue(CustomModuleNameProperty);
+            }
+            set
+            {
+                SetValue(CustomModuleNameProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty CustomModuleNameProperty =
+                      DependencyProperty.Register(
+                          nameof(CustomModuleName),
+                          typeof(string),
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
+        public static readonly DependencyProperty IsCustomModuleProperty =
+                      DependencyProperty.Register(
+                          nameof(IsCustomModule),
+                          typeof(bool),
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+
         public static readonly DependencyProperty WpfEventManagerProperty =
                       DependencyProperty.Register(
                           nameof(WpfEventManager),
@@ -117,40 +154,28 @@ namespace DD.Lab.Wpf.Controls.Inputs
                       DependencyProperty.Register(
                           nameof(IsMultiline),
                           typeof(bool),
-                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
 
         public static readonly DependencyProperty IsReadOnlyProperty =
                       DependencyProperty.Register(
                           nameof(IsReadOnly),
                           typeof(bool),
-                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
 
         public static readonly DependencyProperty DefaultValueProperty =
                       DependencyProperty.Register(
                           nameof(DefaultValue),
                           typeof(string),
-                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
 
 		public static readonly DependencyProperty SugestionsProperty =
                       DependencyProperty.Register(
                           nameof(Sugestions),
                           typeof(List<string>),
-                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler))
-                          {
-                              BindsTwoWayByDefault = true,
-                          });
+                          typeof(StringInputControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
 		private readonly StringInputControlViewModel _viewModel = null;
 
@@ -184,6 +209,18 @@ namespace DD.Lab.Wpf.Controls.Inputs
             {
                 v.SetWpfEventManager((WpfEventManager)e.NewValue);
             }
+            else if (e.Property.Name == nameof(WpfEventManager))
+            {
+                v.SetWpfEventManager((WpfEventManager)e.NewValue);
+            }
+            else if (e.Property.Name == nameof(IsCustomModule))
+            {
+                v.SetIsCustomModule((bool)e.NewValue);
+            }
+            else if (e.Property.Name == nameof(CustomModuleName))
+            {
+                v.SetCustomModuleName((string)e.NewValue);
+            }
         }
 
 		private void SetDefaultValue(string data)
@@ -209,6 +246,16 @@ namespace DD.Lab.Wpf.Controls.Inputs
         private void SetWpfEventManager(WpfEventManager data)
         {
             _viewModel.WpfEventManager = data;
+        }
+
+        private void SetIsCustomModule(bool data)
+        {
+            _viewModel.IsCustomModule = data;
+        }
+
+        private void SetCustomModuleName(string data)
+        {
+            _viewModel.CustomModuleName = data;
         }
 
     }

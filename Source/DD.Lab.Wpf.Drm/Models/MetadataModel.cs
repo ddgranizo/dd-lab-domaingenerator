@@ -37,6 +37,7 @@ namespace DD.Lab.Wpf.Drm.Models
                 }
                 if (isCustom)
                 {
+                    attribute.IsCustomAttribute = true;
                     attribute.CustomModule = Attribute.GetCustomModuleFromPropertyInfo(item);
                 }
                 entity.Attributes.Add(attribute);

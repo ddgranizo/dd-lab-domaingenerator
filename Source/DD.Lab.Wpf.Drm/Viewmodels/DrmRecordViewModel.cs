@@ -229,6 +229,8 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                     IsMandatory = item.IsMandatory,
                     DefaultValue = defaultValue,
                     Type = type,
+                    CustomModuleName = item.CustomModule,
+                    IsCustomModule = item.IsCustomAttribute,
                 };
                 if (type == GenericFormInputModel.TypeValue.EntityReference)
                 {

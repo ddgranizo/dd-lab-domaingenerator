@@ -3,6 +3,7 @@ using DD.Lab.Wpf.Drm.Models.Data;
 using DD.Lab.Wpf.Drm.Models.Workflows;
 using DD.Lab.Wpf.Drm.Services;
 using DD.Lab.Wpf.Drm.Services.Implementations;
+using DD.Lab.Wpf.Events;
 using DD.Lab.Wpf.Models.Inputs;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,11 @@ using System.Linq;
 namespace DD.Lab.Wpf.Drm
 {
 
+    public delegate void CustomModuleHandler(object sender, WpfCustomModuleEventArgs args);
     public class GenericManager
     {
+        public event CustomModuleHandler OnCustomModuleContentEditRequested;
+
         public MetadataModel Model { get; set; }
         public IJsonParserService ParserService { get; set; }
 
@@ -43,6 +47,11 @@ namespace DD.Lab.Wpf.Drm
             AssociateWorkflow = new List<WorkflowDefinition>();
         }
 
+
+        public void RaiseOnCustomModuleContentEditRequested(object sender, WpfCustomModuleEventArgs args)
+        {
+            OnCustomModuleContentEditRequested?.Invoke(sender, args);
+        }
 
         public void RegisterNewCreateWorkflow(string entity, int order, IWorkflowAction action)
         {

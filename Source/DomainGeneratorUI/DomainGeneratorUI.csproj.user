@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Windows\EditRepositoryMethodWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\EditUseCaseWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Windows\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

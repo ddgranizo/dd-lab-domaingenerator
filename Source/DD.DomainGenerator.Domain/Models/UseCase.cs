@@ -24,8 +24,6 @@ namespace DD.DomainGenerator.Models
         }
 
 
-
-
         public string Name { get; set; }
         public UseCaseTypes Type { get; set; }
         public Schema Schema { get; set; }

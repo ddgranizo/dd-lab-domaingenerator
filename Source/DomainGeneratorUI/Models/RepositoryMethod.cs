@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using static DomainGeneratorUI.Definitions;
 
 namespace DomainGeneratorUI.Models
 {
@@ -42,6 +43,8 @@ namespace DomainGeneratorUI.Models
         [EnumAtrribute(EnumName = nameof(RepositoryMethodType))]
         public OptionSetValue Type { get; set; }
 
-
+        [Description("Repository method definition")]
+        [CustomContentAttribute(ModuleName = CustomModules.RepositoryMethodContentModule)]
+        public string Content { get; set; }
     }
 }

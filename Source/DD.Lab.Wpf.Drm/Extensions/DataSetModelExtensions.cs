@@ -55,7 +55,9 @@ namespace DD.Lab.Wpf.Drm.Extensions
             }
             else
             {
-                return data.ToString();
+                return attribute.IsCustomAttribute
+                    ? string.Empty
+                    : data.ToString();
             }
         }
     }

@@ -10,6 +10,11 @@ using DomainGeneratorUI.Windows;
 using DD.Lab.Wpf.ViewModels.Base;
 using DD.Lab.Wpf.Drm.Models;
 using DomainGeneratorUI.Models;
+using DomainGeneratorUI.Models.UseCases;
+using DomainGeneratorUI.Interfaces;
+using System.Windows;
+using DomainGeneratorUI.Utilities;
+using DomainGeneratorUI.Models.RepositoryMethods;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -43,24 +48,21 @@ namespace DomainGeneratorUI.Viewmodels
             model.AddEntity(new Repository());
             model.AddEntity(new UseCase());
             model.AddEntity(new RepositoryMethod());
-            model.AddEntity(new MethodParameter());
+
 
             model.AddRelationship(new Project(), new Domain());
             model.AddRelationship(new Project(), new Setting());
             model.AddRelationship(new Project(), new Models.Environment());
             model.AddRelationship(new Domain(), new Schema());
             model.AddRelationship(new Schema(), new Property());
-            //model.AddRelationship(new Schema(), new Property(), nameof(Property.EntityReferenceSchemaId));
             model.AddRelationship(new Schema(), new Model());
             model.AddRelationship(new Schema(), new Repository());
             model.AddRelationship(new Schema(), new UseCase());
             model.AddRelationship(new Repository(), new RepositoryMethod());
-            model.AddRelationship(new RepositoryMethod(), new MethodParameter());
 
             model.AddManyTwoManyRelationship(new Property(), new Model());
             model.AddManyTwoManyRelationship(new Property(), new Schema(), "ReferencedSchema");
 
-           
             GenericManager.InitializeModel(model);
 
             GenericManager.CreateHandler = new CreateService(StoredDataModel);
@@ -72,10 +74,64 @@ namespace DomainGeneratorUI.Viewmodels
             GenericManager.DisassociateHandler = new DisassociateService(StoredDataModel);
             GenericManager.RetrieveAllAssociatedHandler = new RetrieveAllAssociatedService(StoredDataModel);
 
+            GenericManager.OnCustomModuleContentEditRequested += GenericManager_OnCustomModuleContentEditRequested;
 
-            
         }
 
+        private void GenericManager_OnCustomModuleContentEditRequested(object sender, DD.Lab.Wpf.Events.WpfCustomModuleEventArgs args)
+        {
+            var contentJson = args.Content;
+            string newContentJson = GetNewContentJson(args.ModuleName, contentJson);
+            args.Content = newContentJson;
+        }
+
+        private string GetNewContentJson(string moduleName, string contentJson)
+        {
+
+            if (moduleName == Definitions.CustomModules.UseCaseContentModule)
+            {
+                return GetNewContent<UseCaseContent, EditUseCaseWindow>(contentJson);
+            }
+            else if (moduleName == Definitions.CustomModules.RepositoryMethodContentModule)
+            {
+                return GetNewContent<RepositoryMethodContent, EditRepositoryMethodWindow>(contentJson);
+            }
+            throw new NotImplementedException();
+        }
+
+        private string GetNewContent<TContent, TWindow>(string contentJson)
+            where TContent : IInitializable<TContent>, new()
+            where TWindow : Window, IContentEditor<TContent>, new()
+        {
+
+            var newContentJson = contentJson;
+            bool editing = true;
+            TContent content = default(TContent);
+            if (!JsonUtility.IsValidJson<TContent>(contentJson))
+            {
+                editing = false;
+                RaiseOkCancelDialog("Current content cannot be updated. The content is not a valid json schema. Do you want to generate a new empty json?",
+                    "Invalid json",
+                    () => { editing = true; content = JsonUtility.GetInitialInstance<TContent>(); });
+            }
+            else
+            {
+                content = JsonUtility.GetInstance<TContent>(contentJson);
+            }
+
+            if (editing)
+            {
+                var editContentWindow = new TWindow();
+                editContentWindow.SetContent(content);
+                editContentWindow.ShowDialog();
+                if (editContentWindow.GetResponse() == EditorWindowResponse.OK)
+                {
+                    newContentJson = JsonUtility.Stringfy<TContent>(editContentWindow.GetContent());
+                }
+            }
+            return newContentJson;
+        }
+      
         private MainWindow _view;
 
         public void Initialize(MainWindow view)

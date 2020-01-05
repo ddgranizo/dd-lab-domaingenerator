@@ -122,7 +122,14 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
             _view.ClearControl();
             if (model.Type == GenericFormInputModel.TypeValue.String)
             {
-                _view.AddStringControl(WpfEventManager, DefaultStringValue, Suggestions);
+                if (model.IsCustomModule)
+                {
+                    _view.AddCustomModuleControl(WpfEventManager, DefaultStringValue, model.CustomModuleName);
+                }
+                else
+                {
+                    _view.AddStringControl(WpfEventManager, DefaultStringValue, Suggestions);
+                }
             }
             else if (model.Type == GenericFormInputModel.TypeValue.Bool)
             {
