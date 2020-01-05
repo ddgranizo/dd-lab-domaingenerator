@@ -110,11 +110,11 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                     var selectedValues = associateWindow.SelectedValues;
                     foreach (var item in initialEntityReferences)
                     {
-                        GenericManager.Disassociate(FilterRelationship.RelatedEntity, FilterRelationshipId, FilterRelationship.IntersectionName, FilterRelationship.MainEntity, item.Id);
+                        GenericManager.Disassociate(secondRecordEntityLogicalName, FilterRelationshipId, FilterRelationship.IntersectionName, firstRecordEntityLogicalName, item.Id);
                     }
                     foreach (var item in selectedValues)
                     {
-                        GenericManager.Associate(FilterRelationship.RelatedEntity, FilterRelationshipId, FilterRelationship.IntersectionName, FilterRelationship.MainEntity, item.Id);
+                        GenericManager.Associate(secondRecordEntityLogicalName, FilterRelationshipId, FilterRelationship.IntersectionName, firstRecordEntityLogicalName, item.Id);
                     }
                     GetValues();
                 }
@@ -130,31 +130,31 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
             GenericEventManager.RaiseOnSelectedEntity(Entity, dataRowModel.Id);
         }
 
-        private void UpdatedGenericEventManager(GenericEventManager businessEventManager)
-        {
-            if (!_eventSuscribed)
-            {
-                _eventSuscribed = true;
-                businessEventManager.OnCreatedEntity += BusinessEventManager_OnCreatedEntity;
-                businessEventManager.OnUpdatedEntity += BusinessEventManager_OnUpdatedEntity;
-                businessEventManager.OnDeletedEntity += BusinessEventManager_OnDeletedEntity;
-            }
-        }
+        //private void UpdatedGenericEventManager(GenericEventManager businessEventManager)
+        //{
+        //    if (!_eventSuscribed)
+        //    {
+        //        _eventSuscribed = true;
+        //        businessEventManager.OnCreatedEntity += BusinessEventManager_OnCreatedEntity;
+        //        businessEventManager.OnUpdatedEntity += BusinessEventManager_OnUpdatedEntity;
+        //        businessEventManager.OnDeletedEntity += BusinessEventManager_OnDeletedEntity;
+        //    }
+        //}
 
-        private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
-        {
-            GetValues();
-        }
+        //private void BusinessEventManager_OnDeletedEntity(object sender, Events.EntityEventArgs eventArgs)
+        //{
+        //    GetValues();
+        //}
 
-        private void BusinessEventManager_OnUpdatedEntity(object sender, Events.EntityEventArgs eventArgs)
-        {
-            GetValues();
-        }
+        //private void BusinessEventManager_OnUpdatedEntity(object sender, Events.EntityEventArgs eventArgs)
+        //{
+        //    GetValues();
+        //}
 
-        private void BusinessEventManager_OnCreatedEntity(object sender, Events.EntityEventArgs eventArgs)
-        {
-            GetValues();
-        }
+        //private void BusinessEventManager_OnCreatedEntity(object sender, Events.EntityEventArgs eventArgs)
+        //{
+        //    GetValues();
+        //}
 
         public void Initialize(DrmGridControlView v)
         {
