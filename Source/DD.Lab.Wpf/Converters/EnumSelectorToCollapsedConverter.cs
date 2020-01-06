@@ -26,6 +26,14 @@ namespace DD.Lab.Wpf.Converters
             var valueTyped = (T)value;
             var valueString = valueTyped.ToString().ToLowerInvariant();
 
+            if (parameter == null)
+            {
+                if (valueString == "0")
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
             var stringParameter = parameter.ToString().ToLower();
             var show = stringParameter == valueString;
             if (show)

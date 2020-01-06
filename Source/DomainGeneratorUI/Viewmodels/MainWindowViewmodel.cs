@@ -126,7 +126,8 @@ namespace DomainGeneratorUI.Viewmodels
                 editContentWindow.ShowDialog();
                 if (editContentWindow.GetResponse() == EditorWindowResponse.OK)
                 {
-                    newContentJson = JsonUtility.Stringfy<TContent>(editContentWindow.GetContent());
+                    var newContent = editContentWindow.GetContent();
+                    newContentJson = JsonUtility.Stringfy<TContent>(newContent);
                 }
             }
             return newContentJson;

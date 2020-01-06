@@ -1,4 +1,6 @@
-﻿using DomainGeneratorUI.Interfaces;
+﻿using DomainGeneratorUI.Events;
+using DomainGeneratorUI.Interfaces;
+using DomainGeneratorUI.Models.Methods;
 using DomainGeneratorUI.Models.RepositoryMethods;
 using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Viewmodels;
@@ -19,7 +21,7 @@ using System.Windows.Shapes;
 
 namespace DomainGeneratorUI.Windows
 {
-    
+
     public enum EditorWindowResponse
     {
         OK = 1,
@@ -57,5 +59,27 @@ namespace DomainGeneratorUI.Windows
             return Response;
         }
 
+        private void InputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as OnModifiedMethodParameterListEventArgs;
+            var currentInputs = _viewModel.ContentView.Parameteters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Input).ToList();
+            foreach (var item in currentInputs)
+            {
+                _viewModel.ContentView.Parameteters.Remove(item);
+            }
+            _viewModel.ContentView.Parameteters.AddRange(myEvent.Data);
+        }
+
+        private void OutputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
+        {
+            var myEvent = e as OnModifiedMethodParameterListEventArgs;
+            var currentInputs = _viewModel.ContentView.Parameteters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Output).ToList();
+            foreach (var item in currentInputs)
+            {
+                _viewModel.ContentView.Parameteters.Remove(item);
+            }
+            _viewModel.ContentView.Parameteters.AddRange(myEvent.Data);
+
+        }
     }
 }

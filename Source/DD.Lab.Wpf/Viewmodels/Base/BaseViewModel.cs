@@ -37,6 +37,15 @@ namespace DD.Lab.Wpf.ViewModels.Base
             }
         }
 
+        public static T GetDictionaryValue<T>(Dictionary<string, object> data, string key, T defaultValue = default)
+        {
+            if (data.ContainsKey(key))
+            {
+                return (T)data[key];
+            }
+            return defaultValue;
+        }
+
         //public string GetInputText(string description, string caption)
         //{
         //    var view = new InputTextBox(description, caption);

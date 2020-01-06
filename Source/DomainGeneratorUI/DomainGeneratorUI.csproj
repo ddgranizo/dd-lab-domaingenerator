@@ -2,19 +2,25 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DD.Basic\DD.Basic.csproj" />
     <ProjectReference Include="..\DD.Lab.Services\DD.Lab.Services.System.csproj" />
     <ProjectReference Include="..\DD.Lab.Wpf.Drm\DD.Lab.Wpf.Drm.csproj" />
     <ProjectReference Include="..\DD.Lab.Wpf\DD.Lab.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controls\" />
     <Folder Include="Viewmodels\UseCases\" />
     <Folder Include="Workflows\Utilities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

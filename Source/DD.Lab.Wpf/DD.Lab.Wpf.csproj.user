@@ -30,6 +30,9 @@
     <Page Update="Controls\Inputs\StringInputControlView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Windows\GenericInputFormWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Windows\MultipleAssociationWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
