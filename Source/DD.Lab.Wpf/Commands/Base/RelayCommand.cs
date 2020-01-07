@@ -77,6 +77,7 @@ namespace DD.Lab.Wpf.Commands.Base
                 System32.SetCursor(new HandleRef(parameter, cursor));
             }
         }
+
         public void RaiseCanExecuteChanged(object param = null)
         {
             if (CanExecuteChanged != null)

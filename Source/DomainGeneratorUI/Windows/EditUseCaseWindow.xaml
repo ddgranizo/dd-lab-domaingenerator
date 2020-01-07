@@ -15,6 +15,7 @@
         
         xmlns:vm="clr-namespace:DomainGeneratorUI.Viewmodels"
         xmlns:drm="clr-namespace:DD.Lab.Wpf.Drm.Controls;assembly=DD.Lab.Wpf.Drm"
+         xmlns:control="clr-namespace:DomainGeneratorUI.Controls"
         
         mc:Ignorable="d"
         Title="Domain generator" MinHeight="600" Width="800">
@@ -24,9 +25,54 @@
     </Window.Resources>
     
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
-       
-        
-        
-        
+
+        <GroupBox Header="Use case editor">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" MinHeight="100"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Input parameters"></TextBlock>
+                        <control:ParametersManagerControlView 
+                            Parameters="{Binding ContentView.InputParametetersCollection}"
+                            OnModifiedList="InputParametersManagerControlView_OnModifiedList"
+                            Grid.Row="1"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Output parameters"></TextBlock>
+                        <control:ParametersManagerControlView 
+                            Parameters="{Binding ContentView.OutputParametetersCollection}"
+                            OnModifiedList="OutputParametersManagerControlView_OnModifiedList"
+                            Grid.Row="1"/>
+                    </Grid>
+                    
+                </Grid>
+                <materialDesign:Card Grid.Row="1" Margin="5">
+                    <TextBlock Text="Hola"></TextBlock>
+                </materialDesign:Card>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button  Margin="4,0,0,0" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Move down parameter"  Command="{Binding Source={StaticResource ViewModel}, Path=SaveCommand, Mode=OneWay}"  Padding="5" Width="140">
+                        <TextBlock Text="Save"></TextBlock>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+
     </Grid>
 </Window>

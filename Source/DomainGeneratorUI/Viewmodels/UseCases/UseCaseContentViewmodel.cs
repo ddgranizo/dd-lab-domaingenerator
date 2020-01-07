@@ -1,21 +1,19 @@
 ﻿using DD.Lab.Wpf.ViewModels.Base;
 using DomainGeneratorUI.Viewmodels.Methods;
-using DomainGeneratorUI.Viewmodels.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace DomainGeneratorUI.Viewmodels.RepositoryMethods
+namespace DomainGeneratorUI.Viewmodels.UseCases
 {
-    public class RepositoryMethodContentViewmodel : BaseViewModel
+    public class UseCaseContentViewmodel: BaseViewModel
     {
-        public List<MethodParameterViewmodel> Parameteters { get { return GetValue<List<MethodParameterViewmodel>>(); } set { SetValue(value, UpdatedParameteters);  } }
+        public List<MethodParameterViewmodel> Parameters { get { return GetValue<List<MethodParameterViewmodel>>(); } set { SetValue(value, UpdatedParameteters); } }
         public ObservableCollection<MethodParameterViewmodel> InputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewmodel>();
         public ObservableCollection<MethodParameterViewmodel> OutputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewmodel>();
 
-        public UseCaseSentenceCollectionViewmodel SentenceCollection { get { return GetValue<UseCaseSentenceCollectionViewmodel>(); } set { SetValue(value); } }
 
         private void UpdatedParameteters(List<MethodParameterViewmodel> parameters)
         {

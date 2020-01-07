@@ -72,7 +72,6 @@ namespace DomainGeneratorUI.Viewmodels
 
                 mc.CreateMap<MethodParameter, MethodParameterViewmodel>();
                 mc.CreateMap<MethodParameterViewmodel, MethodParameter>();
-
             });
         }
     }

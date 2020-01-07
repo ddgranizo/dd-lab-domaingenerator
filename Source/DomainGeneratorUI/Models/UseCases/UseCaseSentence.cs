@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DomainGeneratorUI.Models.UseCases
 {
-    class UseCaseSentence
+    public class UseCaseSentence
     {
     }
 }

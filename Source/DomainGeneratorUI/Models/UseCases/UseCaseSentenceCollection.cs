@@ -6,6 +6,11 @@ namespace DomainGeneratorUI.Models.UseCases
 {
     public class UseCaseSentenceCollection
     {
+        public List<UseCaseSentence> Sentences { get; set; }
 
+        public UseCaseSentenceCollection()
+        {
+            Sentences = new List<UseCaseSentence>();
+        }
     }
 }
