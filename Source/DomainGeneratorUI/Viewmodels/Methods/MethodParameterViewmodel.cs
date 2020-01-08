@@ -7,7 +7,7 @@ using static DomainGeneratorUI.Models.Methods.MethodParameter;
 
 namespace DomainGeneratorUI.Viewmodels.Methods
 {
-    public class MethodParameterViewmodel : BaseViewModel
+    public class MethodParameterViewModel : BaseViewModel
     {
         public string Name { get { return GetValue<string>(); } set { SetValue(value); } }
         public ParameterDirection Direction { get { return GetValue<ParameterDirection>(); } set { SetValue(value); } }
@@ -17,11 +17,11 @@ namespace DomainGeneratorUI.Viewmodels.Methods
         public ParameterInputType DictionaryKeyType { get { return GetValue<ParameterInputType>(); } set { SetValue(value); } }
 
         
-        public MethodParameterViewmodel()
+        public MethodParameterViewModel()
         {
         }
 
-        public MethodParameterViewmodel(Dictionary<string,object> data)
+        public MethodParameterViewModel(Dictionary<string,object> data)
         {
             UpdateDataFromDictionary(data);
         }

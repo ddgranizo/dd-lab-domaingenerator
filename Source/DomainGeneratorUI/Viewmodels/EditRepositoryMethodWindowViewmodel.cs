@@ -70,8 +70,8 @@ namespace DomainGeneratorUI.Viewmodels
                 mc.CreateMap<RepositoryMethodContent, RepositoryMethodContentViewmodel>();
                 mc.CreateMap<RepositoryMethodContentViewmodel, RepositoryMethodContent>();
 
-                mc.CreateMap<MethodParameter, MethodParameterViewmodel>();
-                mc.CreateMap<MethodParameterViewmodel, MethodParameter>();
+                mc.CreateMap<MethodParameter, MethodParameterViewModel>();
+                mc.CreateMap<MethodParameterViewModel, MethodParameter>();
             });
         }
     }

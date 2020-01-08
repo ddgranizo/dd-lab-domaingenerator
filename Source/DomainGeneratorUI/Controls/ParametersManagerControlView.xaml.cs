@@ -21,7 +21,6 @@ using System.Windows.Shapes;
 namespace DomainGeneratorUI.Controls
 {
 
-
     public partial class ParametersManagerControlView : UserControl
     {
 
@@ -35,7 +34,7 @@ namespace DomainGeneratorUI.Controls
             remove { RemoveHandler(OnModifiedListEvent, value); }
         }
 
-        public void RaiseOnModifiedListEvent(List<MethodParameterViewmodel> data)
+        public void RaiseOnModifiedListEvent(List<MethodParameterViewModel> data)
         {
             RoutedEventArgs args = new OnModifiedMethodParameterListEventArgs()
             {
@@ -45,11 +44,11 @@ namespace DomainGeneratorUI.Controls
             RaiseEvent(args);
         }
 
-        public IEnumerable<MethodParameterViewmodel> Parameters
+        public IEnumerable<MethodParameterViewModel> Parameters
         {
             get
             {
-                return (IEnumerable<MethodParameterViewmodel>)GetValue(ParametersProperty);
+                return (IEnumerable<MethodParameterViewModel>)GetValue(ParametersProperty);
             }
             set
             {
@@ -60,7 +59,7 @@ namespace DomainGeneratorUI.Controls
         public static readonly DependencyProperty ParametersProperty =
                       DependencyProperty.Register(
                           nameof(Parameters),
-                          typeof(IEnumerable<MethodParameterViewmodel>),
+                          typeof(IEnumerable<MethodParameterViewModel>),
                           typeof(ParametersManagerControlView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)) { BindsTwoWayByDefault = true });
 
 		private readonly ParametersManagerControlViewModel _viewModel = null;
@@ -77,11 +76,11 @@ namespace DomainGeneratorUI.Controls
 			ParametersManagerControlView v = d as ParametersManagerControlView;
 			if (e.Property.Name == nameof(Parameters))
             {
-                v.SetParameters((IEnumerable<MethodParameterViewmodel>)e.NewValue);
+                v.SetParameters((IEnumerable<MethodParameterViewModel>)e.NewValue);
             }
         }
 
-		private void SetParameters(IEnumerable<MethodParameterViewmodel> data)
+		private void SetParameters(IEnumerable<MethodParameterViewModel> data)
         {
             if (data != null)
             {
@@ -91,7 +90,6 @@ namespace DomainGeneratorUI.Controls
             {
                 _viewModel.Parameters = null;
             }
-            
         }
 		
     }

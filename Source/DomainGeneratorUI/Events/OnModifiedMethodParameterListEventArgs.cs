@@ -9,6 +9,6 @@ namespace DomainGeneratorUI.Events
 
     public class OnModifiedMethodParameterListEventArgs : RoutedEventArgs
     {
-        public List<MethodParameterViewmodel> Data { get; set; }
+        public List<MethodParameterViewModel> Data { get; set; }
     }
 }

@@ -23,10 +23,10 @@ namespace DomainGeneratorUI.Viewmodels
 {
     public class ParametersManagerControlViewModel : BaseViewModel
     {
-        public List<MethodParameterViewmodel> Parameters { get { return GetValue<List<MethodParameterViewmodel>>(); } set { SetValue(value); UpdateListToCollection(value, ParametersCollection); } }
-        public ObservableCollection<MethodParameterViewmodel> ParametersCollection { get; set; } = new ObservableCollection<MethodParameterViewmodel>();
+        public List<MethodParameterViewModel> Parameters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, ParametersCollection); } }
+        public ObservableCollection<MethodParameterViewModel> ParametersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
 
-        public MethodParameterViewmodel SelectedParameter { get { return GetValue<MethodParameterViewmodel>(); } set { SetValue(value); } }
+        public MethodParameterViewModel SelectedParameter { get { return GetValue<MethodParameterViewModel>(); } set { SetValue(value); } }
         public bool IsGenericFormOpen { get { return GetValue<bool>(); } set { SetValue(value); } }
         public GenericFormModel FormModel { get { return GetValue<GenericFormModel>(); } set { SetValue(value); } }
 
@@ -63,7 +63,7 @@ namespace DomainGeneratorUI.Viewmodels
         {
             AddNewParameterCommand = new RelayCommand((input) =>
             {
-                var instance = new MethodParameterViewmodel();
+                var instance = new MethodParameterViewModel();
                 var model = instance.ToGenericInputModel("Add new parmeter", _typesAttribute.ToArray());
                 var window = new GenericInputFormWindow(model);
                 window.ShowDialog();

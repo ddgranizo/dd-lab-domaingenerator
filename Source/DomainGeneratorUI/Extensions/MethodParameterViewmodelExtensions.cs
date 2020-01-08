@@ -10,23 +10,23 @@ namespace DomainGeneratorUI.Extensions
     public static class MethodParameterViewmodelExtensions
     {
 
-        public static GenericFormModel ToGenericInputModel(this MethodParameterViewmodel parameter, string formDescription, OptionSetValue[] options)
+        public static GenericFormModel ToGenericInputModel(this MethodParameterViewModel parameter, string formDescription, OptionSetValue[] options)
         {
             var model = new GenericFormModel(formDescription);
             model.AddAttribute(
                 GenericFormInputModel.TypeValue.String,
-                nameof(MethodParameterViewmodel.Name),
-                nameof(MethodParameterViewmodel.Name),
-                nameof(MethodParameterViewmodel.Name),
+                nameof(MethodParameterViewModel.Name),
+                nameof(MethodParameterViewModel.Name),
+                nameof(MethodParameterViewModel.Name),
                 true,
                 parameter.Name);
 
 
             var directionAttr = new GenericFormInputModel()
             {
-                DisplayName = nameof(MethodParameterViewmodel.Direction),
-                Key = nameof(MethodParameterViewmodel.Direction),
-                Description = nameof(MethodParameterViewmodel.Direction),
+                DisplayName = nameof(MethodParameterViewModel.Direction),
+                Key = nameof(MethodParameterViewModel.Direction),
+                Description = nameof(MethodParameterViewModel.Direction),
                 IsMandatory = true,
                 Type = GenericFormInputModel.TypeValue.OptionSet,
                 OptionSetValueOptions = new List<OptionSetValue>()
@@ -40,9 +40,9 @@ namespace DomainGeneratorUI.Extensions
 
             var typeAttr = new GenericFormInputModel()
             {
-                DisplayName = nameof(MethodParameterViewmodel.Type),
-                Key = nameof(MethodParameterViewmodel.Type),
-                Description = nameof(MethodParameterViewmodel.Type),
+                DisplayName = nameof(MethodParameterViewModel.Type),
+                Key = nameof(MethodParameterViewModel.Type),
+                Description = nameof(MethodParameterViewModel.Type),
                 IsMandatory = true,
                 Type = GenericFormInputModel.TypeValue.OptionSet,
                 OptionSetValueOptions = options,
@@ -51,9 +51,9 @@ namespace DomainGeneratorUI.Extensions
 
             var enumAttr = new GenericFormInputModel()
             {
-                DisplayName = nameof(MethodParameterViewmodel.EnumerableType),
-                Key = nameof(MethodParameterViewmodel.EnumerableType),
-                Description = nameof(MethodParameterViewmodel.EnumerableType),
+                DisplayName = nameof(MethodParameterViewModel.EnumerableType),
+                Key = nameof(MethodParameterViewModel.EnumerableType),
+                Description = nameof(MethodParameterViewModel.EnumerableType),
                 IsMandatory = false,
                 Type = GenericFormInputModel.TypeValue.OptionSet,
                 OptionSetValueOptions = options,
@@ -63,9 +63,9 @@ namespace DomainGeneratorUI.Extensions
 
             var dicKeyAttr = new GenericFormInputModel()
             {
-                DisplayName = nameof(MethodParameterViewmodel.DictionaryKeyType),
-                Key = nameof(MethodParameterViewmodel.DictionaryKeyType),
-                Description = nameof(MethodParameterViewmodel.DictionaryKeyType),
+                DisplayName = nameof(MethodParameterViewModel.DictionaryKeyType),
+                Key = nameof(MethodParameterViewModel.DictionaryKeyType),
+                Description = nameof(MethodParameterViewModel.DictionaryKeyType),
                 IsMandatory = false,
                 Type = GenericFormInputModel.TypeValue.OptionSet,
                 OptionSetValueOptions = options,
@@ -75,9 +75,9 @@ namespace DomainGeneratorUI.Extensions
 
             var dicValueAttr = new GenericFormInputModel()
             {
-                DisplayName = nameof(MethodParameterViewmodel.DictionaryValueType),
-                Key = nameof(MethodParameterViewmodel.DictionaryValueType),
-                Description = nameof(MethodParameterViewmodel.DictionaryValueType),
+                DisplayName = nameof(MethodParameterViewModel.DictionaryValueType),
+                Key = nameof(MethodParameterViewModel.DictionaryValueType),
+                Description = nameof(MethodParameterViewModel.DictionaryValueType),
                 IsMandatory = false,
                 Type = GenericFormInputModel.TypeValue.OptionSet,
                 OptionSetValueOptions = options,

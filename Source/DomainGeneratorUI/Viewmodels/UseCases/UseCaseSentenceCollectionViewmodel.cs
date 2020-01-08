@@ -1,4 +1,5 @@
 ﻿using DD.Lab.Wpf.ViewModels.Base;
+using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ namespace DomainGeneratorUI.Viewmodels.UseCases
 {
     public class UseCaseSentenceCollectionViewmodel : BaseViewModel
     {
-        public List<UseCaseSentenceViewmodel> Sentences { get { return GetValue<List<UseCaseSentenceViewmodel>>(); } set { SetValue(value); UpdateListToCollection(value, SentencesCollection); } }
-        public ObservableCollection<UseCaseSentenceViewmodel> SentencesCollection { get; set; } = new ObservableCollection<UseCaseSentenceViewmodel>();
+        public List<UseCaseSentenceViewModel> Sentences { get { return GetValue<List<UseCaseSentenceViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, SentencesCollection); } }
+        public ObservableCollection<UseCaseSentenceViewModel> SentencesCollection { get; set; } = new ObservableCollection<UseCaseSentenceViewModel>();
     }
 }

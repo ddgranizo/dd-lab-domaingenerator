@@ -17,6 +17,9 @@ using DD.Lab.Wpf.Commands.Base;
 using DomainGeneratorUI.Viewmodels.UseCases;
 using DomainGeneratorUI.Models.Methods;
 using DomainGeneratorUI.Viewmodels.Methods;
+using DomainGeneratorUI.Inputs;
+using DomainGeneratorUI.Models.UseCases.Sentences.Base;
+using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -26,11 +29,16 @@ namespace DomainGeneratorUI.Viewmodels
         public UseCaseContent Content
         {
             get { return _content; }
-            set { _content = value; 
-                ContentView = Mapper.Map<UseCaseContentViewmodel>(value); }
+            set
+            {
+                _content = value;
+                ContentView = Mapper.Map<UseCaseContentViewmodel>(value);
+            }
         }
 
-        public UseCaseContentViewmodel ContentView { get { return GetValue<UseCaseContentViewmodel>(); } set { SetValue(value); } }
+        public UseCaseContentViewmodel ContentView { get { return GetValue<UseCaseContentViewmodel>(); } set { SetValue(value, UpdatedContentView); } }
+
+        public UseCaseSentenceCollectionManagerInputData SentenceCollectionInputData { get { return GetValue<UseCaseSentenceCollectionManagerInputData>(); } set { SetValue(value); } }
 
         public IMapper Mapper { get; private set; }
 
@@ -66,22 +74,25 @@ namespace DomainGeneratorUI.Viewmodels
             RegisterCommand(SaveCommand);
         }
 
+        private void UpdatedContentView(UseCaseContentViewmodel data)
+        {
+            SentenceCollectionInputData = new UseCaseSentenceCollectionManagerInputData()
+            {
+                SentenceCollection = data.SentenceCollection,
+            };
+        }
+
 
         private MapperConfiguration ConfigureMappingProfiles()
         {
             return new MapperConfiguration(mc =>
             {
-                mc.CreateMap<UseCaseContent, UseCaseContentViewmodel>();
-                mc.CreateMap<UseCaseContentViewmodel, UseCaseContent>();
-
-                mc.CreateMap<MethodParameter, MethodParameterViewmodel>();
-                mc.CreateMap<MethodParameterViewmodel, MethodParameter>();
-
-                mc.CreateMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewmodel>();
-                mc.CreateMap<UseCaseSentenceCollectionViewmodel, UseCaseSentenceCollection>();
-
-                mc.CreateMap<UseCaseSentence, UseCaseSentenceViewmodel>();
-                mc.CreateMap<UseCaseSentenceViewmodel, UseCaseSentence>();
+                mc.CreateReversiveMap<UseCaseContent, UseCaseContentViewmodel>();
+                mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
+                mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewmodel>();
+                mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
+                mc.CreateReversiveMap<SentenceInputParameter, SentenceInputParameterViewModel>();
+                mc.CreateReversiveMap<SentenceOutputParameter, SentenceOutputParameterViewModel>();
 
             });
         }
