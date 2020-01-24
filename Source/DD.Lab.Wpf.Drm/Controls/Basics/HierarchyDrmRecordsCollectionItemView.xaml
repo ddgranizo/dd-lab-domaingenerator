@@ -1,0 +1,52 @@
+<UserControl x:Class="DD.Lab.Wpf.Drm.Controls.Basics.HierarchyDrmRecordsCollectionItemView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:conv="clr-namespace:DD.Lab.Wpf.Converters;assembly=DD.Lab.Wpf"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="clr-namespace:HierarchyDrmRecordsCollectionItem"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:HierarchyDrmRecordsCollectionItemViewModel x:Key="ViewModel" d:IsDataSource="True" />
+        <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.Resources>
+            
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Cursor="Hand" MouseDown="Record_MouseDown" >
+            <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
+                <materialDesign:PackIcon.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </materialDesign:PackIcon.RenderTransform>
+            </materialDesign:PackIcon>
+            <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}"  RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
+                <materialDesign:PackIcon.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </materialDesign:PackIcon.RenderTransform>
+            </materialDesign:PackIcon>
+            <materialDesign:PackIcon Kind="Text"/>
+            <TextBlock Margin="4,0,0,0" Text="{Binding Record.Values[Name]}" Foreground="Blue" FontWeight="Bold"/>
+            
+        </StackPanel>
+        <Grid x:Name="RecordGrid" Margin="12,0,0,0" Grid.Row="1" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}">
+
+        </Grid>
+    </Grid>
+</UserControl>

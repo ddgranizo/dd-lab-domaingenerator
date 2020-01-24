@@ -19,11 +19,12 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
 
         public List<SentenceInputParameter> InputParameters { get; set; }
         public List<SentenceOutputParameter> OutputParameters { get; set; }
-
+        public Dictionary<string, object> Values { get; set; }
         public UseCaseSentence()
         {
             InputParameters = new List<SentenceInputParameter>();
             OutputParameters = new List<SentenceOutputParameter>();
+            Values = new Dictionary<string, object>();
         }
     }
 }

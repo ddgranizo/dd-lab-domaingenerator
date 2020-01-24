@@ -53,7 +53,7 @@ namespace DD.Lab.Wpf.Commands.Base
         public event EventHandler CanExecuteChanged;
 
 
-        public void Execute(object parameter)
+        public virtual void Execute(object parameter)
         {
             IntPtr cursor = IntPtr.Zero;
             try

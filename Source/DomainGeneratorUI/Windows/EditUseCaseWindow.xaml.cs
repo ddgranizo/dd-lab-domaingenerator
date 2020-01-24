@@ -1,4 +1,5 @@
-﻿using DomainGeneratorUI.Events;
+﻿using DD.Lab.Wpf.Drm;
+using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Interfaces;
 using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Viewmodels;
@@ -25,7 +26,7 @@ namespace DomainGeneratorUI.Windows
     public partial class EditUseCaseWindow : Window, IContentEditor<UseCaseContent>
     {
        
-        private readonly EditUseCaseWindowViewmodel _viewModel = null;
+        private readonly EditUseCaseWindowViewModel _viewModel = null;
 
         public UseCaseContent ResponseContent { get; set; }
         public EditorWindowResponse Response { get; set; }
@@ -34,13 +35,9 @@ namespace DomainGeneratorUI.Windows
         {
             InitializeComponent();
 
-            _viewModel = Resources["ViewModel"] as EditUseCaseWindowViewmodel;
+            _viewModel = Resources["ViewModel"] as EditUseCaseWindowViewModel;
             _viewModel.Initialize(this);
-        }
 
-        public void SetContent(UseCaseContent instance)
-        {
-            _viewModel.Content = instance;
         }
 
         public UseCaseContent GetContent()
@@ -51,6 +48,12 @@ namespace DomainGeneratorUI.Windows
         public EditorWindowResponse GetResponse()
         {
             return Response;
+        }
+
+        public void SetContext(GenericManager manager, UseCaseContent instance)
+        {
+            _viewModel.GenericManager = manager;
+            _viewModel.Content = instance;
         }
 
         private void InputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
@@ -74,5 +77,6 @@ namespace DomainGeneratorUI.Windows
             }
             _viewModel.ContentView.Parameters.AddRange(myEvent.Data);
         }
+
     }
 }

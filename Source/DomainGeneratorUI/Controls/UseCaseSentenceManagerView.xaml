@@ -1,0 +1,32 @@
+<UserControl x:Class="DomainGeneratorUI.Controls.UseCaseSentenceManagerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+		xmlns:vm="clr-namespace:DomainGeneratorUI.Viewmodels"
+        mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+        <vm:UseCaseSentenceManagerViewModel x:Key="ViewModel" d:IsDataSource="True" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.Resources>
+            
+        </Grid.Resources>
+        <Border BorderBrush="Gray" BorderThickness="0.4" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <materialDesign:PackIcon Kind="Menu" VerticalAlignment="Center"/>
+                </Grid>
+                <Grid x:Name="SentenceGrid" Grid.Column="1" VerticalAlignment="Center" />
+
+                
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

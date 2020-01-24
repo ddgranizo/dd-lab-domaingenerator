@@ -35,17 +35,9 @@ namespace UIClient.Views
 
             this.DataContext = this;
             InitializeComponent();
-            SetCenteredWindows();
             TextBox.Focus();
         }
 
-        private void SetCenteredWindows()
-        {
-            Application curApp = Application.Current;
-            Window mainWindow = curApp.MainWindow;
-            this.Left = mainWindow.Left + (mainWindow.Width - this.ActualWidth) / 2;
-            this.Top = mainWindow.Top + (mainWindow.Height - this.ActualHeight) / 2;
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

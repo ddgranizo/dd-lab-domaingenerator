@@ -1,4 +1,5 @@
 
+using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Drm.Controls;
 using DD.Lab.Wpf.Drm.Extensions;
@@ -74,7 +75,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void InitializeCommands()
         {
-            SaveCommand = new RelayCommand((data) =>
+            SaveCommand = new RelayCommandHandled((data) =>
             {
                 if (Mode == DetailMode.Creating)
                 {
@@ -96,7 +97,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 return IsCompleted;
             });
 
-            DeleteCommand = new RelayCommand((data) =>
+            DeleteCommand = new RelayCommandHandled((data) =>
             {
                 var dialog = new OkCancelMessageBox("Confirm the delete? This operation cannot be undone", "Delete operation");
                 dialog.ShowDialog();

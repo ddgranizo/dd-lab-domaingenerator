@@ -1,5 +1,6 @@
 using DD.Lab.Services.System.Implementations;
 using DD.Lab.Services.System.Interfaces;
+using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Drm.Controls;
 using DD.Lab.Wpf.Drm.Models;
@@ -168,7 +169,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void InitializeCommands()
         {
-            ListViewModeCommand = new RelayCommand((data) =>
+            ListViewModeCommand = new RelayCommandHandled((data) =>
             {
                 CurrentViewType = ViewType.List;
                 SetGridMode(CurrentEntity);

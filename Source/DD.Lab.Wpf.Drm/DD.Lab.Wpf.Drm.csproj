@@ -21,4 +21,16 @@
     <ProjectReference Include="..\DD.Lab.Wpf\DD.Lab.Wpf.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Windows\GenericRecordFinderWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Windows\GenericRecordFinderWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

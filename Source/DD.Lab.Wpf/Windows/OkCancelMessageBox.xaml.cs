@@ -36,18 +36,9 @@ namespace DD.Lab.Wpf.Windows
 
             this.DataContext = this;
             InitializeComponent();
-            SetCenteredWindows();
         }
 
-        private void SetCenteredWindows()
-        {
-            Application curApp = Application.Current;
-            Window mainWindow = curApp.MainWindow;
-            this.Left = mainWindow.Left + (mainWindow.Width - this.ActualWidth) / 2;
-            this.Top = mainWindow.Top + (mainWindow.Height - this.ActualHeight) / 2;
-        }
-
-
+       
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
             Response = InputTextBoxResponse.OK;

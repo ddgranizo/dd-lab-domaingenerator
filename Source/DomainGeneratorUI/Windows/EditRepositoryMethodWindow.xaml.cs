@@ -1,4 +1,5 @@
-﻿using DomainGeneratorUI.Events;
+﻿using DD.Lab.Wpf.Drm;
+using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Interfaces;
 using DomainGeneratorUI.Models.Methods;
 using DomainGeneratorUI.Models.RepositoryMethods;
@@ -31,7 +32,7 @@ namespace DomainGeneratorUI.Windows
     public partial class EditRepositoryMethodWindow : Window, IContentEditor<RepositoryMethodContent>
     {
 
-        private readonly EditRepositoryMethodWindowViewmodel _viewModel = null;
+        private readonly EditRepositoryMethodWindowViewModel _viewModel = null;
 
         public RepositoryMethodContent ResponseContent { get; set; }
         public EditorWindowResponse Response { get; set; }
@@ -40,15 +41,10 @@ namespace DomainGeneratorUI.Windows
         {
             InitializeComponent();
 
-            _viewModel = Resources["ViewModel"] as EditRepositoryMethodWindowViewmodel;
+            _viewModel = Resources["ViewModel"] as EditRepositoryMethodWindowViewModel;
             _viewModel.Initialize(this);
         }
-
-        public void SetContent(RepositoryMethodContent instance)
-        {
-            _viewModel.Content = instance;
-        }
-
+        
         public RepositoryMethodContent GetContent()
         {
             return ResponseContent;
@@ -57,6 +53,12 @@ namespace DomainGeneratorUI.Windows
         public EditorWindowResponse GetResponse()
         {
             return Response;
+        }
+
+        public void SetContext(GenericManager manager, RepositoryMethodContent instance)
+        {
+            _viewModel.GenericManager = manager;
+            _viewModel.Content = instance;
         }
 
         private void InputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
@@ -79,7 +81,8 @@ namespace DomainGeneratorUI.Windows
                 _viewModel.ContentView.Parameteters.Remove(item);
             }
             _viewModel.ContentView.Parameteters.AddRange(myEvent.Data);
-
         }
+
+       
     }
 }

@@ -20,8 +20,10 @@ namespace DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base
         public List<SentenceInputParameterViewModel> InputParameters { get { return GetValue<List<SentenceInputParameterViewModel>>(); } set { SetValue(value);  UpdateListToCollection(value, InputParametetersCollection); } }
         public ObservableCollection<SentenceInputParameterViewModel> InputParametetersCollection { get; set; } = new ObservableCollection<SentenceInputParameterViewModel>();
 
-        public List<SentenceInputParameterViewModel> OutputParameters { get { return GetValue<List<SentenceInputParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
-        public ObservableCollection<SentenceInputParameterViewModel> OutputParametersCollection { get; set; } = new ObservableCollection<SentenceInputParameterViewModel>();
+        public List<SentenceOutputParameterViewModel> OutputParameters { get { return GetValue<List<SentenceOutputParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
+        public ObservableCollection<SentenceOutputParameterViewModel> OutputParametersCollection { get; set; } = new ObservableCollection<SentenceOutputParameterViewModel>();
+
+        public Dictionary<string, object> Values { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
 
     }
 }

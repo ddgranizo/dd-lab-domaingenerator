@@ -1,3 +1,4 @@
+using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.ViewModels.Base;
 using DomainGeneratorUI.Controls;
@@ -50,7 +51,7 @@ namespace DomainGeneratorUI.Viewmodels
         public ICommand AddSentenceCommand { get; set; }
         private void InitializeCommands()
         {
-            AddSentenceCommand = new RelayCommand((input) =>
+            AddSentenceCommand = new RelayCommandHandled((input) =>
             {
                 
             }, (input) =>
@@ -65,6 +66,7 @@ namespace DomainGeneratorUI.Viewmodels
         {
             _view = v;
         }
+
 
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DomainGeneratorUI.Viewmodels.UseCases
 {
-    public class UseCaseSentenceCollectionViewmodel : BaseViewModel
+    public class UseCaseSentenceCollectionViewModel : BaseViewModel
     {
         public List<UseCaseSentenceViewModel> Sentences { get { return GetValue<List<UseCaseSentenceViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, SentencesCollection); } }
         public ObservableCollection<UseCaseSentenceViewModel> SentencesCollection { get; set; } = new ObservableCollection<UseCaseSentenceViewModel>();

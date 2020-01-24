@@ -22,7 +22,7 @@
         Title="Domain generator" MinHeight="600" Width="800">
 
     <Window.Resources>
-        <vm:EditUseCaseWindowViewmodel x:Key="ViewModel" d:IsDataSource="True" />
+        <vm:EditUseCaseWindowViewModel x:Key="ViewModel" d:IsDataSource="True" />
     </Window.Resources>
     
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">

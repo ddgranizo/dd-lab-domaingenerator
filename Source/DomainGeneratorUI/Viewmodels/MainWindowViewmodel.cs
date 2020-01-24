@@ -18,7 +18,7 @@ using DomainGeneratorUI.Models.RepositoryMethods;
 
 namespace DomainGeneratorUI.Viewmodels
 {
-    public class MainWindowViewmodel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
 
         public GenericManager GenericManager { get; }
@@ -28,7 +28,7 @@ namespace DomainGeneratorUI.Viewmodels
         public StoredGenericValuesService StoredDataModel { get; }
         public BusinessWorkflowManager BusinessWorkflowManager { get; set; }
 
-        public MainWindowViewmodel()
+        public MainWindowViewModel()
         {
             GenericManager = new GenericManager();
             BusinessWorkflowManager = new BusinessWorkflowManager(GenericManager);
@@ -122,7 +122,7 @@ namespace DomainGeneratorUI.Viewmodels
             if (editing)
             {
                 var editContentWindow = new TWindow();
-                editContentWindow.SetContent(content);
+                editContentWindow.SetContext(GenericManager, content);
                 editContentWindow.ShowDialog();
                 if (editContentWindow.GetResponse() == EditorWindowResponse.OK)
                 {

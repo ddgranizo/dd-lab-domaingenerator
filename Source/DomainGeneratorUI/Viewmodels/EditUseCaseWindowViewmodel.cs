@@ -20,10 +20,11 @@ using DomainGeneratorUI.Viewmodels.Methods;
 using DomainGeneratorUI.Inputs;
 using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
+using DD.Lab.Wpf.Commands;
 
 namespace DomainGeneratorUI.Viewmodels
 {
-    public class EditUseCaseWindowViewmodel : BaseViewModel
+    public class EditUseCaseWindowViewModel : BaseViewModel
     {
         private UseCaseContent _content = null;
         public UseCaseContent Content
@@ -32,20 +33,31 @@ namespace DomainGeneratorUI.Viewmodels
             set
             {
                 _content = value;
-                ContentView = Mapper.Map<UseCaseContentViewmodel>(value);
+                
+                ContentView = Mapper.Map<UseCaseContentViewModel>(_content);
             }
         }
 
-        public UseCaseContentViewmodel ContentView { get { return GetValue<UseCaseContentViewmodel>(); } set { SetValue(value, UpdatedContentView); } }
+        public GenericManager GenericManager { get; set; }
+
+        public UseCaseContentViewModel ContentView { get { return GetValue<UseCaseContentViewModel>(); } set { SetValue(value); } }
 
         public UseCaseSentenceCollectionManagerInputData SentenceCollectionInputData { get { return GetValue<UseCaseSentenceCollectionManagerInputData>(); } set { SetValue(value); } }
 
         public IMapper Mapper { get; private set; }
 
-        public EditUseCaseWindowViewmodel()
+        public EditUseCaseWindowViewModel()
         {
             InitializeMapper();
             InitializeCommands();
+            AddSetterPropertiesTrigger(new DD.Lab.Wpf.Models.PropertiesTrigger(() =>
+            {
+                SentenceCollectionInputData = new UseCaseSentenceCollectionManagerInputData()
+                {
+                    SentenceCollection = ContentView.SentenceCollection,
+                    GenericManager = GenericManager,
+                };
+            }, nameof(ContentView), nameof(GenericManager)));
         }
 
         private EditUseCaseWindow _view;
@@ -60,11 +72,10 @@ namespace DomainGeneratorUI.Viewmodels
             Mapper = new Mapper(ConfigureMappingProfiles());
         }
 
-
         public ICommand SaveCommand { get; set; }
         private void InitializeCommands()
         {
-            SaveCommand = new RelayCommand((input) =>
+            SaveCommand = new RelayCommandHandled((input) =>
             {
                 _view.ResponseContent = Mapper.Map<UseCaseContent>(ContentView);
                 _view.Response = EditorWindowResponse.OK;
@@ -73,27 +84,17 @@ namespace DomainGeneratorUI.Viewmodels
 
             RegisterCommand(SaveCommand);
         }
-
-        private void UpdatedContentView(UseCaseContentViewmodel data)
-        {
-            SentenceCollectionInputData = new UseCaseSentenceCollectionManagerInputData()
-            {
-                SentenceCollection = data.SentenceCollection,
-            };
-        }
-
-
+     
         private MapperConfiguration ConfigureMappingProfiles()
         {
             return new MapperConfiguration(mc =>
             {
-                mc.CreateReversiveMap<UseCaseContent, UseCaseContentViewmodel>();
+                mc.CreateReversiveMap<UseCaseContent, UseCaseContentViewModel>();
                 mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
-                mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewmodel>();
+                mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>();
                 mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
                 mc.CreateReversiveMap<SentenceInputParameter, SentenceInputParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputParameter, SentenceOutputParameterViewModel>();
-
             });
         }
     }

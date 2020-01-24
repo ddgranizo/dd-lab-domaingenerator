@@ -1,4 +1,5 @@
 using DD.Basic.Extensions;
+using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Models.Inputs;
 using DD.Lab.Wpf.ViewModels.Base;
@@ -61,7 +62,7 @@ namespace DomainGeneratorUI.Viewmodels
 
         private void RegisterCommands()
         {
-            AddNewParameterCommand = new RelayCommand((input) =>
+            AddNewParameterCommand = new RelayCommandHandled((input) =>
             {
                 var instance = new MethodParameterViewModel();
                 var model = instance.ToGenericInputModel("Add new parmeter", _typesAttribute.ToArray());
@@ -76,7 +77,7 @@ namespace DomainGeneratorUI.Viewmodels
                 }
             });
 
-            ModifyNewParameterCommand = new RelayCommand((input) =>
+            ModifyNewParameterCommand = new RelayCommandHandled((input) =>
             {
                 var instance = SelectedParameter;
                 var model = instance.ToGenericInputModel("Modify parmeter", _typesAttribute.ToArray());
@@ -91,7 +92,7 @@ namespace DomainGeneratorUI.Viewmodels
 
             }, (input) => { return SelectedParameter != null; });
 
-            RemoveParameterCommand = new RelayCommand((input) =>
+            RemoveParameterCommand = new RelayCommandHandled((input) =>
             {
                 RaiseOkCancelDialog("Confirm the remove?", "Remove", () =>
                 {
@@ -102,7 +103,7 @@ namespace DomainGeneratorUI.Viewmodels
 
             }, (input) => { return SelectedParameter != null; });
 
-            MoveUpParameterCommand = new RelayCommand((input) =>
+            MoveUpParameterCommand = new RelayCommandHandled((input) =>
             {
                 var oldSelectedParameter = SelectedParameter;
                 var items = Parameters;
@@ -113,7 +114,7 @@ namespace DomainGeneratorUI.Viewmodels
 
             }, (input) => { return SelectedParameter != null && SelectedParameter != ParametersCollection.First(); });
 
-            MoveDownParameterCommand = new RelayCommand((input) =>
+            MoveDownParameterCommand = new RelayCommandHandled((input) =>
             {
                 var oldSelectedParameter = SelectedParameter;
                 var items = Parameters;

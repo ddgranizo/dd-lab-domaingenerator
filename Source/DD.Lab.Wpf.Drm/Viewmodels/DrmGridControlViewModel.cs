@@ -1,4 +1,5 @@
 
+using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Drm.Controls;
 using DD.Lab.Wpf.Drm.Extensions;
@@ -60,12 +61,12 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
 
         private void InitializeCommands()
         {
-            CreateCommand = new RelayCommand((data) =>
+            CreateCommand = new RelayCommandHandled((data) =>
             {
                 GenericEventManager.RaiseOnCreateRequested(Entity);
             });
 
-            AddNewRelatedCommand = new RelayCommand((data) =>
+            AddNewRelatedCommand = new RelayCommandHandled((data) =>
             {
                 var initialValues = new Dictionary<string, object>();
                 initialValues.Add(FilterRelationship.RelatedAttribute, new EntityReferenceValue()
@@ -77,7 +78,7 @@ namespace DD.Lab.Wpf.Drm.Viewmodels
                 GenericEventManager.RaiseOnCreateRequested(Entity, initialValues);
             });
 
-            AssociateCommand = new RelayCommand((data) =>
+            AssociateCommand = new RelayCommandHandled((data) =>
             {
 
                 var availableValues = GenericManager.RetrieveAll(FirstEntityAssociation);

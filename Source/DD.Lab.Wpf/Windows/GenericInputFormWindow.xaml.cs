@@ -37,16 +37,10 @@ namespace DD.Lab.Wpf.Windows
             _viewModel.Initialize(this, model);
             Response = WindowResponse.KO;
 
-            SetCenteredWindows();
+            
         }
 
-        private void SetCenteredWindows()
-        {
-            Application curApp = Application.Current;
-            Window mainWindow = curApp.MainWindow;
-            this.Left = mainWindow.Left + (mainWindow.Width - this.ActualWidth) / 2;
-            this.Top = mainWindow.Top + (mainWindow.Height - this.ActualHeight) / 2;
-        }
+        
 
         private void GenericFormControlView_ValueSetChanged(object sender, RoutedEventArgs e)
         {

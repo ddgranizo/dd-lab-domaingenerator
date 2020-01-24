@@ -2,15 +2,19 @@
 using DD.Lab.Wpf.Drm.Models;
 using DD.Lab.Wpf.Drm.Models.Workflows;
 using DD.Lab.Wpf.Drm.Services;
+using DD.Lab.Wpf.Drm.Services.Implementations;
 using DD.Lab.Wpf.Models.Inputs;
 using DomainGeneratorUI.Extensions;
 using DomainGeneratorUI.Models;
 using DomainGeneratorUI.Models.Methods;
 using DomainGeneratorUI.Models.RepositoryMethods;
+using DomainGeneratorUI.Models.UseCases;
+using DomainGeneratorUI.Models.UseCases.Sentences;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static DomainGeneratorUI.Models.UseCase;
 
 namespace DomainGeneratorUI.Workflows.Schemas
 {
@@ -20,14 +24,14 @@ namespace DomainGeneratorUI.Workflows.Schemas
         public EntityReferenceValue SchemaEntityReference { get; set; }
         public EntityReferenceValue RepositoryEntityReference { get; set; }
         public EntityReferenceValue UserEntityReference { get; set; }
-
+        public IJsonParserService JsonParserService { get; set; }
         public CreateMainPropertiesWorkflow()
         {
+            JsonParserService = new JsonParserService();
         }
 
         public void Execute(GenericManager manager, WorkflowInputParameter inputParameter)
         {
-
             var id = (Guid)inputParameter.Values["Id"];
             var record = manager.Retrieve("Schema", id);
             var schemaObject = Entity.DictionartyToEntity<Schema>(record.Values);
@@ -77,19 +81,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
 
         private void CreateCrudServices(GenericManager manager)
         {
-            var createMehtodId = CreateRepositoryMethod(manager, "Create",
-                RepositoryMethod.RepositoryMethodType.Create,
-                new MethodParameter[] {
-                    new MethodParameter(){
-                        Name = "Entity",
-                        Type = MethodParameter.ParameterInputType.Entity,
-                    }
-                },
-                new MethodParameter()
-                {
-                    Name = "Id",
-                    Type = MethodParameter.ParameterInputType.Guid,
-                });
+            CreateCreateMethod(manager);
 
             var updateMehtodId = CreateRepositoryMethod(manager, "Update",
                 RepositoryMethod.RepositoryMethodType.Update,
@@ -122,8 +114,49 @@ namespace DomainGeneratorUI.Workflows.Schemas
                     Name = "Entity",
                     Type = MethodParameter.ParameterInputType.Entity,
                 });
+        }
 
 
+
+        private void CreateCreateMethod(GenericManager manager)
+        {
+            var createMethodInputParameter = new MethodParameter()
+            {
+                Name = "Entity",
+                Type = MethodParameter.ParameterInputType.Entity,
+            };
+            var createMethodOutputParameter = new MethodParameter()
+            {
+                Name = "Id",
+                Type = MethodParameter.ParameterInputType.Guid,
+            };
+            var createMehtodId = CreateRepositoryMethod(manager, "Create",
+                RepositoryMethod.RepositoryMethodType.Create,
+                new MethodParameter[] { createMethodInputParameter },
+                createMethodOutputParameter);
+
+            var repositoryMethod = Entity.DictionartyToEntity<RepositoryMethod>(manager.Retrieve(RepositoryMethod.LogicalName, createMehtodId).Values);
+
+            var content = new UseCaseContent();
+            content.Parameters.Add(createMethodInputParameter);
+            content.Parameters.Add(createMethodOutputParameter);
+            content.SentenceCollection.Sentences.Add(new ExecuteRepositoryMethodSentence(SchemaEntityReference.DisplayName, RepositoryEntityReference.DisplayName,  repositoryMethod));
+            _ = CreateUseCase(manager, "CreateService", "Create record", "Create record", UseCaseType.Create, content);
+        }
+
+
+        private Guid CreateUseCase(GenericManager manager, string name, string displayName, string description, UseCaseType type, UseCaseContent content)
+        {
+            var usecase = new UseCase()
+            {
+                SchemaId = SchemaEntityReference,
+                Name = name,
+                Description = description,
+                DisplayName = displayName,
+                Type = new OptionSetValue((int)type),
+                Content = JsonParserService.Stringfy(content),
+            };
+            return manager.Create(UseCase.LogicalName, Entity.EntityToDictionary(usecase));
         }
 
 
@@ -291,7 +324,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)type),
-                Content = JsonConvert.SerializeObject(content),
+                Content = JsonParserService.Stringfy(content),
             };
 
             return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
@@ -312,7 +345,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
-                Content = JsonConvert.SerializeObject(content),
+                Content = JsonParserService.Stringfy(content),
             };
 
             return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
@@ -328,9 +361,9 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
                 RepositoryId = RepositoryEntityReference,
-                Content = JsonConvert.SerializeObject(content),
+                Content = JsonParserService.Stringfy(content),
             };
-            return genericManager.Create(Repository.LogicalName, Entity.EntityToDictionary(method));
+            return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
         }
 
     }

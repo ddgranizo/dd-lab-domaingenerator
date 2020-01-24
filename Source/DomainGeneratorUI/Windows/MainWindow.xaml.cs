@@ -22,12 +22,12 @@ namespace DomainGeneratorUI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainWindowViewmodel _viewModel = null;
+        private readonly MainWindowViewModel _viewModel = null;
         public MainWindow()
         {
             InitializeComponent();
 
-            _viewModel = Resources["ViewModel"] as MainWindowViewmodel;
+            _viewModel = Resources["ViewModel"] as MainWindowViewModel;
             _viewModel.Initialize(this);
         }
     }

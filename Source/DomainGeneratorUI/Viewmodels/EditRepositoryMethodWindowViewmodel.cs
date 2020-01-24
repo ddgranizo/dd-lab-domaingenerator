@@ -18,19 +18,20 @@ using DomainGeneratorUI.Viewmodels.Methods;
 using DomainGeneratorUI.Models.Methods;
 using System.Windows.Input;
 using DD.Lab.Wpf.Commands.Base;
+using DD.Lab.Wpf.Commands;
 
 namespace DomainGeneratorUI.Viewmodels
 {
-    public class EditRepositoryMethodWindowViewmodel : BaseViewModel
+    public class EditRepositoryMethodWindowViewModel : BaseViewModel
     {
         private RepositoryMethodContent _content = null;
         public RepositoryMethodContent Content { get { return _content; } set { _content = value; ContentView = Mapper.Map<RepositoryMethodContentViewmodel>(value); } }
         public RepositoryMethodContentViewmodel ContentView { get { return GetValue<RepositoryMethodContentViewmodel>(); } set { SetValue(value); } }
-
+        public GenericManager GenericManager { get; set; }
 
         public IMapper Mapper { get; private set; }
 
-        public EditRepositoryMethodWindowViewmodel()
+        public EditRepositoryMethodWindowViewModel()
         {
             InitializeMapper();
             InitializeCommands();
@@ -52,7 +53,7 @@ namespace DomainGeneratorUI.Viewmodels
         public ICommand SaveCommand { get; set; }
         private void InitializeCommands()
         {
-            SaveCommand = new RelayCommand((input) =>
+            SaveCommand = new RelayCommandHandled((input) =>
             {
                 _view.ResponseContent = Mapper.Map<RepositoryMethodContent>(ContentView);
                 _view.Response = EditorWindowResponse.OK;
