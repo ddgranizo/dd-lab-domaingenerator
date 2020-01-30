@@ -1,4 +1,6 @@
-﻿using DD.Lab.Wpf.Drm.Viewmodels.Windows;
+﻿using DD.Lab.Wpf.Drm.Events;
+using DD.Lab.Wpf.Drm.Models.Data;
+using DD.Lab.Wpf.Drm.Viewmodels.Windows;
 using DD.Lab.Wpf.Inputs.Events;
 using DD.Lab.Wpf.Models.Inputs;
 using DD.Lab.Wpf.Viewmodels.Windows;
@@ -21,7 +23,7 @@ namespace DD.Lab.Wpf.Drm
     public partial class GenericRecordFinderWindow : Window
     {
         public WindowResponse Response { get; set; }
-        public object ResponseValue { get; set; }
+        public DataRecord ResponseValue { get; set; }
 
         private readonly GenericRecordFinderViewmodel _viewModel = null;
 
@@ -34,12 +36,19 @@ namespace DD.Lab.Wpf.Drm
             _viewModel = Resources["ViewModel"] as GenericRecordFinderViewmodel;
             _viewModel.Initialize(this, manager, mainEntityLogicalName, mainEntityId, targetEntityLogicalName);
             Response = WindowResponse.KO;
-          
         }
 
-        public void SetResponseValue(object value)
+        public void SetResponseValue(DataRecord value)
         {
+            Response = WindowResponse.OK;
             ResponseValue = value;
+            this.Close();
+        }
+
+        private void HierarchyDrmRecordsCollectionView_SelectedDataRow(object sender, RoutedEventArgs e)
+        {
+            var data = e as SelectedDataRowEventArgs;
+            SetResponseValue(data.Data);
         }
     }
 }

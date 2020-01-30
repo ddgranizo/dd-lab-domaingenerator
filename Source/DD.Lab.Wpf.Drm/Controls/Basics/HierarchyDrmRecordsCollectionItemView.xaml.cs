@@ -1,4 +1,5 @@
 
+using DD.Lab.Wpf.Drm.Events;
 using DD.Lab.Wpf.Drm.Inputs;
 using DD.Lab.Wpf.Drm.Models.Data;
 using HierarchyDrmRecordsCollectionItem;
@@ -23,6 +24,28 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
 
     public partial class HierarchyDrmRecordsCollectionItemView : UserControl
     {
+
+        public static readonly RoutedEvent SelectedDataRowEvent =
+                   EventManager.RegisterRoutedEvent(nameof(SelectedDataRow), RoutingStrategy.Bubble,
+                   typeof(RoutedEventHandler), typeof(HierarchyDrmRecordsCollectionItemView));
+
+        public event RoutedEventHandler SelectedDataRow
+        {
+            add { AddHandler(SelectedDataRowEvent, value); }
+            remove { RemoveHandler(SelectedDataRowEvent, value); }
+        }
+
+        public void RaiseSelectedDataRowEvent(DataRecord data, string logicalName)
+        {
+            RoutedEventArgs args = new SelectedDataRowEventArgs()
+            {
+                Data = data,
+                LogicalName = logicalName
+            };
+            args.RoutedEvent = SelectedDataRowEvent;
+            RaiseEvent(args);
+        }
+
 
         public DataRecord Record
         {
@@ -98,113 +121,113 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
             }
         }
 
-		public static readonly DependencyProperty RecordProperty =
+        public static readonly DependencyProperty RecordProperty =
                       DependencyProperty.Register(
                           nameof(Record),
                           typeof(DataRecord),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-		public static readonly DependencyProperty GenericManagerProperty =
+        public static readonly DependencyProperty GenericManagerProperty =
                       DependencyProperty.Register(
                           nameof(GenericManager),
                           typeof(GenericManager),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-        
+
         public static readonly DependencyProperty ContextEntityProperty =
                       DependencyProperty.Register(
                           nameof(ContextEntity),
                           typeof(string),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-		public static readonly DependencyProperty ParentContextEntityProperty =
+        public static readonly DependencyProperty ParentContextEntityProperty =
                       DependencyProperty.Register(
                           nameof(ParentContextEntity),
                           typeof(string),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-		public static readonly DependencyProperty ParentContextEntityIdProperty =
+        public static readonly DependencyProperty ParentContextEntityIdProperty =
                       DependencyProperty.Register(
                           nameof(ParentContextEntityId),
                           typeof(Guid),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-		public static readonly DependencyProperty TargetEntityLogicalNameProperty =
+        public static readonly DependencyProperty TargetEntityLogicalNameProperty =
                       DependencyProperty.Register(
                           nameof(TargetEntityLogicalName),
                           typeof(string),
                           typeof(HierarchyDrmRecordsCollectionItemView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-		private readonly HierarchyDrmRecordsCollectionItemViewModel _viewModel = null;
+        private readonly HierarchyDrmRecordsCollectionItemViewModel _viewModel = null;
 
         public HierarchyDrmRecordsCollectionItemView()
         {
             InitializeComponent();
-			_viewModel = Resources["ViewModel"] as HierarchyDrmRecordsCollectionItemViewModel;
-			_viewModel.Initialize(this);
+            _viewModel = Resources["ViewModel"] as HierarchyDrmRecordsCollectionItemViewModel;
+            _viewModel.Initialize(this);
         }
 
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-			HierarchyDrmRecordsCollectionItemView v = d as HierarchyDrmRecordsCollectionItemView;
-			if (e.Property.Name == nameof(Record))
+            HierarchyDrmRecordsCollectionItemView v = d as HierarchyDrmRecordsCollectionItemView;
+            if (e.Property.Name == nameof(Record))
             {
                 v.SetRecord((DataRecord)e.NewValue);
             }
-			else if (e.Property.Name == nameof(GenericManager))
+            else if (e.Property.Name == nameof(GenericManager))
             {
                 v.SetGenericManager((GenericManager)e.NewValue);
             }
-			else if (e.Property.Name == nameof(ContextEntity))
+            else if (e.Property.Name == nameof(ContextEntity))
             {
                 v.SetContextEntity((string)e.NewValue);
             }
-			else if (e.Property.Name == nameof(ParentContextEntity))
+            else if (e.Property.Name == nameof(ParentContextEntity))
             {
                 v.SetParentContextEntity((string)e.NewValue);
             }
-			else if (e.Property.Name == nameof(ParentContextEntityId))
+            else if (e.Property.Name == nameof(ParentContextEntityId))
             {
                 v.SetParentContextEntityId((Guid)e.NewValue);
             }
-			else if (e.Property.Name == nameof(TargetEntityLogicalName))
+            else if (e.Property.Name == nameof(TargetEntityLogicalName))
             {
                 v.SetTargetEntityLogicalName((string)e.NewValue);
             }
-            
+
         }
 
-		private void SetRecord(DataRecord data)
+        private void SetRecord(DataRecord data)
         {
             _viewModel.Record = data;
         }
 
-		private void SetGenericManager(GenericManager data)
+        private void SetGenericManager(GenericManager data)
         {
             _viewModel.GenericManager = data;
         }
 
-		private void SetContextEntity(string data)
+        private void SetContextEntity(string data)
         {
             _viewModel.ContextEntity = data;
         }
 
-		private void SetParentContextEntity(string data)
+        private void SetParentContextEntity(string data)
         {
             _viewModel.ParentContextEntity = data;
         }
 
-		private void SetParentContextEntityId(Guid data)
+        private void SetParentContextEntityId(Guid data)
         {
             _viewModel.ParentContextEntityId = data;
         }
 
-		private void SetTargetEntityLogicalName(string data)
+        private void SetTargetEntityLogicalName(string data)
         {
             _viewModel.TargetEntityLogicalName = data;
         }
 
-     
+
 
         private void Record_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -217,7 +240,27 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
         public void SetViewRecordData(HierarchyDrmRecordInputData data)
         {
             RecordGrid.Children.Clear();
-            RecordGrid.Children.Add(new HierarchyDrmRecordView() { HierarchyRecordInputData = data });
+            var view = new HierarchyDrmRecordView()
+            {
+                HierarchyRecordInputData = data,
+            };
+            view.SelectedDataRow += View_SelectedDataRow;
+            RecordGrid.Children.Add(view);
+        }
+
+        private void View_SelectedDataRow(object sender, RoutedEventArgs e)
+        {
+            var data = e as SelectedDataRowEventArgs;
+            RaiseSelectedDataRowEvent(data.Data, data.LogicalName);
+        }
+
+        private void TargetRecord_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed
+                && e.ClickCount == 2)
+            {
+                RaiseSelectedDataRowEvent(_viewModel.Record, _viewModel.ContextEntity);
+            }
         }
     }
 }

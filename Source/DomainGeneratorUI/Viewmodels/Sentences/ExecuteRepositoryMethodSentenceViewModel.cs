@@ -1,6 +1,8 @@
+using AutoMapper;
 using DD.Lab.Wpf.Commands;
 using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Drm;
+using DD.Lab.Wpf.Drm.Models;
 using DD.Lab.Wpf.Drm.Services;
 using DD.Lab.Wpf.Drm.Services.Implementations;
 using DD.Lab.Wpf.ViewModels.Base;
@@ -8,7 +10,12 @@ using DomainGeneratorUI.Controls.Sentences;
 using DomainGeneratorUI.Extensions;
 using DomainGeneratorUI.Inputs;
 using DomainGeneratorUI.Models;
+using DomainGeneratorUI.Models.Methods;
+using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Models.UseCases.Sentences;
+using DomainGeneratorUI.Models.UseCases.Sentences.Base;
+using DomainGeneratorUI.Viewmodels.Methods;
+using DomainGeneratorUI.Viewmodels.UseCases;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
@@ -28,39 +35,60 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
     {
 
         public ExecuteRepositoryMethodSentenceInputData ExecuteRepositoryMethodSentenceInputData { get { return GetValue<ExecuteRepositoryMethodSentenceInputData>(); } set { SetValue(value, UpdatedExecuteRepositoryMethodSentenceInputData); } }
-        public UseCaseSentenceViewModel BasicSentence { get { return GetValue<UseCaseSentenceViewModel>(); } set { SetValue(value, UpdatedSentence); } }
+        public UseCaseSentenceViewModel BasicSentence { get { return GetValue<UseCaseSentenceViewModel>(); } set { SetValue(value, UpdatedBasicSentence); } }
         public GenericManager GenericManager { get; set; }
         public ExecuteRepositoryMethodSentence Sentence { get; set; }
         private ExecuteRepositoryMethodSentenceView _view;
+        public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
 
-        public IJsonParserService JsonParserService { get; set; }
+
+        public IMapper Mapper { get; private set; }
 
         public ExecuteRepositoryMethodSentenceViewModel()
         {
-            JsonParserService = new JsonParserService();
             InitializeCommands();
+            InitializeMapper();
         }
+
 
         public void Initialize(ExecuteRepositoryMethodSentenceView v)
         {
-			_view = v;
+            _view = v;
         }
+
+        private void InitializeMapper()
+        {
+            Mapper = new Mapper(ConfigureMappingProfiles());
+        }
+
 
         public ICommand EditCommand { get; set; }
         private void InitializeCommands()
         {
-            EditCommand = new RelayCommandHandled((input) => {
-
-                var current = Sentence.RepositoryMethod;
-                var finderRecord = new GenericRecordFinderWindow(GenericManager, Project.LogicalName, Guid.Empty, RepositoryMethod.LogicalName);
+            EditCommand = new RelayCommandHandled((input) =>
+            {
+                //var current = Sentence.RepositoryMethod;
+                var finderRecord = new GenericRecordFinderWindow(GenericManager, Domain.LogicalName, Guid.Empty, RepositoryMethod.LogicalName);
                 finderRecord.ShowDialog();
                 if (finderRecord.Response == DD.Lab.Wpf.Windows.WindowResponse.OK)
                 {
-                    
+                    var record = finderRecord.ResponseValue;
+                    var repositoryMethod = Entity.DictionartyToEntity<RepositoryMethod>(record.Values);
+                    UpdatedExecuteRepositoryMethodSentence(repositoryMethod);
                 }
             });
 
             RegisterCommand(EditCommand);
+        }
+
+        private void UpdatedExecuteRepositoryMethodSentence(RepositoryMethod method)
+        {
+            var repositoryId = method.RepositoryId.Id;
+            var repository = Entity.DictionartyToEntity<Repository>(GenericManager.Retrieve(Repository.LogicalName, repositoryId).Values);
+            var schemaId = repository.SchemaId.Id;
+            var schema = Entity.DictionartyToEntity<Schema>(GenericManager.Retrieve(Schema.LogicalName, schemaId).Values);
+            var newSentence = new ExecuteRepositoryMethodSentence(schema.Name, repository.Name, method);
+            _view.RaiseUpdateUseCaseSentenceEvent(newSentence, BasicSentence);
         }
 
         private void UpdatedExecuteRepositoryMethodSentenceInputData(ExecuteRepositoryMethodSentenceInputData data)
@@ -69,9 +97,31 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             GenericManager = data.GenericManager;
         }
 
-        private void UpdatedSentence(UseCaseSentenceViewModel data)
+        private void UpdatedBasicSentence(UseCaseSentenceViewModel data)
         {
-            Sentence = BasicSentence.ToExecuteRepositoryMethod(JsonParserService);
+            var sentence = Mapper.Map<UseCaseSentence>(BasicSentence);
+            SetCurrentSentenceFromUseCase(sentence);
         }
+
+        private void SetCurrentSentenceFromUseCase(UseCaseSentence sentence)
+        {
+            Sentence = new ExecuteRepositoryMethodSentence(sentence);
+            Description = Sentence.Description;
+        }
+
+        private MapperConfiguration ConfigureMappingProfiles()
+        {
+            return new MapperConfiguration(mc =>
+            {
+                mc.CreateReversiveMap<UseCaseContent, UseCaseContentViewModel>();
+                mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
+                mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>();
+                mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
+                mc.CreateReversiveMap<SentenceInputParameter, SentenceInputParameterViewModel>();
+                mc.CreateReversiveMap<SentenceOutputParameter, SentenceOutputParameterViewModel>();
+            });
+        }
+
+
     }
 }

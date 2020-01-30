@@ -27,5 +27,15 @@ namespace DD.Lab.Wpf.Drm.Services.Implementations
             };
             return JsonConvert.SerializeObject(instance, Formatting.Indented, settings);
         }
+
+        public string StringfyWithTypes<T>(T instance)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+            return JsonConvert.SerializeObject(instance, Formatting.Indented, settings);
+        }
     }
 }

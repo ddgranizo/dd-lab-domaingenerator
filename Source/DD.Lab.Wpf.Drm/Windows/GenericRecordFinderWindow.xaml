@@ -18,10 +18,15 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
-        <basics:HierarchyDrmRecordsCollectionView
-            HierarchyDrmEntityCollectionInputData="{Binding HierarchyRecordCollection}"
+        <GroupBox Grid.Row="1" >
+            <GroupBox.Header>
+                <TextBlock  Text="{Binding TargetEntityLogicalName, StringFormat='Record selector: Select one record from {0}'}"  Foreground="White" FontWeight="Bold"/>
+            </GroupBox.Header>
+            <basics:HierarchyDrmRecordsCollectionView
+                HierarchyDrmEntityCollectionInputData="{Binding HierarchyRecordCollection}"
+                SelectedDataRow="HierarchyDrmRecordsCollectionView_SelectedDataRow"
             />
+        </GroupBox>
         
     </Grid>
 </Window>

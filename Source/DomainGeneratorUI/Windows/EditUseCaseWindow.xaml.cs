@@ -78,5 +78,10 @@ namespace DomainGeneratorUI.Windows
             _viewModel.ContentView.Parameters.AddRange(myEvent.Data);
         }
 
+        private void UseCaseSentenceCollectionManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.UpdatedUseCaseSentence(data.UseCaseViewModel, data.UseCase);
+        }
     }
 }

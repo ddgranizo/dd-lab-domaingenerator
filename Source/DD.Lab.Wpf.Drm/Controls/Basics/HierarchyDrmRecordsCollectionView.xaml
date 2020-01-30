@@ -26,6 +26,8 @@
                         ParentContextEntity="{Binding RelativeSource={RelativeSource AncestorType=basiccontrols:HierarchyDrmRecordsCollectionView}, Path=HierarchyDrmEntityCollectionInputData.ParentContextEntity}"
                         ParentContextEntityId="{Binding RelativeSource={RelativeSource AncestorType=basiccontrols:HierarchyDrmRecordsCollectionView}, Path=HierarchyDrmEntityCollectionInputData.ParentContextEntityId}"
                         TargetEntityLogicalName="{Binding RelativeSource={RelativeSource AncestorType=basiccontrols:HierarchyDrmRecordsCollectionView}, Path=HierarchyDrmEntityCollectionInputData.TargetEntityLogicalName}"
+                        
+                        SelectedDataRow="HierarchyDrmRecordsCollectionItemView_SelectedDataRow"
                         />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

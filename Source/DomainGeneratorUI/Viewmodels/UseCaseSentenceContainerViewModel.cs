@@ -17,15 +17,15 @@ using System.Xml.Serialization;
 
 namespace DomainGeneratorUI.Viewmodels
 {
-    public class UseCaseSentenceManagerViewModel : BaseViewModel
+    public class UseCaseSentenceContainerViewModel : BaseViewModel
     {
 
         public UseCaseSentenceViewModel Sentence { get { return GetValue<UseCaseSentenceViewModel>(); } set { SetValue(value, UpdatedSentence); } }
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
 
-        private UseCaseSentenceManagerView _view;
+        private UseCaseSentenceContainerView _view;
 
-        public UseCaseSentenceManagerViewModel()
+        public UseCaseSentenceContainerViewModel()
         {
             AddSetterPropertiesTrigger(new DD.Lab.Wpf.Models.PropertiesTrigger(
                 () =>
@@ -43,7 +43,7 @@ namespace DomainGeneratorUI.Viewmodels
 
         }
 
-        public void Initialize(UseCaseSentenceManagerView v)
+        public void Initialize(UseCaseSentenceContainerView v)
         {
             _view = v;
         }

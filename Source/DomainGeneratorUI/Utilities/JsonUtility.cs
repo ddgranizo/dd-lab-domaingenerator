@@ -25,6 +25,22 @@ namespace DomainGeneratorUI.Utilities
             }
         }
 
+        public static T GetInstanceWithTypes<T>(string json) where T : IInitializable<T>, new()
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                var instance = new T();
+                return instance.GetInitialInstance();
+            }
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+
+            return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
         public static T GetInstance<T>(string json) where T: IInitializable<T>, new()
         {
             if (string.IsNullOrEmpty(json))

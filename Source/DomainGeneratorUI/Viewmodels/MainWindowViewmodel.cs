@@ -116,7 +116,7 @@ namespace DomainGeneratorUI.Viewmodels
             }
             else
             {
-                content = JsonUtility.GetInstance<TContent>(contentJson);
+                content = JsonUtility.GetInstanceWithTypes<TContent>(contentJson);
             }
 
             if (editing)

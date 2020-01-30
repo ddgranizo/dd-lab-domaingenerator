@@ -1,4 +1,5 @@
 
+using DD.Lab.Wpf.Drm.Events;
 using DD.Lab.Wpf.Drm.Inputs;
 using DD.Lab.Wpf.Drm.Models;
 using DD.Lab.Wpf.Drm.Models.Data;
@@ -24,6 +25,28 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
 
     public partial class HierarchyDrmRecordRelationshipView : UserControl
     {
+
+        public static readonly RoutedEvent SelectedDataRowEvent =
+                   EventManager.RegisterRoutedEvent(nameof(SelectedDataRow), RoutingStrategy.Bubble,
+                   typeof(RoutedEventHandler), typeof(HierarchyDrmRecordRelationshipView));
+
+        public event RoutedEventHandler SelectedDataRow
+        {
+            add { AddHandler(SelectedDataRowEvent, value); }
+            remove { RemoveHandler(SelectedDataRowEvent, value); }
+        }
+
+        public void RaiseSelectedDataRowEvent(DataRecord data, string logicalName)
+        {
+            RoutedEventArgs args = new SelectedDataRowEventArgs()
+            {
+                Data = data,
+                LogicalName = logicalName
+            };
+            args.RoutedEvent = SelectedDataRowEvent;
+            RaiseEvent(args);
+        }
+
         public DataRecord Record
         {
             get
@@ -241,9 +264,19 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
         public void SetRecords(HierarchyDrmRecordCollectionInputData data)
         {
             RecordsGrid.Children.Clear();
-            RecordsGrid.Children.Add(new HierarchyDrmRecordsCollectionView() { 
+            var view = new HierarchyDrmRecordsCollectionView()
+            {
                 HierarchyDrmEntityCollectionInputData = data,
-            });
+            };
+
+            view.SelectedDataRow += View_SelectedDataRow;
+            RecordsGrid.Children.Add(view);
+        }
+
+        private void View_SelectedDataRow(object sender, RoutedEventArgs e)
+        {
+            var data = e as SelectedDataRowEventArgs;
+            RaiseSelectedDataRowEvent(data.Data, data.LogicalName);
         }
     }
 }

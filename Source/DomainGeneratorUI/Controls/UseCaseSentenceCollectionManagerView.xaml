@@ -36,7 +36,11 @@
             <ItemsControl ItemsSource="{Binding UseCaseSentenceCollectionManagerInputData.SentenceCollection.SentencesCollection}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <user:UseCaseSentenceManagerView Sentence="{Binding}" GenericManager="{Binding Path=UseCaseSentenceCollectionManagerInputData.GenericManager ,RelativeSource={RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}}"/>
+                        <user:UseCaseSentenceContainerView 
+                                Sentence="{Binding}" 
+                                GenericManager="{Binding Path=UseCaseSentenceCollectionManagerInputData.GenericManager ,RelativeSource={RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}}"
+                                UpdatedUseCase="UseCaseSentenceManagerView_UpdatedUseCase"  
+                                />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

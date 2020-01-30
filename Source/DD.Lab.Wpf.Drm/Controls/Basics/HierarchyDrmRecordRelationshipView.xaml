@@ -19,7 +19,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" MouseDown="Relationship_MouseDown" Cursor="Hand">
+        <StackPanel Orientation="Horizontal" MouseDown="Relationship_MouseDown" Cursor="Hand" Background="Transparent">
 
             <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
                 <materialDesign:PackIcon.RenderTransform>
@@ -45,11 +45,11 @@
             <!--<TextBlock Text="[1-N]" Visibility="{Binding Relationship.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" />
             <TextBlock Text="[N-M]" Visibility="{Binding Relationship.IsManyToMany, Converter={StaticResource BoolToCollapsedConverter}}" />-->
             <TextBlock Text="{Binding RecordName}" Foreground="Blue"/>
-            <TextBlock Margin="0,0,0,0" Text="{Binding RelatedEntityLogicalName, StringFormat=' {0}(s)'}"/>
+            <TextBlock Margin="0,0,0,0" Text="{Binding RelatedEntityLogicalName, StringFormat=' {0}(s)'}" Foreground="Blue"/>
             
         </StackPanel>
 
-        <Grid x:Name="RecordsGrid" Grid.Row="1" Margin="24,0,0,0" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}">
+        <Grid x:Name="RecordsGrid" Grid.Row="1" Margin="24,0,0,0" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}" Cursor="Hand" >
             
         </Grid>
         

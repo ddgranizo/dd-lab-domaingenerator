@@ -8,45 +8,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:HierarchyDrmRecordsCollectionItem"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
+    <UserControl.Resources>
         <vm:HierarchyDrmRecordsCollectionItemViewModel x:Key="ViewModel" d:IsDataSource="True" />
         <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter"/>
     </UserControl.Resources>
-    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
-        <Grid.Resources>
-            
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Cursor="Hand" MouseDown="Record_MouseDown" >
-            <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
-                <materialDesign:PackIcon.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="90"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </materialDesign:PackIcon.RenderTransform>
-            </materialDesign:PackIcon>
-            <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}"  RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
-                <materialDesign:PackIcon.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="180"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </materialDesign:PackIcon.RenderTransform>
-            </materialDesign:PackIcon>
-            <materialDesign:PackIcon Kind="Text"/>
-            <TextBlock Margin="4,0,0,0" Text="{Binding Record.Values[Name]}" Foreground="Blue" FontWeight="Bold"/>
-            
-        </StackPanel>
-        <Grid x:Name="RecordGrid" Margin="12,0,0,0" Grid.Row="1" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}">
+    <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}" >
+        <Grid Visibility="{Binding IsTargetEntity, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Cursor="Hand" MouseDown="Record_MouseDown" >
+                <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </materialDesign:PackIcon.RenderTransform>
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Width="10" Height="10" Kind="Triangle" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}"  RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center">
+                    <materialDesign:PackIcon.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </materialDesign:PackIcon.RenderTransform>
+                </materialDesign:PackIcon>
+                <materialDesign:PackIcon Kind="Text"/>
+                <TextBlock Margin="4,0,0,0" Text="{Binding Record.Values[Name]}" Foreground="Blue" FontWeight="Bold"/>
+            </StackPanel>
+            <Grid x:Name="RecordGrid" Margin="12,0,0,0" Grid.Row="1" Visibility="{Binding IsOpen, Converter={StaticResource BoolToCollapsedConverter}}">
 
+            </Grid>
+        </Grid>
+        <Grid Visibility="{Binding IsTargetEntity, Converter={StaticResource BoolToCollapsedConverter}}" Background="Transparent" MouseDown="TargetRecord_MouseDown">
+            <TextBlock Margin="4,0,0,0" Text="{Binding Record.Values[Name]}" Foreground="Blue" FontWeight="Bold" TextDecorations="Underline"/>
         </Grid>
     </Grid>
 </UserControl>

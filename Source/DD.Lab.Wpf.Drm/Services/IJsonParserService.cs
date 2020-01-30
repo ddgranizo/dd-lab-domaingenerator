@@ -8,5 +8,6 @@ namespace DD.Lab.Wpf.Drm.Services
     {
         T Objectify<T>(string json);
         string Stringfy<T>(T instance);
+        string StringfyWithTypes<T>(T instance);
     }
 }

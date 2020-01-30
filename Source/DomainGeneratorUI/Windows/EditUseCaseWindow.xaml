@@ -66,6 +66,7 @@
                 <materialDesign:Card Grid.Row="1" Margin="5">
                     <control:UseCaseSentenceCollectionManagerView 
                         UseCaseSentenceCollectionManagerInputData="{Binding SentenceCollectionInputData}"
+                        UpdatedUseCase="UseCaseSentenceCollectionManagerView_UpdatedUseCase"    
                         />
                 </materialDesign:Card>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

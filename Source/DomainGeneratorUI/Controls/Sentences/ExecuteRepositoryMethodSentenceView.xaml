@@ -20,7 +20,7 @@
         <Grid Margin="5,0,0,0" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Execute repository method" FontWeight="Bold"/>
-                <TextBlock  Cursor="Hand" Text="{Binding Sentence.Description}" Margin="5,0,0,0" />
+                <TextBlock  Cursor="Hand" Text="{Binding Description}" Margin="5,0,0,0" />
             </StackPanel>
         </Grid>
         <Button Grid.Column="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Edit sentence" Command="{Binding Source={StaticResource ViewModel}, Path=EditCommand, Mode=OneWay}"  Padding="5" Margin="5">

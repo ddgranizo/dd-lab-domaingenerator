@@ -1,7 +1,9 @@
 
 using DD.Lab.Wpf.Drm;
 using DomainGeneratorUI.Controls.Sentences;
+using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Inputs;
+using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
@@ -23,8 +25,28 @@ using System.Windows.Shapes;
 namespace DomainGeneratorUI.Controls
 {
 
-    public partial class UseCaseSentenceManagerView : UserControl
+    public partial class UseCaseSentenceContainerView : UserControl
     {
+        public static readonly RoutedEvent UpdatedUseCaseEvent =
+                    EventManager.RegisterRoutedEvent(nameof(UpdatedUseCase), RoutingStrategy.Bubble,
+                    typeof(RoutedEventHandler), typeof(UseCaseSentenceContainerView));
+
+        public event RoutedEventHandler UpdatedUseCase
+        {
+            add { AddHandler(UpdatedUseCaseEvent, value); }
+            remove { RemoveHandler(UpdatedUseCaseEvent, value); }
+        }
+
+        public void RaiseUpdateUseCaseSentenceEvent(UseCaseSentence useCaseSentence, UseCaseSentenceViewModel useCaseSentenceViewModel)
+        {
+            RoutedEventArgs args = new UpdatedUseCaseSentenceEventArgs()
+            {
+                UseCase = useCaseSentence,
+                UseCaseViewModel = useCaseSentenceViewModel,
+            };
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
 
         public UseCaseSentenceViewModel Sentence
         {
@@ -54,28 +76,26 @@ namespace DomainGeneratorUI.Controls
                       DependencyProperty.Register(
                           nameof(GenericManager),
                           typeof(GenericManager),
-                          typeof(UseCaseSentenceManagerView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
-
+                          typeof(UseCaseSentenceContainerView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
         public static readonly DependencyProperty SentenceProperty =
                       DependencyProperty.Register(
                           nameof(Sentence),
                           typeof(UseCaseSentenceViewModel),
-                          typeof(UseCaseSentenceManagerView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
+                          typeof(UseCaseSentenceContainerView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
+		private readonly UseCaseSentenceContainerViewModel _viewModel = null;
 
-		private readonly UseCaseSentenceManagerViewModel _viewModel = null;
-
-        public UseCaseSentenceManagerView()
+        public UseCaseSentenceContainerView()
         {
             InitializeComponent();
-			_viewModel = Resources["ViewModel"] as UseCaseSentenceManagerViewModel;
+			_viewModel = Resources["ViewModel"] as UseCaseSentenceContainerViewModel;
 			_viewModel.Initialize(this);
         }
 
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-			UseCaseSentenceManagerView v = d as UseCaseSentenceManagerView;
+			UseCaseSentenceContainerView v = d as UseCaseSentenceContainerView;
             if (e.Property.Name == nameof(Sentence))
             {
                 v.SetSentence((UseCaseSentenceViewModel)e.NewValue);
@@ -99,14 +119,25 @@ namespace DomainGeneratorUI.Controls
         public void AddExecuteRepositoryMethodSentence(GenericManager manager, UseCaseSentenceViewModel sentence)
         {
             SentenceGrid.Children.Clear();
-            SentenceGrid.Children.Add(new ExecuteRepositoryMethodSentenceView()
+            var instance = new ExecuteRepositoryMethodSentenceView()
             {
                 ExecuteRepositoryMethodSentenceInputData = new ExecuteRepositoryMethodSentenceInputData()
                 {
                     Sentence = sentence,
                     GenericManager = manager,
                 }
-            });
+            };
+            instance.UpdatedUseCase += Instance_UpdatedUseCase;
+            SentenceGrid.Children.Add(instance);
+        }
+
+        private void Instance_UpdatedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            if (data.UseCaseViewModel == Sentence)
+            {
+                RaiseUpdateUseCaseSentenceEvent(data.UseCase, Sentence);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace DD.Lab.Wpf.Drm.Events
 {
     public class SelectedDataRowEventArgs : RoutedEventArgs
     {
+        public string LogicalName { get; set; }
         public DataRecord Data { get; set; }
     }
 

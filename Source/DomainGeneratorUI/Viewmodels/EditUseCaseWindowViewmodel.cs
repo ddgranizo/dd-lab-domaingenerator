@@ -21,6 +21,7 @@ using DomainGeneratorUI.Inputs;
 using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using DD.Lab.Wpf.Commands;
+using System.Linq;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -96,6 +97,14 @@ namespace DomainGeneratorUI.Viewmodels
                 mc.CreateReversiveMap<SentenceInputParameter, SentenceInputParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputParameter, SentenceOutputParameterViewModel>();
             });
+        }
+
+        public void UpdatedUseCaseSentence(UseCaseSentenceViewModel source, UseCaseSentence newValue)
+        {
+            var index = ContentView.SentenceCollection.Sentences.IndexOf(source);
+            var newViewModel = Mapper.Map<UseCaseSentenceViewModel>(newValue);
+            ContentView.SentenceCollection.Sentences[index] = newViewModel;
+            Content = Mapper.Map<UseCaseContent>(ContentView);
         }
     }
 }

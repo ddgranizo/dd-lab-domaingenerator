@@ -10,6 +10,7 @@ using System.Text;
 
 namespace DD.Lab.Wpf.Drm.Viewmodels.Windows
 {
+
     public class GenericRecordFinderViewmodel: BaseViewModel
     {
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value);  } }
@@ -17,13 +18,11 @@ namespace DD.Lab.Wpf.Drm.Viewmodels.Windows
         public string TargetEntityLogicalName { get; set; }
         public Guid MainEntityId { get; set; }
 
-
-        //public HierarchyDrmEntityInputData HierarchyInputData { get { return GetValue<HierarchyDrmEntityInputData>(); } set { SetValue(value); } }
         public HierarchyDrmRecordCollectionInputData HierarchyRecordCollection { get { return GetValue<HierarchyDrmRecordCollectionInputData>(); } set { SetValue(value); } }
-
 
         public GenericRecordFinderViewmodel()
         {
+
         }
 
         private GenericRecordFinderWindow _view;
@@ -62,7 +61,6 @@ namespace DD.Lab.Wpf.Drm.Viewmodels.Windows
                     ParentContextEntity = null,
                     ParentContextEntityId = Guid.Empty,
                     ContextEntity = MainEntityLogicalName,
-
                 };
             }
             else

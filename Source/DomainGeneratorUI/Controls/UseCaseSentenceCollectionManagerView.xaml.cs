@@ -1,6 +1,10 @@
 
+using DomainGeneratorUI.Controls.Sentences;
+using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Inputs;
+using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels;
+using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +26,27 @@ namespace DomainGeneratorUI.Controls
 
     public partial class UseCaseSentenceCollectionManagerView : UserControl
     {
+        public static readonly RoutedEvent UpdatedUseCaseEvent =
+                    EventManager.RegisterRoutedEvent(nameof(UpdatedUseCase), RoutingStrategy.Bubble,
+                    typeof(RoutedEventHandler), typeof(UseCaseSentenceCollectionManagerView));
+
+        public event RoutedEventHandler UpdatedUseCase
+        {
+            add { AddHandler(UpdatedUseCaseEvent, value); }
+            remove { RemoveHandler(UpdatedUseCaseEvent, value); }
+        }
+
+        public void RaiseUpdateUseCaseSentenceEvent(UseCaseSentenceViewModel useCaseViewModel, UseCaseSentence useCaseSentence)
+        {
+            RoutedEventArgs args = new UpdatedUseCaseSentenceEventArgs()
+            {
+                UseCaseViewModel = useCaseViewModel,
+                UseCase = useCaseSentence,
+            };
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
+
 
         public UseCaseSentenceCollectionManagerInputData UseCaseSentenceCollectionManagerInputData
         {
@@ -66,6 +91,11 @@ namespace DomainGeneratorUI.Controls
         {
             _viewModel.UseCaseSentenceCollectionManagerInputData = data;
         }
-		
+
+        private void UseCaseSentenceManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            RaiseUpdateUseCaseSentenceEvent(data.UseCaseViewModel, data.UseCase);
+        }
     }
 }

@@ -1,5 +1,7 @@
 
+using DD.Lab.Wpf.Drm.Events;
 using DD.Lab.Wpf.Drm.Inputs;
+using DD.Lab.Wpf.Drm.Models.Data;
 using DD.Lab.Wpf.Drm.Viewmodels.Basics;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,28 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
 
     public partial class HierarchyDrmRecordsCollectionView : UserControl
     {
+
+        public static readonly RoutedEvent SelectedDataRowEvent =
+                    EventManager.RegisterRoutedEvent(nameof(SelectedDataRow), RoutingStrategy.Bubble,
+                    typeof(RoutedEventHandler), typeof(HierarchyDrmRecordsCollectionView));
+
+        public event RoutedEventHandler SelectedDataRow
+        {
+            add { AddHandler(SelectedDataRowEvent, value); }
+            remove { RemoveHandler(SelectedDataRowEvent, value); }
+        }
+
+        public void RaiseSelectedDataRowEvent(DataRecord data, string logicalName)
+        {
+            RoutedEventArgs args = new SelectedDataRowEventArgs()
+            {
+                Data = data,
+                LogicalName = logicalName
+            };
+            args.RoutedEvent = SelectedDataRowEvent;
+            RaiseEvent(args);
+        }
+
 
         public HierarchyDrmRecordCollectionInputData HierarchyDrmEntityCollectionInputData
         {
@@ -64,7 +88,13 @@ namespace DD.Lab.Wpf.Drm.Controls.Basics
             _viewModel.HierarchyDrmEntityCollectionInputData = data;
         }
 
-
-
+        private void HierarchyDrmRecordsCollectionItemView_SelectedDataRow(object sender, RoutedEventArgs e)
+        {
+            var data = e as SelectedDataRowEventArgs;
+            if (data.LogicalName == _viewModel.ContextEntity)
+            {
+                RaiseSelectedDataRowEvent(data.Data, data.LogicalName);
+            }
+        }
     }
 }

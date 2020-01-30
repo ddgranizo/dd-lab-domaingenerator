@@ -154,7 +154,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Description = description,
                 DisplayName = displayName,
                 Type = new OptionSetValue((int)type),
-                Content = JsonParserService.Stringfy(content),
+                Content = JsonParserService.StringfyWithTypes(content),
             };
             return manager.Create(UseCase.LogicalName, Entity.EntityToDictionary(usecase));
         }
@@ -324,7 +324,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)type),
-                Content = JsonParserService.Stringfy(content),
+                Content = JsonParserService.StringfyWithTypes(content),
             };
 
             return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
@@ -345,7 +345,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 RepositoryId = RepositoryEntityReference,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
-                Content = JsonParserService.Stringfy(content),
+                Content = JsonParserService.StringfyWithTypes(content),
             };
 
             return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
@@ -361,7 +361,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
                 Name = methodName,
                 Type = new OptionSetValue((int)RepositoryMethod.RepositoryMethodType.View),
                 RepositoryId = RepositoryEntityReference,
-                Content = JsonParserService.Stringfy(content),
+                Content = JsonParserService.StringfyWithTypes(content),
             };
             return genericManager.Create(RepositoryMethod.LogicalName, Entity.EntityToDictionary(method));
         }

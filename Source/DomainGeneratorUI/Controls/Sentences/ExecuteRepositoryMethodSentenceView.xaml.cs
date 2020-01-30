@@ -1,6 +1,9 @@
 
+using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Inputs;
+using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.Sentences;
+using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,10 +23,28 @@ using System.Windows.Shapes;
 namespace DomainGeneratorUI.Controls.Sentences
 {
 
-
     public partial class ExecuteRepositoryMethodSentenceView : UserControl
     {
+        public static readonly RoutedEvent UpdatedUseCaseEvent =
+                    EventManager.RegisterRoutedEvent(nameof(UpdatedUseCase), RoutingStrategy.Bubble,
+                    typeof(RoutedEventHandler), typeof(ExecuteRepositoryMethodSentenceView));
 
+        public event RoutedEventHandler UpdatedUseCase
+        {
+            add { AddHandler(UpdatedUseCaseEvent, value); }
+            remove { RemoveHandler(UpdatedUseCaseEvent, value); }
+        }
+
+        public void RaiseUpdateUseCaseSentenceEvent(UseCaseSentence useCaseSentence, UseCaseSentenceViewModel viewmodel)
+        {
+            RoutedEventArgs args = new UpdatedUseCaseSentenceEventArgs()
+            {
+                UseCase = useCaseSentence,
+                UseCaseViewModel = viewmodel,
+            };
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
 
         public ExecuteRepositoryMethodSentenceInputData ExecuteRepositoryMethodSentenceInputData
         {
@@ -53,7 +74,6 @@ namespace DomainGeneratorUI.Controls.Sentences
 			_viewModel.Initialize(this);
         }
 
-
         private static void OnPropsValueChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 			ExecuteRepositoryMethodSentenceView v = d as ExecuteRepositoryMethodSentenceView;
@@ -68,9 +88,6 @@ namespace DomainGeneratorUI.Controls.Sentences
             _viewModel.ExecuteRepositoryMethodSentenceInputData = data;
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+      
     }
 }
