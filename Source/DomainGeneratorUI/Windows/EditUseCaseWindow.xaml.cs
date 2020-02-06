@@ -37,7 +37,6 @@ namespace DomainGeneratorUI.Windows
 
             _viewModel = Resources["ViewModel"] as EditUseCaseWindowViewModel;
             _viewModel.Initialize(this);
-
         }
 
         public UseCaseContent GetContent()
@@ -59,23 +58,27 @@ namespace DomainGeneratorUI.Windows
         private void InputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
         {
             var myEvent = e as OnModifiedMethodParameterListEventArgs;
-            var currentInputs = _viewModel.ContentView.Parameters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Input).ToList();
+            var useCaseViewmodel = _viewModel.ContentView;
+            var currentInputs = useCaseViewmodel.Parameters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Input).ToList();
             foreach (var item in currentInputs)
             {
-                _viewModel.ContentView.Parameters.Remove(item);
+                useCaseViewmodel.Parameters.Remove(item);
             }
-            _viewModel.ContentView.Parameters.AddRange(myEvent.Data);
+            useCaseViewmodel.Parameters.AddRange(myEvent.Data);
+            _viewModel.UpdatedUseCaseParameters(useCaseViewmodel);
         }
 
         private void OutputParametersManagerControlView_OnModifiedList(object sender, RoutedEventArgs e)
         {
             var myEvent = e as OnModifiedMethodParameterListEventArgs;
-            var currentInputs = _viewModel.ContentView.Parameters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Output).ToList();
+            var useCaseViewmodel = _viewModel.ContentView;
+            var currentInputs = useCaseViewmodel.Parameters.Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Output).ToList();
             foreach (var item in currentInputs)
             {
-                _viewModel.ContentView.Parameters.Remove(item);
+                useCaseViewmodel.Parameters.Remove(item);
             }
-            _viewModel.ContentView.Parameters.AddRange(myEvent.Data);
+            useCaseViewmodel.Parameters.AddRange(myEvent.Data);
+            _viewModel.UpdatedUseCaseParameters(useCaseViewmodel);
         }
 
         private void UseCaseSentenceCollectionManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)

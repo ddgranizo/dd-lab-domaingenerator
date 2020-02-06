@@ -10,6 +10,7 @@ namespace DomainGeneratorUI.Viewmodels.UseCases
 {
     public class UseCaseContentViewModel: BaseViewModel
     {
+
         public List<MethodParameterViewModel> Parameters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value, UpdatedParameteters); } }
         public ObservableCollection<MethodParameterViewModel> InputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
         public ObservableCollection<MethodParameterViewModel> OutputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();

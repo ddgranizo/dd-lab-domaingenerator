@@ -40,7 +40,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
             {
                 Value = 0.ToString();
             }
-            _view.RaiseValueChangedEvent(myValue);
+            else
+            {
+                _view.RaiseValueChangedEvent(myValue);
+            }
         }
 
         private void SetDefaultValue(int value)

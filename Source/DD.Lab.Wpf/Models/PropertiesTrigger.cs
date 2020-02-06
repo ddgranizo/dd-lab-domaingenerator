@@ -17,11 +17,13 @@ namespace DD.Lab.Wpf.Models
             Properties = properties;
             Action = action ?? throw new ArgumentNullException(nameof(action));
             Mode = TriggerMode.EveryChange;
+            SetNullParametersWhenExecutedOnce = true;
         }
 
         public string[] Properties { get; set; }
         public Action Action { get; set; }
         public TriggerMode Mode { get; set; }
         public int ExecutionTimes { get; set; }
+        public bool SetNullParametersWhenExecutedOnce { get; set; }
     }
 }

@@ -5,8 +5,10 @@ using System.Text;
 
 namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
 {
-    public class SentenceInputParameter
+    public class SentenceInputReferencedParameter
     {
+        public MethodParameter RegardingParameter { get; set; }
+
         public enum SentenceSourceTpye
         {
             UseCaseInput = 5,
@@ -18,7 +20,6 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
 
         public UseCaseSentence RegardingSentence { get; set; }
         public UseCaseSentence RegardingSentenceOutputParameter { get; set; }
-
         public MethodParameter RegardingUseCaseParameter { get; set; }
     }
 }

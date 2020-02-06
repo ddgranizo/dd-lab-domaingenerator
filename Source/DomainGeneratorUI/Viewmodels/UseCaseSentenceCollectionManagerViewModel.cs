@@ -5,6 +5,8 @@ using DomainGeneratorUI.Controls;
 using DomainGeneratorUI.Inputs;
 using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Models.UseCases.Sentences.Base;
+using DomainGeneratorUI.Viewmodels.Methods;
+using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,6 +37,45 @@ namespace DomainGeneratorUI.Viewmodels
             SetSentenceTypes();
             InitializeCommands();
         }
+
+        public List<MethodParameterReferenceViewModel> GetOutputParametersForSentence(UseCaseSentenceViewModel sentence)
+        {
+            var parameters = new List<MethodParameterReferenceViewModel>();
+            parameters.AddRange(UseCaseSentenceCollectionManagerInputData.ParentOutputParameters);
+            var allSentences = UseCaseSentenceCollectionManagerInputData
+                    .SentenceCollection
+                    .Sentences;
+
+            var index = allSentences
+                    .IndexOf(sentence);
+
+            for (int i = 0; i < index; i++)
+            {
+                var targetSentence = allSentences[i];
+                parameters.AddRange(targetSentence.OutputParameters.Select(k=>new MethodParameterReferenceViewModel(targetSentence, k)));
+            }
+            return parameters;
+        }
+
+        public List<MethodParameterReferenceViewModel> GetInputParametersForSentence(UseCaseSentenceViewModel sentence)
+        {
+            var parameters = new List<MethodParameterReferenceViewModel>();
+            parameters.AddRange(UseCaseSentenceCollectionManagerInputData.ParentInputParameters);
+            var allSentences = UseCaseSentenceCollectionManagerInputData
+                    .SentenceCollection
+                    .Sentences;
+
+            var index = allSentences
+                    .IndexOf(sentence);
+
+            for (int i = 0; i < index; i++)
+            {
+                var targetSentence = allSentences[i];
+                parameters.AddRange(targetSentence.OutputParameters.Select(k => new MethodParameterReferenceViewModel(targetSentence, k)));
+            }
+            return parameters;
+        }
+
 
         private void SetSentenceTypes()
         {

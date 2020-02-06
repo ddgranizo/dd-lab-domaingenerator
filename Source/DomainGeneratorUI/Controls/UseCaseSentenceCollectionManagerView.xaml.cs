@@ -66,14 +66,13 @@ namespace DomainGeneratorUI.Controls
                           typeof(UseCaseSentenceCollectionManagerInputData),
                           typeof(UseCaseSentenceCollectionManagerView), new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropsValueChangedHandler)));
 
-
-		private readonly UseCaseSentenceCollectionManagerViewModel _viewModel = null;
+        public UseCaseSentenceCollectionManagerViewModel ViewModel { get; }
 
         public UseCaseSentenceCollectionManagerView()
         {
             InitializeComponent();
-			_viewModel = Resources["ViewModel"] as UseCaseSentenceCollectionManagerViewModel;
-			_viewModel.Initialize(this);
+			ViewModel = Resources["ViewModel"] as UseCaseSentenceCollectionManagerViewModel;
+            ViewModel.Initialize(this);
         }
 
 
@@ -89,7 +88,7 @@ namespace DomainGeneratorUI.Controls
 
         private void SetUseCaseSentenceCollectionManagerInputData(UseCaseSentenceCollectionManagerInputData data)
         {
-            _viewModel.UseCaseSentenceCollectionManagerInputData = data;
+            ViewModel.UseCaseSentenceCollectionManagerInputData = data;
         }
 
         private void UseCaseSentenceManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)

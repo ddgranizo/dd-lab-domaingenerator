@@ -4,17 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:DomainGeneratorUI.Viewmodels"
+        xmlns:ddconv="clr-namespace:DD.Lab.Wpf.Converters;assembly=DD.Lab.Wpf"
         xmlns:conv="clr-namespace:DomainGeneratorUI.Converters"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:user="clr-namespace:DomainGeneratorUI.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
+    <UserControl.Resources>
         <vm:UseCaseSentenceCollectionManagerViewModel x:Key="ViewModel" d:IsDataSource="True" />
         <conv:SentenceTypeToCollapsedConverter x:Key="SentenceTypeToCollapsedConverter" />
+        <!--<ObjectDataProvider x:Key="ChildParametersInCollectionProvider" 
+                            ObjectType="{x:Type prov:ChildParametersInCollectionProvider}"  
+                            MethodName="GetInputParametersForSentence">
+            <ObjectDataProvider.ConstructorParameters>
+                <Binding Source="{StaticResource ViewModel}" Path="UseCaseSentenceCollectionManagerInputData.UseCaseInputParameters" />
+                <Binding Source="{StaticResource ViewModel}" Path="UseCaseSentenceCollectionManagerInputData.SentenceCollection.SentencesCollection" />
+            </ObjectDataProvider.ConstructorParameters>
+        </ObjectDataProvider>-->
+        <ddconv:MethodToValueConverter x:Key="MethodToValueConverter"/>
+
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
-            
+
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -37,14 +49,22 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <user:UseCaseSentenceContainerView 
-                                Sentence="{Binding}" 
-                                GenericManager="{Binding Path=UseCaseSentenceCollectionManagerInputData.GenericManager ,RelativeSource={RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}}"
-                                UpdatedUseCase="UseCaseSentenceManagerView_UpdatedUseCase"  
-                                />
+                            Sentence="{Binding}" 
+                            GenericManager="{Binding Path=UseCaseSentenceCollectionManagerInputData.GenericManager ,RelativeSource={RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}}"
+                            ParentOutputParameters="{Binding Path=UseCaseSentenceCollectionManagerInputData.ParentOutputParameters ,RelativeSource={RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}}"
+                            UpdatedUseCase="UseCaseSentenceManagerView_UpdatedUseCase">
+                            <user:UseCaseSentenceContainerView.ParentInputParameters>
+                                <MultiBinding Converter="{StaticResource MethodToValueConverter}" ConverterParameter="GetInputParametersForSentence">
+                                    <Binding  RelativeSource="{RelativeSource AncestorType=user:UseCaseSentenceCollectionManagerView}" Path="ViewModel"/>
+                                    <Binding />
+                                </MultiBinding>
+                            </user:UseCaseSentenceContainerView.ParentInputParameters>
+                            
+                        </user:UseCaseSentenceContainerView>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        
+
     </Grid>
 </UserControl>

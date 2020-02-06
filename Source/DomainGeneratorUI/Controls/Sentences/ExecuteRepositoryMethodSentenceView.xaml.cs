@@ -88,6 +88,23 @@ namespace DomainGeneratorUI.Controls.Sentences
             _viewModel.ExecuteRepositoryMethodSentenceInputData = data;
         }
 
-      
+    
+        private void Name_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var command = _viewModel.EditCommand;
+            if (command.CanExecute(null))
+            {
+                command.Execute(null);
+            }
+        }
+
+        private void Inputs_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var command = _viewModel.ManageInputsCommand;
+            if (command.CanExecute(null))
+            {
+                command.Execute(null);
+            }
+        }
     }
 }

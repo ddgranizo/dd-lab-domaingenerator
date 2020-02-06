@@ -32,10 +32,12 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
 
             InputParameters = baseSentence.InputParameters;
             OutputParameters = baseSentence.OutputParameters;
+            ReferencedInputParametersValues = baseSentence.ReferencedInputParametersValues;
+            //InputReferencedParameters = baseSentence.InputReferencedParameters;
+            //OutputReferencedParameters = baseSentence.OutputReferencedParameters;
             Name = baseSentence.Name;
             Description = baseSentence.Description;
             DisplayName = baseSentence.DisplayName;
-
         }
 
         public ExecuteRepositoryMethodSentence(string schemaName, string repositoryName, RepositoryMethod repositoryMethod)
@@ -63,21 +65,26 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
 
             var repositoryMethod = JsonConvert.DeserializeObject<RepositoryMethodContent>(regardingRepositoryMethod.Content);
 
-            foreach (var item in repositoryMethod.Parameteters.Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Input))
+            
+
+            foreach (var item in repositoryMethod.Parameteters
+                                    .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Input))
             {
-                InputParameters.Add(new SentenceInputParameter()
-                {
-                    Type = SentenceInputParameter.SentenceSourceTpye.UseCaseInput,
-                    RegardingUseCaseParameter = item,
-                });
+                InputParameters.Add(item);
+                //InputReferencedParameters.Add(new SentenceInputReferencedParameter()
+                //{
+                //    RegardingParameter = item,
+                //});
             }
 
-            foreach (var item in repositoryMethod.Parameteters.Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Output))
+            foreach (var item in repositoryMethod.Parameteters
+                                    .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Output))
             {
-                OutputParameters.Add(new SentenceOutputParameter()
-                {
-                    SourceParameter = item,
-                });
+                OutputParameters.Add(item);
+                //OutputReferencedParameters.Add(new SentenceOutputReferencedParameter()
+                //{
+                //    RegardingParameter = item,
+                //});
             }
         }
 

@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Windows\InputParameterSelectorWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Windows\EditRepositoryMethodWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

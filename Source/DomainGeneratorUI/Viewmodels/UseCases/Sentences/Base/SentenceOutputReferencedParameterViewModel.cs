@@ -6,9 +6,9 @@ using System.Text;
 
 namespace DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base
 {
-    public class SentenceOutputParameterViewModel : BaseViewModel
+    public class SentenceOutputReferencedParameterViewModel : BaseViewModel
     {
-        public MethodParameterViewModel SourceParameter { get { return GetValue<MethodParameterViewModel>(); } set { SetValue(value); } }
+        public MethodParameterViewModel RegardingParameter { get { return GetValue<MethodParameterViewModel>(); } set { SetValue(value); } }
 
     }
 }

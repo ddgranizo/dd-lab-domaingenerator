@@ -23,14 +23,14 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 
         private DecimalInputControlView _view;
 
-		public DecimalInputControlViewModel()
+        public DecimalInputControlViewModel()
         {
-			
+
         }
 
         public void Initialize(DecimalInputControlView v)
         {
-			_view = v;
+            _view = v;
             Value = DefaultValue.ToString();
         }
 
@@ -40,7 +40,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
             {
                 Value = 0.ToString();
             }
-            _view.RaiseValueChangedEvent(myValue);
+            else
+            {
+                _view.RaiseValueChangedEvent(myValue);
+            }
         }
 
         private void SetDefaultValue(decimal value)

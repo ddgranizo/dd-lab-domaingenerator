@@ -116,7 +116,7 @@ namespace DomainGeneratorUI.Viewmodels
             }
             else
             {
-                content = JsonUtility.GetInstanceWithTypes<TContent>(contentJson);
+                content = JsonUtility.ObjectifyWithTypes<TContent>(contentJson);
             }
 
             if (editing)
@@ -127,7 +127,7 @@ namespace DomainGeneratorUI.Viewmodels
                 if (editContentWindow.GetResponse() == EditorWindowResponse.OK)
                 {
                     var newContent = editContentWindow.GetContent();
-                    newContentJson = JsonUtility.Stringfy<TContent>(newContent);
+                    newContentJson = JsonUtility.StringfyWithTypes<TContent>(newContent);
                 }
             }
             return newContentJson;

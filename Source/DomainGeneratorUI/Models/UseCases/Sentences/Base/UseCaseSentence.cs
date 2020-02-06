@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainGeneratorUI.Models.Methods;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,13 +18,20 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
         public string DisplayName { get; set; }
         public string Description { get; set; }
 
-        public List<SentenceInputParameter> InputParameters { get; set; }
-        public List<SentenceOutputParameter> OutputParameters { get; set; }
+        public List<MethodParameter> InputParameters { get; set; }
+        public List<MethodParameter> OutputParameters { get; set; }
+        //public List<SentenceInputReferencedParameter> InputReferencedParameters { get; set; }
+        //public List<SentenceOutputReferencedParameter> OutputReferencedParameters { get; set; }
+
+        public List<MethodParameterReferenceValueViewModel> ReferencedInputParametersValues { get; set; }
         public Dictionary<string, object> Values { get; set; }
         public UseCaseSentence()
         {
-            InputParameters = new List<SentenceInputParameter>();
-            OutputParameters = new List<SentenceOutputParameter>();
+            ReferencedInputParametersValues = new List<MethodParameterReferenceValueViewModel>();
+            //InputReferencedParameters = new List<SentenceInputReferencedParameter>();
+            //OutputReferencedParameters = new List<SentenceOutputReferencedParameter>();
+            OutputParameters = new List<MethodParameter>();
+            InputParameters = new List<MethodParameter>();
             Values = new Dictionary<string, object>();
         }
     }

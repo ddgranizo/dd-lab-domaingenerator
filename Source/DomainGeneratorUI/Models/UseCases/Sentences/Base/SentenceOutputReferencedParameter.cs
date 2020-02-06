@@ -5,8 +5,8 @@ using System.Text;
 
 namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
 {
-    public class SentenceOutputParameter
+    public class SentenceOutputReferencedParameter
     {
-        public MethodParameter SourceParameter { get; set; }
+        public MethodParameter RegardingParameter { get; set; }
     }
 }

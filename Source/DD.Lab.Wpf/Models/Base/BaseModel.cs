@@ -181,24 +181,39 @@ namespace DD.Lab.Wpf.Models.Base
                     {
                         item.Action.Invoke();
                         item.ExecutionTimes++;
+                        //if (item.SetNullParametersWhenExecutedOnce)
+                        //{
+                        //    SetPreviousValueNull(item.Properties);
+                        //}
                     }
                 }
             }
         }
 
-        private bool PropertiesHasChanged(string[] properties)
+        private void SetPreviousValueNull(string[] properties)
         {
-            bool hasChanged = false;
             foreach (var item in properties)
             {
-                hasChanged = hasChanged ? hasChanged : PropertyHasChanged(item);
+                _previewsValues[item] = null;
             }
-            return hasChanged;
+        }
+
+        private bool PropertiesHasChanged(string[] properties)
+        {
+            Dictionary<string, bool> propertiesChanged = new Dictionary<string, bool>();
+            foreach (var item in properties)
+            {
+                var hasChanged = PropertyHasChanged(item);
+                propertiesChanged.Add(item, hasChanged);
+            }
+            return propertiesChanged.All(k=>k.Value);
         }
 
         private bool PropertyHasChanged(string property)
         {
-            return _values[property] != _previewsValues[property];
+            return _values.ContainsKey(property) 
+                    && _previewsValues.ContainsKey(property)
+                    && _values[property] != _previewsValues[property];
         }
 
     }

@@ -25,7 +25,7 @@ namespace DomainGeneratorUI.Utilities
             }
         }
 
-        public static T GetInstanceWithTypes<T>(string json) where T : IInitializable<T>, new()
+        public static T ObjectifyWithTypes<T>(string json) where T : IInitializable<T>, new()
         {
             if (string.IsNullOrEmpty(json))
             {
@@ -51,9 +51,14 @@ namespace DomainGeneratorUI.Utilities
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static string Stringfy<T>(T content)
+        public static string StringfyWithTypes<T>(T content)
         {
-            return JsonConvert.SerializeObject(content);
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+            return JsonConvert.SerializeObject(content, settings);
         }
 
 

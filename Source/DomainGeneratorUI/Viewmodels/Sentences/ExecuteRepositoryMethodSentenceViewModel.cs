@@ -17,6 +17,7 @@ using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.Methods;
 using DomainGeneratorUI.Viewmodels.UseCases;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
+using DomainGeneratorUI.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,6 +39,9 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         public UseCaseSentenceViewModel BasicSentence { get { return GetValue<UseCaseSentenceViewModel>(); } set { SetValue(value, UpdatedBasicSentence); } }
         public GenericManager GenericManager { get; set; }
         public ExecuteRepositoryMethodSentence Sentence { get; set; }
+        public List<MethodParameterReferenceViewModel> ParentInputParameters { get; set; }
+        public List<MethodParameterReferenceViewModel> ParentOutputParameters { get; set; }
+
         private ExecuteRepositoryMethodSentenceView _view;
         public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
 
@@ -50,7 +54,6 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             InitializeMapper();
         }
 
-
         public void Initialize(ExecuteRepositoryMethodSentenceView v)
         {
             _view = v;
@@ -61,13 +64,12 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             Mapper = new Mapper(ConfigureMappingProfiles());
         }
 
-
         public ICommand EditCommand { get; set; }
+        public ICommand ManageInputsCommand { get; set; }
         private void InitializeCommands()
         {
             EditCommand = new RelayCommandHandled((input) =>
             {
-                //var current = Sentence.RepositoryMethod;
                 var finderRecord = new GenericRecordFinderWindow(GenericManager, Domain.LogicalName, Guid.Empty, RepositoryMethod.LogicalName);
                 finderRecord.ShowDialog();
                 if (finderRecord.Response == DD.Lab.Wpf.Windows.WindowResponse.OK)
@@ -78,6 +80,25 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 }
             });
 
+            ManageInputsCommand = new RelayCommandHandled((input) =>
+            {
+               
+
+                var window = new InputParameterSelectorWindow(
+                    GenericManager, 
+                    BasicSentence.InputParameters,
+                    ParentInputParameters, 
+                    BasicSentence.ReferencedInputParametersValues);
+                window.ShowDialog();
+                //if (window.Response == DD.Lab.Wpf.Windows.WindowResponse.OK)
+                //{
+                ////    var record = finderRecord.ResponseValue;
+                ////    var repositoryMethod = Entity.DictionartyToEntity<RepositoryMethod>(record.Values);
+                ////    UpdatedExecuteRepositoryMethodSentence(repositoryMethod);
+                //}
+            });
+
+            RegisterCommand(ManageInputsCommand);
             RegisterCommand(EditCommand);
         }
 
@@ -95,6 +116,8 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         {
             BasicSentence = data.Sentence;
             GenericManager = data.GenericManager;
+            ParentInputParameters = data.ParentInputParameters;
+            ParentOutputParameters = data.ParentOutputParameters;
         }
 
         private void UpdatedBasicSentence(UseCaseSentenceViewModel data)
@@ -117,11 +140,10 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
                 mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>();
                 mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
-                mc.CreateReversiveMap<SentenceInputParameter, SentenceInputParameterViewModel>();
-                mc.CreateReversiveMap<SentenceOutputParameter, SentenceOutputParameterViewModel>();
+                mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
+                mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
             });
         }
-
 
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DD.Lab.Wpf.ViewModels.Base;
+using DomainGeneratorUI.Models.Methods;
+using DomainGeneratorUI.Viewmodels.Methods;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,11 +19,21 @@ namespace DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base
         public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
 
 
-        public List<SentenceInputParameterViewModel> InputParameters { get { return GetValue<List<SentenceInputParameterViewModel>>(); } set { SetValue(value);  UpdateListToCollection(value, InputParametetersCollection); } }
-        public ObservableCollection<SentenceInputParameterViewModel> InputParametetersCollection { get; set; } = new ObservableCollection<SentenceInputParameterViewModel>();
+        public List<MethodParameterViewModel> InputParameters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value);  UpdateListToCollection(value, InputParametetersCollection); } }
+        public ObservableCollection<MethodParameterViewModel> InputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
 
-        public List<SentenceOutputParameterViewModel> OutputParameters { get { return GetValue<List<SentenceOutputParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
-        public ObservableCollection<SentenceOutputParameterViewModel> OutputParametersCollection { get; set; } = new ObservableCollection<SentenceOutputParameterViewModel>();
+        public List<MethodParameterViewModel> OutputParameters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputParametersCollection); } }
+        public ObservableCollection<MethodParameterViewModel> OutputParametersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
+
+        //public List<SentenceInputReferencedParameterViewModel> InputReferencedParameters { get { return GetValue<List<SentenceInputReferencedParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, InputReferencedParametetersCollection); } }
+        //public ObservableCollection<SentenceInputReferencedParameterViewModel> InputReferencedParametetersCollection { get; set; } = new ObservableCollection<SentenceInputReferencedParameterViewModel>();
+
+        //public List<SentenceOutputReferencedParameterViewModel> OutputReferencedParameters { get { return GetValue<List<SentenceOutputReferencedParameterViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, OutputReferencedParametersCollection); } }
+        //public ObservableCollection<SentenceOutputReferencedParameterViewModel> OutputReferencedParametersCollection { get; set; } = new ObservableCollection<SentenceOutputReferencedParameterViewModel>();
+
+        public List<MethodParameterReferenceValueViewModel> ReferencedInputParametersValues { get { return GetValue<List<MethodParameterReferenceValueViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, ReferencedInputParametersValuesCollection); } }
+        public ObservableCollection<MethodParameterReferenceValueViewModel> ReferencedInputParametersValuesCollection { get; set; } = new ObservableCollection<MethodParameterReferenceValueViewModel>();
+
 
         public Dictionary<string, object> Values { get { return GetValue<Dictionary<string, object>>(); } set { SetValue(value); } }
 

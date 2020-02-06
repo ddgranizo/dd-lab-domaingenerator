@@ -24,14 +24,14 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
 
         private DoubleInputControlView _view;
 
-		public DoubleInputControlViewModel()
+        public DoubleInputControlViewModel()
         {
-			
+
         }
 
         public void Initialize(DoubleInputControlView v)
         {
-			_view = v;
+            _view = v;
         }
 
         private void UpdatedValue(string value)
@@ -40,7 +40,10 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
             {
                 Value = 0.ToString();
             }
-            _view.RaiseValueChangedEvent(myValue);
+            else
+            {
+                _view.RaiseValueChangedEvent(myValue);
+            }
         }
 
         private void SetDefaultValue(double value)
