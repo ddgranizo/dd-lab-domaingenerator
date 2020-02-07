@@ -47,6 +47,7 @@ namespace DomainGeneratorUI.Windows
             List<MethodParameterReferenceViewModel> availableInputParameterReferences,
             List<MethodParameterReferenceValueViewModel> methodInputParametersReferenceValues)
         {
+            //TODO: check if methodInputParametersReferenceValues has the same input parameters than methodInputParameters, because if the inputs are set and the repositoryMethod change the inputs, here you will still see the old parameters.
             InitializeComponent();
             ViewModel = Resources["ViewModel"] as InputParameterSelectorWindowViewmodel;
             ViewModel.Initialize(this, manager, methodInputParameters, availableInputParameterReferences, methodInputParametersReferenceValues);

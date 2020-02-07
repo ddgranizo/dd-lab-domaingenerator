@@ -315,9 +315,9 @@ namespace DomainGeneratorUI.Workflows.Schemas
             if (outputParameter != null)
             {
                 outputParameter.Direction = MethodParameter.ParameterDirection.Output;
-                content.Parameteters.Add(outputParameter);
+                content.Parameters.Add(outputParameter);
             }
-            content.Parameteters.AddRange(inputParameters);
+            content.Parameters.AddRange(inputParameters);
 
             var method = new RepositoryMethod()
             {
@@ -338,7 +338,7 @@ namespace DomainGeneratorUI.Workflows.Schemas
             {
                 item.Direction = MethodParameter.ParameterDirection.Input;
             }
-            content.Parameteters.AddRange(inputParameters);
+            content.Parameters.AddRange(inputParameters);
 
             var method = new RepositoryMethod()
             {

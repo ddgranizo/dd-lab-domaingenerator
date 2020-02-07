@@ -77,6 +77,9 @@ namespace DomainGeneratorUI.Viewmodels
                 else
                 {
                     SelectedSourceType = SourceTypes.ElementAt(1);
+                    //TODO: match the parameter no by display name, but other unique parameter
+                    SelectedMethodParameterReference = AvailableParameterReferences.FirstOrDefault
+                        (k => k.DisplayName == data.RegardingReferenceMethodParameter.DisplayName);
                 }
                 newValue.RegardingMethodParameter = data.RegardingMethodParameter;
                 newValue.RegardingReferenceMethodParameter = data.RegardingReferenceMethodParameter;

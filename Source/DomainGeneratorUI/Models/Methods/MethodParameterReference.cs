@@ -19,20 +19,26 @@ namespace DomainGeneratorUI.Models.Methods
         public MethodParameterReferenceType ReferenceType { get; set; }
 
 
+        public MethodParameterReference()
+        {
+
+        }
+
+
         public MethodParameterReference(
             UseCaseSentence sentence,
             MethodParameter methodParameter,
             MethodParameterReferenceType referenceType)
         {
-            Sentence = sentence ?? throw new ArgumentNullException(nameof(sentence));
-            MethodParameter = methodParameter ?? throw new ArgumentNullException(nameof(methodParameter));
+            Sentence = sentence ;
+            MethodParameter = methodParameter ;
             ReferenceType = referenceType;
         }
 
         public MethodParameterReference(
             MethodParameter methodParameter)
         {
-            MethodParameter = methodParameter ?? throw new ArgumentNullException(nameof(methodParameter));
+            MethodParameter = methodParameter;
             ReferenceType = MethodParameterReferenceType.UseCase;
         }
 
@@ -40,8 +46,8 @@ namespace DomainGeneratorUI.Models.Methods
             UseCaseSentence sentence,
             MethodParameter methodParameter)
         {
-            Sentence = sentence ?? throw new ArgumentNullException(nameof(sentence));
-            MethodParameter = methodParameter ?? throw new ArgumentNullException(nameof(methodParameter));
+            Sentence = sentence ;
+            MethodParameter = methodParameter;
             ReferenceType = MethodParameterReferenceType.UseCaseSentence;
         }
     }

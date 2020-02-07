@@ -22,6 +22,8 @@ using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using DD.Lab.Wpf.Commands;
 using System.Linq;
+using DomainGeneratorUI.Viewmodels.RepositoryMethods;
+using DomainGeneratorUI.Models.RepositoryMethods;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -103,6 +105,15 @@ namespace DomainGeneratorUI.Viewmodels
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
                 mc.CreateReversiveMap<MethodParameterReference, MethodParameterReferenceViewModel>();
+
+                //mc.CreateMap<UseCaseContentViewModel, UseCaseContent>();
+                //mc.CreateMap<UseCaseContent, UseCaseContentViewModel>()
+                //    .ForMember(x => x.InputParametetersCollection, opt => opt.Ignore())
+                //    .ForMember(x => x.OutputParametetersCollection, opt => opt.Ignore());
+
+                //mc.CreateMap<UseCaseSentenceCollectionViewModel, UseCaseSentenceCollection>();
+                //mc.CreateMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>()
+                //    .ForMember(x => x.SentencesCollection, opt => opt.Ignore());
             });
         }
 
@@ -128,7 +139,8 @@ namespace DomainGeneratorUI.Viewmodels
 
         private void UpdateUseCaseContent(UseCaseContentViewModel newValue)
         {
-            Content = Mapper.Map<UseCaseContent>(ContentView);
+            var data = Mapper.Map<UseCaseContent>(ContentView);
+            Content = data;
         }
     }
 }

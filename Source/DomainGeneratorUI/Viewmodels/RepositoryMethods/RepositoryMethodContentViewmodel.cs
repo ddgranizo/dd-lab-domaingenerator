@@ -11,13 +11,11 @@ namespace DomainGeneratorUI.Viewmodels.RepositoryMethods
 {
     public class RepositoryMethodContentViewmodel : BaseViewModel
     {
-        public List<MethodParameterViewModel> Parameteters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value, UpdatedParameteters);  } }
+        public List<MethodParameterViewModel> Parameters { get { return GetValue<List<MethodParameterViewModel>>(); } set { SetValue(value, UpdatedParameters);  } }
         public ObservableCollection<MethodParameterViewModel> InputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
         public ObservableCollection<MethodParameterViewModel> OutputParametetersCollection { get; set; } = new ObservableCollection<MethodParameterViewModel>();
 
-        public UseCaseSentenceCollectionViewModel SentenceCollection { get { return GetValue<UseCaseSentenceCollectionViewModel>(); } set { SetValue(value); } }
-
-        private void UpdatedParameteters(List<MethodParameterViewModel> parameters)
+        private void UpdatedParameters(List<MethodParameterViewModel> parameters)
         {
             var inputParameters = parameters
                 .Where(k => k.Direction == Models.Methods.MethodParameter.ParameterDirection.Input)

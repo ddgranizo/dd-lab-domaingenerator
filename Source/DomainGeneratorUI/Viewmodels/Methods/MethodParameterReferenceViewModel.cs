@@ -22,12 +22,16 @@ namespace DomainGeneratorUI.Viewmodels.Methods
         public MethodParameterViewModel MethodParameter { get { return GetValue<MethodParameterViewModel>(); } set { SetValue(value); } }
         public MethodParameterReferenceType ReferenceType { get { return GetValue<MethodParameterReferenceType>(); } set { SetValue(value); } }
 
+        public MethodParameterReferenceViewModel()
+        {
+        }
+
         public MethodParameterReferenceViewModel(
             UseCaseSentenceViewModel sentence,
             MethodParameterViewModel methodParameter,
             MethodParameterReferenceType referenceType)
         {
-            Sentence = sentence ?? throw new ArgumentNullException(nameof(sentence));
+            Sentence = sentence ;
             MethodParameter = methodParameter ?? throw new ArgumentNullException(nameof(methodParameter));
             ReferenceType = referenceType;
         }
@@ -43,7 +47,7 @@ namespace DomainGeneratorUI.Viewmodels.Methods
             UseCaseSentenceViewModel sentence,
             MethodParameterViewModel methodParameter)
         {
-            Sentence = sentence ?? throw new ArgumentNullException(nameof(sentence));
+            Sentence = sentence ;
             MethodParameter = methodParameter ?? throw new ArgumentNullException(nameof(methodParameter));
             ReferenceType = MethodParameterReferenceType.UseCaseSentence;
         }

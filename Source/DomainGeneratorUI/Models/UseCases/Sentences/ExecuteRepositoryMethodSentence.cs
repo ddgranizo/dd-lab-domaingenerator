@@ -67,7 +67,7 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
 
             
 
-            foreach (var item in repositoryMethod.Parameteters
+            foreach (var item in repositoryMethod.Parameters
                                     .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Input))
             {
                 InputParameters.Add(item);
@@ -77,7 +77,7 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
                 //});
             }
 
-            foreach (var item in repositoryMethod.Parameteters
+            foreach (var item in repositoryMethod.Parameters
                                     .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Output))
             {
                 OutputParameters.Add(item);

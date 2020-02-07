@@ -32,11 +32,11 @@ namespace DD.Lab.Wpf.Commands
             catch (Exception ex)
             {
                 MessageBox.Show($"Error executing command.{Environment.NewLine}Error description: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-//#if DEBUG
-//                throw;
-//#endif
+#if DEBUG
+                throw;
+#endif
             }
-            
+
         }
     }
 }

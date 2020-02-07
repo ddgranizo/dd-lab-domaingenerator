@@ -147,6 +147,7 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
                 mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>();
                 mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
+                mc.CreateReversiveMap<MethodParameterReference, MethodParameterReferenceViewModel>();
                 mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
                 mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();

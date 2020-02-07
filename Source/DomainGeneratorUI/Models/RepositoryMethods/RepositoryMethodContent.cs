@@ -1,5 +1,6 @@
 ﻿using DomainGeneratorUI.Interfaces;
 using DomainGeneratorUI.Models.Methods;
+using DomainGeneratorUI.Models.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,17 +10,17 @@ namespace DomainGeneratorUI.Models.RepositoryMethods
 {
     public class RepositoryMethodContent : IInitializable<RepositoryMethodContent>
     {
-        public List<MethodParameter> Parameteters { get; set; }
+        public List<MethodParameter> Parameters { get; set; }
 
         public RepositoryMethodContent()
         {
-            Parameteters = new List<MethodParameter>();
+            Parameters = new List<MethodParameter>();
 
         }
 
         public RepositoryMethodContent AddInputParameter(string name, ParameterInputType type)
         {
-            Parameteters.Add(new MethodParameter()
+            Parameters.Add(new MethodParameter()
             {
                 Direction = ParameterDirection.Input,
                 Name = name,
@@ -30,7 +31,7 @@ namespace DomainGeneratorUI.Models.RepositoryMethods
 
         public RepositoryMethodContent AddOutputParameter(string name, ParameterInputType type)
         {
-            Parameteters.Add(new MethodParameter()
+            Parameters.Add(new MethodParameter()
             {
                 Direction = ParameterDirection.Output,
                 Name = name,
@@ -41,7 +42,7 @@ namespace DomainGeneratorUI.Models.RepositoryMethods
 
         public RepositoryMethodContent AddDefaultOutputViewParameter()
         {
-            Parameteters.Add(new MethodParameter()
+            Parameters.Add(new MethodParameter()
             {
                 Direction = ParameterDirection.Output,
                 Name = "Collection",
