@@ -26,9 +26,9 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
         public ExecuteRepositoryMethodSentence(UseCaseSentence baseSentence)
         {
             Type = SentenceType.ExecuteRepositoryMethod;
-            SchemaName = (string)baseSentence.Values[nameof(SchemaName)];
-            RepositoryName = (string)baseSentence.Values[nameof(RepositoryName)];
-            RepositoryMethodId = (EntityReferenceValue)baseSentence.Values[nameof(RepositoryMethodId)];
+            SchemaName = GetValue<string>(nameof(SchemaName));
+            RepositoryName = GetValue<string>(nameof(RepositoryName)); 
+            RepositoryMethodId = GetValue<EntityReferenceValue>(nameof(RepositoryMethodId)); 
 
             InputParameters = baseSentence.InputParameters;
             OutputParameters = baseSentence.OutputParameters;

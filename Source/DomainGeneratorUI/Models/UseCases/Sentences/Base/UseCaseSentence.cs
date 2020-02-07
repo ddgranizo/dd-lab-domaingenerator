@@ -34,5 +34,15 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
             InputParameters = new List<MethodParameter>();
             Values = new Dictionary<string, object>();
         }
+
+
+        public T GetValue<T>(string name)
+        {
+            if (Values.ContainsKey(name))
+            {
+                return (T)Values[name];
+            }
+            return default(T);
+        }
     }
 }
