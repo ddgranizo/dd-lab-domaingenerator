@@ -8,12 +8,27 @@ namespace DD.Lab.Wpf.Drm.Services.Implementations
 {
     public class JsonParserService : IJsonParserService
     {
+        public T Clone<T>(T instance)
+        {
+            return ObjectifyWithTypes<T>(StringfyWithTypes(instance));
+        }
+
         public T Objectify<T>(string json)
         {
             var settings = new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 //TypeNameHandling = TypeNameHandling.None
+            };
+            return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
+        public T ObjectifyWithTypes<T>(string json)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.None
             };
             return JsonConvert.DeserializeObject<T>(json, settings);
         }

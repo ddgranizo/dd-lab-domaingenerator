@@ -61,7 +61,16 @@ namespace DD.Lab.Wpf.Viewmodels.Inputs
                 }
                 else if (model.Type == GenericFormInputModel.TypeValue.Decimal)
                 {
-                    DefaultDecimalValue = (decimal)model.DefaultValue;
+                    decimal decimalValue;
+                    if (model.DefaultValue is double)
+                    {
+                        decimalValue = Convert.ToDecimal(model.DefaultValue);
+                    }
+                    else
+                    {
+                        decimalValue = (decimal)model.DefaultValue;
+                    }
+                    DefaultDecimalValue = decimalValue;
                 }
                 else if (model.Type == GenericFormInputModel.TypeValue.Double)
                 {

@@ -82,24 +82,31 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
 
             ManageInputsCommand = new RelayCommandHandled((input) =>
             {
-               
+                var parameters = GenericManager.ParserService.Clone<List<MethodParameterReferenceValueViewModel>>
+                            (BasicSentence.ReferencedInputParametersValues);
 
                 var window = new InputParameterSelectorWindow(
                     GenericManager, 
                     BasicSentence.InputParameters,
-                    ParentInputParameters, 
-                    BasicSentence.ReferencedInputParametersValues);
+                    ParentInputParameters,
+                    parameters);
                 window.ShowDialog();
-                //if (window.Response == DD.Lab.Wpf.Windows.WindowResponse.OK)
-                //{
-                ////    var record = finderRecord.ResponseValue;
-                ////    var repositoryMethod = Entity.DictionartyToEntity<RepositoryMethod>(record.Values);
-                ////    UpdatedExecuteRepositoryMethodSentence(repositoryMethod);
-                //}
+                if (window.Response == DD.Lab.Wpf.Windows.WindowResponse.OK) 
+                {
+                    var response = window.OutputMethodInputParametersReferenceValues;
+                    UpdatedExecuteRepositoryMethodSentenceInputParameters(response);
+                }
             });
 
             RegisterCommand(ManageInputsCommand);
             RegisterCommand(EditCommand);
+        }
+
+
+        private void UpdatedExecuteRepositoryMethodSentenceInputParameters(List<MethodParameterReferenceValueViewModel> parameters)
+        {
+            BasicSentence.ReferencedInputParametersValues = parameters;
+            _view.RaiseUpdateUseCaseSentenceEvent(parameters, BasicSentence);
         }
 
         private void UpdatedExecuteRepositoryMethodSentence(RepositoryMethod method)
@@ -140,8 +147,10 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 mc.CreateReversiveMap<MethodParameter, MethodParameterViewModel>();
                 mc.CreateReversiveMap<UseCaseSentenceCollection, UseCaseSentenceCollectionViewModel>();
                 mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
+                mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
                 mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
+                
             });
         }
 

@@ -1,6 +1,7 @@
 
 using DomainGeneratorUI.Events;
 using DomainGeneratorUI.Inputs;
+using DomainGeneratorUI.Models.Methods;
 using DomainGeneratorUI.Models.UseCases.Sentences.Base;
 using DomainGeneratorUI.Viewmodels.Sentences;
 using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
@@ -41,6 +42,19 @@ namespace DomainGeneratorUI.Controls.Sentences
             {
                 UseCase = useCaseSentence,
                 UseCaseViewModel = viewmodel,
+                Type = UpdatedUseCaseSentenceEventArgs.UpdateType.Sentence,
+            };
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
+
+        public void RaiseUpdateUseCaseSentenceEvent(List<MethodParameterReferenceValueViewModel> parameters, UseCaseSentenceViewModel viewmodel)
+        {
+            RoutedEventArgs args = new UpdatedUseCaseSentenceEventArgs()
+            {
+                Parameters = parameters,
+                UseCaseViewModel = viewmodel,
+                Type = UpdatedUseCaseSentenceEventArgs.UpdateType.InputParameters,
             };
             args.RoutedEvent = UpdatedUseCaseEvent;
             RaiseEvent(args);

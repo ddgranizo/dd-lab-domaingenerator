@@ -23,11 +23,11 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
         //public List<SentenceInputReferencedParameter> InputReferencedParameters { get; set; }
         //public List<SentenceOutputReferencedParameter> OutputReferencedParameters { get; set; }
 
-        public List<MethodParameterReferenceValueViewModel> ReferencedInputParametersValues { get; set; }
+        public List<MethodParameterReferenceValue> ReferencedInputParametersValues { get; set; }
         public Dictionary<string, object> Values { get; set; }
         public UseCaseSentence()
         {
-            ReferencedInputParametersValues = new List<MethodParameterReferenceValueViewModel>();
+            ReferencedInputParametersValues = new List<MethodParameterReferenceValue>();
             //InputReferencedParameters = new List<SentenceInputReferencedParameter>();
             //OutputReferencedParameters = new List<SentenceOutputReferencedParameter>();
             OutputParameters = new List<MethodParameter>();

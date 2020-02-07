@@ -35,8 +35,10 @@ namespace DomainGeneratorUI.Viewmodels
         public List<MethodParameterReferenceViewModel> AvailableInputParameterReferences { get { return GetValue<List<MethodParameterReferenceViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, AvailableInputParameterReferencesCollection); } }
         public ObservableCollection<MethodParameterReferenceViewModel> AvailableInputParameterReferencesCollection { get; set; } = new ObservableCollection<MethodParameterReferenceViewModel>();
 
-        public List<MethodParameterReferenceValueViewModel> MethodInputParametersReferenceValues { get { return GetValue<List<MethodParameterReferenceValueViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, MethodInputParametersReferenceValuesCollection); } }
+        public List<MethodParameterReferenceValueViewModel> MethodInputParametersReferenceValues { get { return GetValue<List<MethodParameterReferenceValueViewModel>>(); } set { SetValue(value, UpdatedMethodInputParametersReferenceValues); UpdateListToCollection(value, MethodInputParametersReferenceValuesCollection); } }
         public ObservableCollection<MethodParameterReferenceValueViewModel> MethodInputParametersReferenceValuesCollection { get; set; } = new ObservableCollection<MethodParameterReferenceValueViewModel>();
+
+        public List<MethodParameterReferenceValueViewModel> NewInputParametersReferenceValues { get { return GetValue<List<MethodParameterReferenceValueViewModel>>(); } set { SetValue(value); } }
 
         public InputParameterSelectorWindowViewmodel()
         {
@@ -52,9 +54,11 @@ namespace DomainGeneratorUI.Viewmodels
             List<MethodParameterReferenceViewModel> availableInputParameterReferences,
             List<MethodParameterReferenceValueViewModel> methodInputParametersReferenceValues)
         {
-            _view = view 
+            NewInputParametersReferenceValues = new List<MethodParameterReferenceValueViewModel>();
+
+            _view = view
                 ?? throw new ArgumentNullException(nameof(view));
-            MethodInputParameters = methodInputParameters   
+            MethodInputParameters = methodInputParameters
                 ?? throw new ArgumentNullException(nameof(methodInputParameters));
             AvailableInputParameterReferences = availableInputParameterReferences
                 ?? throw new ArgumentNullException(nameof(availableInputParameterReferences)); ;
@@ -62,13 +66,27 @@ namespace DomainGeneratorUI.Viewmodels
                 ?? throw new ArgumentNullException(nameof(methodInputParametersReferenceValues));
             GenericManager = manager
                 ?? throw new ArgumentNullException(nameof(manager));
+
+
         }
 
         public MethodParameterReferenceValueViewModel GetCurrentValueForParameter(MethodParameterViewModel parameter)
         {
-            return MethodInputParametersReferenceValues.FirstOrDefault(k => k.RegardingMethodParameter == parameter);
+            return MethodInputParametersReferenceValues.FirstOrDefault(k => k.RegardingMethodParameter.Name == parameter.Name);
         }
 
+
+        private void UpdatedMethodInputParametersReferenceValues(List<MethodParameterReferenceValueViewModel> data)
+        {
+            if (data != null)
+            {
+                NewInputParametersReferenceValues.Clear();
+                foreach (var item in data)
+                {
+                    NewInputParametersReferenceValues.Add(item);
+                }
+            }
+        }
 
         public List<MethodParameterReferenceViewModel> GetAvailableParametersForMethodParmaeter(MethodParameterViewModel parameter)
         {
@@ -80,9 +98,47 @@ namespace DomainGeneratorUI.Viewmodels
         {
             SaveCommand = new RelayCommandHandled((input) =>
             {
-                
+                _view.SaveAndClose(NewInputParametersReferenceValues);
             });
             RegisterCommand(SaveCommand);
+        }
+
+
+        public void UpdatedParameterReferenceValue(
+            MethodParameterReferenceValueViewModel oldValue,
+            MethodParameterReferenceValueViewModel newValue)
+        {
+            if (newValue == null || (newValue.RegardingMethodParameter == null && newValue.RegardingReferenceMethodParameter == null))
+            {
+                return;
+            }
+            if (oldValue == null)
+            {
+                var sameParameter = newValue.RegardingMethodParameter;
+                var sameReference = NewInputParametersReferenceValues.FirstOrDefault(k => k.RegardingMethodParameter == sameParameter);
+                if (sameReference != null)
+                {
+                    int index = NewInputParametersReferenceValues.IndexOf(sameReference);
+                    if (index != -1)
+                    {
+                        NewInputParametersReferenceValues[index] = newValue;
+                    }
+                }
+                else
+                {
+                    NewInputParametersReferenceValues.Add(newValue);
+                }
+            }
+            else
+            {
+                var item = NewInputParametersReferenceValues.FirstOrDefault
+                    (k => k.RegardingMethodParameter.Name == oldValue.RegardingMethodParameter.Name);
+                var index = NewInputParametersReferenceValues.IndexOf(item);
+                if (index > -1)
+                {
+                    NewInputParametersReferenceValues[index] = newValue;
+                }
+            }
         }
     }
 }

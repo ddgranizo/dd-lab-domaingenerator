@@ -31,7 +31,6 @@ namespace DD.Lab.Wpf.Drm
 
         public IEntityReferenceSuggestionHandler EntityReferenceSuggestionHandler { get; set; }
 
-
         public List<WorkflowDefinition> CreateWorkflows { get; set; }
         public List<WorkflowDefinition> UpdateWorkflows { get; set; }
         public List<WorkflowDefinition> DeleteWorkflows { get; set; }

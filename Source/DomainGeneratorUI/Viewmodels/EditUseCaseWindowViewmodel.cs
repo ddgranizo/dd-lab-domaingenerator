@@ -54,7 +54,7 @@ namespace DomainGeneratorUI.Viewmodels
                 {
                     ParentInputParameters = ContentView.Parameters
                         .Where(k => k.Direction == MethodParameter.ParameterDirection.Input)
-                        .Select(k=> new MethodParameterReferenceViewModel(k))
+                        .Select(k => new MethodParameterReferenceViewModel(k))
                         .ToList(),
                     ParentOutputParameters = ContentView.Parameters
                         .Where(k => k.Direction == MethodParameter.ParameterDirection.Output)
@@ -101,8 +101,8 @@ namespace DomainGeneratorUI.Viewmodels
                 mc.CreateReversiveMap<UseCaseSentence, UseCaseSentenceViewModel>();
                 mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
-                mc.CreateReversiveMap<MethodParameterReferenceValueViewModel, MethodParameterReferenceValue>();
-                
+                mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
+                mc.CreateReversiveMap<MethodParameterReference, MethodParameterReferenceViewModel>();
             });
         }
 
@@ -119,8 +119,15 @@ namespace DomainGeneratorUI.Viewmodels
             UpdateUseCaseContent(ContentView);
         }
 
+        public void UpdatedUseCaseInputParameters(UseCaseSentenceViewModel source, List<MethodParameterReferenceValueViewModel> parameters)
+        {
+            var sentence = ContentView.SentenceCollection.Sentences.First(k => k == source);
+            sentence.ReferencedInputParametersValues = parameters;
+            UpdateUseCaseContent(ContentView);
+        }
+
         private void UpdateUseCaseContent(UseCaseContentViewModel newValue)
-        { 
+        {
             Content = Mapper.Map<UseCaseContent>(ContentView);
         }
     }

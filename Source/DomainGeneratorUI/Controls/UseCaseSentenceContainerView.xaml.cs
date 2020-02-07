@@ -50,6 +50,12 @@ namespace DomainGeneratorUI.Controls
             RaiseEvent(args);
         }
 
+        public void RaiseUpdateUseCaseSentenceEvent(UpdatedUseCaseSentenceEventArgs args)
+        {
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
+
 
         public List<MethodParameterReferenceViewModel> ParentInputParameters
         {
@@ -203,9 +209,10 @@ namespace DomainGeneratorUI.Controls
         private void Instance_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
             var data = e as UpdatedUseCaseSentenceEventArgs;
+
             if (data.UseCaseViewModel == Sentence)
             {
-                RaiseUpdateUseCaseSentenceEvent(data.UseCase, Sentence);
+                RaiseUpdateUseCaseSentenceEvent(data);
             }
         }
     }

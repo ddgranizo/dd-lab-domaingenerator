@@ -39,7 +39,8 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <control:InputParameterSelectorControlView 
-                                Parameter="{Binding}">
+                                Parameter="{Binding}"
+                                UpdatedValue="InputParameterSelectorControlView_UpdatedValue">
                                 <control:InputParameterSelectorControlView.AvailableParameterReferences>
                                     <MultiBinding Converter="{StaticResource MethodToValueConverter}" ConverterParameter="GetAvailableParametersForMethodParmaeter">
                                         <Binding  RelativeSource="{RelativeSource AncestorType=window:InputParameterSelectorWindow}" Path="ViewModel"/>

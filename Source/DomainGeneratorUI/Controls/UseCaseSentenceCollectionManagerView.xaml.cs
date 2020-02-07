@@ -47,6 +47,12 @@ namespace DomainGeneratorUI.Controls
             RaiseEvent(args);
         }
 
+        public void RaiseUpdateUseCaseSentenceEvent(UpdatedUseCaseSentenceEventArgs args)
+        {
+            args.RoutedEvent = UpdatedUseCaseEvent;
+            RaiseEvent(args);
+        }
+
 
         public UseCaseSentenceCollectionManagerInputData UseCaseSentenceCollectionManagerInputData
         {
@@ -94,7 +100,7 @@ namespace DomainGeneratorUI.Controls
         private void UseCaseSentenceManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
             var data = e as UpdatedUseCaseSentenceEventArgs;
-            RaiseUpdateUseCaseSentenceEvent(data.UseCaseViewModel, data.UseCase);
+            RaiseUpdateUseCaseSentenceEvent(data);
         }
     }
 }

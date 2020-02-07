@@ -84,7 +84,15 @@ namespace DomainGeneratorUI.Windows
         private void UseCaseSentenceCollectionManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
             var data = e as UpdatedUseCaseSentenceEventArgs;
-            _viewModel.UpdatedUseCaseSentence(data.UseCaseViewModel, data.UseCase);
+            if (data.Type == UpdatedUseCaseSentenceEventArgs.UpdateType.Sentence)
+            {
+                _viewModel.UpdatedUseCaseSentence(data.UseCaseViewModel, data.UseCase);
+            }
+            else
+            {
+                _viewModel.UpdatedUseCaseInputParameters(data.UseCaseViewModel, data.Parameters);
+            }
+            
         }
     }
 }
