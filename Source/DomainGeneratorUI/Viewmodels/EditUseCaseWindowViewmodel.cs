@@ -118,7 +118,15 @@ namespace DomainGeneratorUI.Viewmodels
         {
             var index = ContentView.SentenceCollection.Sentences.IndexOf(source);
             var newViewModel = Mapper.Map<UseCaseSentenceViewModel>(newValue);
-            ContentView.SentenceCollection.Sentences[index] = newViewModel;
+            if (index >-1)
+            {
+                ContentView.SentenceCollection.Sentences[index] = newViewModel;
+            }
+            else
+            {
+                ContentView.SentenceCollection.Sentences.Add(newViewModel);
+            }
+            
             UpdateUseCaseContent(ContentView);
         }
 

@@ -61,7 +61,7 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
         public void ProcessData(RepositoryMethod regardingRepositoryMethod)
         {
             Name = regardingRepositoryMethod.Name;
-            Description = $"Method {SchemaName}.{RepositoryName}.{regardingRepositoryMethod.Name}";
+            DisplayName = $"Method {SchemaName}.{RepositoryName}.{regardingRepositoryMethod.Name}";
 
             var repositoryMethod = JsonConvert.DeserializeObject<RepositoryMethodContent>(regardingRepositoryMethod.Content);
 

@@ -21,7 +21,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Execute repository method" FontWeight="Bold" />
                 <!--<TextBlock Cursor="Hand" Text="Select repository method" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Name_MouseDown" Visibility="{Binding }"/>-->
-                <TextBlock Cursor="Hand" Text="{Binding Description}" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Name_MouseDown"/>
+                <TextBlock Cursor="Hand" Text="{Binding DisplayName}" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Name_MouseDown"/>
                 <TextBlock Cursor="Hand" Text="Inputs" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Inputs_MouseDown"/>
             </StackPanel>
         </Grid>

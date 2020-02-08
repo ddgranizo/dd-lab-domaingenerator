@@ -44,6 +44,7 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
 
         private ExecuteRepositoryMethodSentenceView _view;
         public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
+        public string DisplayName { get { return GetValue<string>(); } set { SetValue(value); } }
 
 
         public IMapper Mapper { get; private set; }
@@ -136,7 +137,22 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         private void SetCurrentSentenceFromUseCase(UseCaseSentence sentence)
         {
             Sentence = new ExecuteRepositoryMethodSentence(sentence);
-            Description = Sentence.Description;
+            
+            var description = Sentence.Description;
+            if (description == null
+                || description != null && description.Trim() == string.Empty)
+            {
+                description = "Add description";
+            }
+            Description = description;
+
+            var displayName = Sentence.DisplayName;
+            if (displayName == null
+                || displayName != null && displayName.Trim() == string.Empty)
+            {
+                displayName = "Select repository method";
+            }
+            DisplayName = displayName;
         }
 
         private MapperConfiguration ConfigureMappingProfiles()
