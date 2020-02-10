@@ -1,4 +1,5 @@
-﻿using DD.Lab.Wpf.Drm;
+﻿using AutoMapper;
+using DD.Lab.Wpf.Drm;
 using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Viewmodels.Methods;
 using DomainGeneratorUI.Viewmodels.UseCases;
@@ -16,5 +17,6 @@ namespace DomainGeneratorUI.Inputs
         public UseCaseSentenceCollectionViewModel SentenceCollection { get; set; }
         public GenericManager GenericManager { get; set; }
         public UseCaseContext UseCaseContext { get; set; }
+        public IMapper Mapper { get; set; }
     }
 }

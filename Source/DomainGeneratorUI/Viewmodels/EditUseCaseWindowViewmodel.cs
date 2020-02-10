@@ -67,6 +67,7 @@ namespace DomainGeneratorUI.Viewmodels
                     SentenceCollection = ContentView.SentenceCollection,
                     GenericManager = GenericManager,
                     UseCaseContext = UseCaseContext,
+                    Mapper = Mapper,
                 };
             }, nameof(ContentView), nameof(GenericManager)));
         }
@@ -117,27 +118,17 @@ namespace DomainGeneratorUI.Viewmodels
             UpdateUseCaseContent();
         }
 
-        public void UpdatedUseCaseSentence(UseCaseSentenceViewModel source, UseCaseSentence newValue)
+        public void UpdatedUseCaseSentence()
         {
-            var index = ContentView.SentenceCollection.Sentences.IndexOf(source);
-            var newViewModel = Mapper.Map<UseCaseSentenceViewModel>(newValue);
-            if (index >-1)
-            {
-                ContentView.SentenceCollection.Sentences[index] = newViewModel;
-            }
-            else
-            {
-                ContentView.SentenceCollection.Sentences.Add(newViewModel);
-            }
             UpdateUseCaseContent();
         }
 
-        public void UpdatedUseCaseInputParameters(UseCaseSentenceViewModel source, List<MethodParameterReferenceValueViewModel> parameters)
-        {
-            var sentence = ContentView.SentenceCollection.Sentences.First(k => k == source);
-            sentence.ReferencedInputParametersValues = parameters;
-            UpdateUseCaseContent();
-        }
+        //public void UpdatedUseCaseInputParameters(UseCaseSentenceViewModel source, List<MethodParameterReferenceValueViewModel> parameters)
+        //{
+        //    var sentence = ContentView.SentenceCollection.Sentences.First(k => k == source);
+        //    sentence.ReferencedInputParametersValues = parameters;
+        //    UpdateUseCaseContent();
+        //}
 
         private void UpdateUseCaseContent()
         {

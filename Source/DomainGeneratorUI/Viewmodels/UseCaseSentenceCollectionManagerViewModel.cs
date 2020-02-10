@@ -20,6 +20,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using DD.Basic.Extensions;
+using DomainGeneratorUI.Models.Methods;
+using AutoMapper;
 
 namespace DomainGeneratorUI.Viewmodels
 {
@@ -32,6 +34,7 @@ namespace DomainGeneratorUI.Viewmodels
         public UseCaseSentenceCollectionViewModel SentenceCollection { get { return GetValue<UseCaseSentenceCollectionViewModel>(); } set { SetValue(value); } }
         public UseCaseSentenceCollectionManagerInputData UseCaseSentenceCollectionManagerInputData { get { return GetValue<UseCaseSentenceCollectionManagerInputData>(); } set { SetValue(value, UpdatedUseCaseSentenceCollectionManagerInputData); } }
 
+        public IMapper Mapper { get; set; }
         private UseCaseSentenceCollectionManagerView _view;
 
         public UseCaseSentenceCollectionManagerViewModel()
@@ -58,6 +61,32 @@ namespace DomainGeneratorUI.Viewmodels
             return parameters;
         }
 
+        public void UpdatedUseCaseSentence(UseCaseSentenceViewModel sentence, UseCaseSentence newSentence)
+        {
+            if (IsItemInList(sentence))
+            {
+                var index = UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.IndexOf(sentence);
+                var newViewModel =  Mapper.Map<UseCaseSentenceViewModel>(newSentence);
+                if (index > -1)
+                {
+                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences[index] = newViewModel;
+                }
+                else
+                {
+                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.Add(newViewModel);
+                }
+                _view.RaiseUpdateUseCaseSentenceEvent(newViewModel);
+            }
+        }
+
+        public void UpdatedUseCaseSentenceInputParameters(UseCaseSentenceViewModel sentence, List<MethodParameterReferenceValueViewModel> newSentence)
+        {
+            if (IsItemInList(sentence))
+            {
+                sentence.ReferencedInputParametersValues = newSentence;
+                _view.RaiseUpdateUseCaseSentenceEvent(sentence);
+            }
+        }
 
         private bool IsItemInList(UseCaseSentenceViewModel sentence)
         {
@@ -149,6 +178,7 @@ namespace DomainGeneratorUI.Viewmodels
         {
             SentenceCollection = data.SentenceCollection;
             UseCaseContext = data.UseCaseContext;
+            Mapper = data.Mapper;
         }
 
         public List<MethodParameterReferenceViewModel> GetInputParametersForSentence(UseCaseSentenceViewModel sentence)

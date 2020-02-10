@@ -11,6 +11,7 @@ using DomainGeneratorUI.Extensions;
 using DomainGeneratorUI.Inputs;
 using DomainGeneratorUI.Models;
 using DomainGeneratorUI.Models.Methods;
+using DomainGeneratorUI.Models.RepositoryMethods;
 using DomainGeneratorUI.Models.UseCases;
 using DomainGeneratorUI.Models.UseCases.Sentences;
 using DomainGeneratorUI.Models.UseCases.Sentences.Base;
@@ -45,6 +46,9 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         private ExecuteRepositoryMethodSentenceView _view;
         public string Description { get { return GetValue<string>(); } set { SetValue(value); } }
         public string DisplayName { get { return GetValue<string>(); } set { SetValue(value); } }
+        public Guid RepositoryMethodId { get { return GetValue<Guid>(); } set { SetValue(value); } }
+        public bool AreInputsOk { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool IsRepositoryOk { get { return GetValue<bool>(); } set { SetValue(value); } }
 
 
         public IMapper Mapper { get; private set; }
@@ -87,12 +91,12 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                             (BasicSentence.ReferencedInputParametersValues);
 
                 var window = new InputParameterSelectorWindow(
-                    GenericManager, 
+                    GenericManager,
                     BasicSentence.InputParameters,
                     ParentInputParameters,
                     parameters);
                 window.ShowDialog();
-                if (window.Response == DD.Lab.Wpf.Windows.WindowResponse.OK) 
+                if (window.Response == DD.Lab.Wpf.Windows.WindowResponse.OK)
                 {
                     var response = window.OutputMethodInputParametersReferenceValues;
                     UpdatedExecuteRepositoryMethodSentenceInputParameters(response);
@@ -103,6 +107,31 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             RegisterCommand(EditCommand);
         }
 
+
+        private void CheckIfSentenceIsOk()
+        {
+            CheckIfRepositoryMethodIsOk();
+            CheckIfInputsAreOk();
+        }
+
+        private void CheckIfInputsAreOk()
+        {
+            if (IsRepositoryOk)
+            {
+                var repository = Entity.DictionartyToEntity<RepositoryMethod>
+                    (GenericManager.Retrieve(RepositoryMethod.LogicalName, Sentence.RepositoryMethodId.Id).Values);
+                var repositoryContentJson = repository.Content;
+                var repositoryContent = GenericManager
+                    .ParserService
+                    .ObjectifyWithTypes<RepositoryMethodContent>(repositoryContentJson);
+            }
+        }
+
+        private void CheckIfRepositoryMethodIsOk()
+        {
+            IsRepositoryOk = Sentence.RepositoryMethodId != null
+                   && Sentence.RepositoryMethodId.Id != Guid.Empty;
+        }
 
         private void UpdatedExecuteRepositoryMethodSentenceInputParameters(List<MethodParameterReferenceValueViewModel> parameters)
         {
@@ -126,18 +155,21 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             GenericManager = data.GenericManager;
             ParentInputParameters = data.ParentInputParameters;
             ParentOutputParameters = data.ParentOutputParameters;
+            
         }
 
         private void UpdatedBasicSentence(UseCaseSentenceViewModel data)
         {
             var sentence = Mapper.Map<UseCaseSentence>(BasicSentence);
             SetCurrentSentenceFromUseCase(sentence);
+
+            CheckIfSentenceIsOk();
         }
 
         private void SetCurrentSentenceFromUseCase(UseCaseSentence sentence)
         {
             Sentence = new ExecuteRepositoryMethodSentence(sentence);
-            
+
             var description = Sentence.Description;
             if (description == null
                 || description != null && description.Trim() == string.Empty)
@@ -153,6 +185,8 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 displayName = "Select repository method";
             }
             DisplayName = displayName;
+
+
         }
 
         private MapperConfiguration ConfigureMappingProfiles()
@@ -167,7 +201,7 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
                 mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
-                
+
             });
         }
 

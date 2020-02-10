@@ -25,7 +25,7 @@ namespace DomainGeneratorUI.Windows
     /// </summary>
     public partial class EditUseCaseWindow : Window, IContentEditor<UseCaseContent>
     {
-       
+
         private readonly EditUseCaseWindowViewModel _viewModel = null;
 
         public UseCaseContent ResponseContent { get; set; }
@@ -83,16 +83,7 @@ namespace DomainGeneratorUI.Windows
 
         private void UseCaseSentenceCollectionManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
-            var data = e as UpdatedUseCaseSentenceEventArgs;
-            if (data.Type == UpdatedUseCaseSentenceEventArgs.UpdateType.Sentence)
-            {
-                _viewModel.UpdatedUseCaseSentence(data.UseCaseViewModel, data.UseCase);
-            }
-            else
-            {
-                _viewModel.UpdatedUseCaseInputParameters(data.UseCaseViewModel, data.Parameters);
-            }
-            
+            _viewModel.UpdatedUseCaseSentence();
         }
 
         private void UseCaseSentenceCollectionManagerView_CopiedUseCase(object sender, RoutedEventArgs e)

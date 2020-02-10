@@ -78,6 +78,7 @@ namespace DomainGeneratorUI.Controls
             remove { RemoveHandler(MovedDownUseCaseEvent, value); }
         }
 
+
         public void RaiseCopiedUseCaseSentenceEvent(UseCaseSentenceViewModel sentenceViewModel)
         {
             RaiseRouteEventWithCurrentSentence(CopiedUseCaseEvent, sentenceViewModel);
@@ -124,15 +125,9 @@ namespace DomainGeneratorUI.Controls
             remove { RemoveHandler(UpdatedUseCaseEvent, value); }
         }
 
-        public void RaiseUpdateUseCaseSentenceEvent(UseCaseSentenceViewModel useCaseViewModel, UseCaseSentence useCaseSentence)
+        public void RaiseUpdateUseCaseSentenceEvent(UseCaseSentenceViewModel useCaseViewModel)
         {
-            RoutedEventArgs args = new UpdatedUseCaseSentenceEventArgs()
-            {
-                UseCaseViewModel = useCaseViewModel,
-                UseCase = useCaseSentence,
-            };
-            args.RoutedEvent = UpdatedUseCaseEvent;
-            RaiseEvent(args);
+            RaiseRouteEventWithCurrentSentence(UpdatedUseCaseEvent, useCaseViewModel);
         }
 
         public void RaiseUpdateUseCaseSentenceEvent(UpdatedUseCaseSentenceEventArgs args)
@@ -186,7 +181,20 @@ namespace DomainGeneratorUI.Controls
         private void UseCaseSentenceManagerView_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
             var data = e as UpdatedUseCaseSentenceEventArgs;
-            RaiseUpdateUseCaseSentenceEvent(data);
+
+            if (data.Source is UseCaseSentenceContainerView
+                && ((UseCaseSentenceContainerView)data.Source).ViewModel.Sentence == data.UseCaseViewModel)
+            {
+                if (data.Type == UpdatedUseCaseSentenceEventArgs.UpdateType.InputParameters)
+                {
+                    ViewModel.UpdatedUseCaseSentenceInputParameters(data.UseCaseViewModel, data.Parameters);
+                }
+                else if (data.Type == UpdatedUseCaseSentenceEventArgs.UpdateType.Sentence)
+                {
+                    ViewModel.UpdatedUseCaseSentence(data.UseCaseViewModel, data.UseCase);
+                }
+                
+            }
         }
 
         private void UseCaseSentenceContainerView_CopiedUseCase(object sender, RoutedEventArgs e)
