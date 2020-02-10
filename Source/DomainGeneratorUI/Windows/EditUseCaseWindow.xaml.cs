@@ -94,5 +94,35 @@ namespace DomainGeneratorUI.Windows
             }
             
         }
+
+        private void UseCaseSentenceCollectionManagerView_CopiedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.CopiedUseCase(data.UseCaseViewModel);
+        }
+
+        private void UseCaseSentenceCollectionManagerView_PastedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.PastedUseCase(data.UseCaseViewModel);
+        }
+
+        private void UseCaseSentenceCollectionManagerView_DeletedUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.DeletedUseCase(data.UseCaseViewModel);
+        }
+
+        private void UseCaseSentenceCollectionManagerView_MovedDownUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.MovedDownUseCase(data.UseCaseViewModel);
+        }
+
+        private void UseCaseSentenceCollectionManagerView_MovedUpUseCase(object sender, RoutedEventArgs e)
+        {
+            var data = e as UpdatedUseCaseSentenceEventArgs;
+            _viewModel.MovedUpUseCase(data.UseCaseViewModel);
+        }
     }
 }

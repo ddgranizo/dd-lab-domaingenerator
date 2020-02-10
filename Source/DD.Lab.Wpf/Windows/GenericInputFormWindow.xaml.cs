@@ -36,8 +36,6 @@ namespace DD.Lab.Wpf.Windows
             _viewModel = Resources["ViewModel"] as GenericInputFormWindowViewModel;
             _viewModel.Initialize(this, model);
             Response = WindowResponse.KO;
-
-            
         }
 
         

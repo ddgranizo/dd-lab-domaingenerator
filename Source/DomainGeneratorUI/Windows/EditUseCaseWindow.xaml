@@ -67,6 +67,11 @@
                     <control:UseCaseSentenceCollectionManagerView 
                         UseCaseSentenceCollectionManagerInputData="{Binding SentenceCollectionInputData}"
                         UpdatedUseCase="UseCaseSentenceCollectionManagerView_UpdatedUseCase"    
+                        CopiedUseCase="UseCaseSentenceCollectionManagerView_CopiedUseCase"
+                        PastedUseCase="UseCaseSentenceCollectionManagerView_PastedUseCase"
+                        DeletedUseCase="UseCaseSentenceCollectionManagerView_DeletedUseCase"
+                        MovedDownUseCase="UseCaseSentenceCollectionManagerView_MovedDownUseCase"
+                        MovedUpUseCase="UseCaseSentenceCollectionManagerView_MovedUpUseCase"
                         />
                 </materialDesign:Card>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">

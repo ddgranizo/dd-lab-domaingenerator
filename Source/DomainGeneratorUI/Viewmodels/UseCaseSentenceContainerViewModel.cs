@@ -1,3 +1,4 @@
+using DD.Lab.Wpf.Commands.Base;
 using DD.Lab.Wpf.Drm;
 using DD.Lab.Wpf.ViewModels.Base;
 using DomainGeneratorUI.Controls;
@@ -26,10 +27,18 @@ namespace DomainGeneratorUI.Viewmodels
         public List<MethodParameterReferenceViewModel> ParentInputParameters { get { return GetValue<List<MethodParameterReferenceViewModel>>(); } set { SetValue(value, UpdatedParentInputParameters); } }
         public List<MethodParameterReferenceViewModel> ParentOutputParameters { get { return GetValue<List<MethodParameterReferenceViewModel>>(); } set { SetValue(value, UpdatedParentOutputParameters); } }
 
+        public bool CanMoveUp { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool CanMoveDown { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool CanCopy { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool CanPaste { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool CanDelete { get { return GetValue<bool>(); } set { SetValue(value); } }
+
         private UseCaseSentenceContainerView _view;
 
         public UseCaseSentenceContainerViewModel()
         {
+            RegisterCommands();
+
             AddSetterPropertiesTrigger(new DD.Lab.Wpf.Models.PropertiesTrigger(() =>
             {
                 List<MethodParameterReferenceViewModel> childInputParameters = GetNewListWithInputParameters();
@@ -50,6 +59,47 @@ namespace DomainGeneratorUI.Viewmodels
                     AddCurrentChildOutputParameters(childOutputParameters);
                 }
             }, nameof(Sentence), nameof(GenericManager), nameof(ParentInputParameters), nameof(ParentOutputParameters)));
+        }
+
+
+        public ICommand CopyCommand { get; set; }
+        public ICommand PasteCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+        public ICommand MoveUpCommand { get; set; }
+        public ICommand MoveDownCommand { get; set; }
+
+        private void RegisterCommands()
+        {
+            CopyCommand = new RelayCommand((data) =>
+            {
+                _view.RaiseCopiedUseCaseSentenceEvent();
+            },(data) => { return CanCopy; });
+
+            PasteCommand = new RelayCommand((data) =>
+            {
+                _view.RaisePastedUseCaseSentenceEvent();
+            }, (data) => { return CanPaste; });
+
+            DeleteCommand = new RelayCommand((data) =>
+            {
+                _view.RaiseDeletedUseCaseSentenceEvent();
+            }, (data) => { return CanDelete; });
+
+            MoveUpCommand = new RelayCommand((data) =>
+            {
+                _view.RaiseMovedUpUseCaseSentenceEvent();
+            }, (data) => { return CanMoveUp; });
+
+            MoveDownCommand = new RelayCommand((data) =>
+            {
+                _view.RaiseMovedDownUseCaseSentenceEvent();
+            }, (data) => { return CanMoveDown; });
+
+            RegisterCommand(CopyCommand);
+            RegisterCommand(PasteCommand);
+            RegisterCommand(DeleteCommand);
+            RegisterCommand(MoveUpCommand);
+            RegisterCommand(MoveDownCommand);
         }
 
         private void UpdatedParentOutputParameters(List<MethodParameterReferenceViewModel> data)
@@ -110,6 +160,6 @@ namespace DomainGeneratorUI.Viewmodels
 
         }
 
-        
+
     }
 }

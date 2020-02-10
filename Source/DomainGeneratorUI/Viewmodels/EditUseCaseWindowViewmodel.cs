@@ -43,13 +43,15 @@ namespace DomainGeneratorUI.Viewmodels
         public GenericManager GenericManager { get { return GetValue<GenericManager>(); } set { SetValue(value); } }
         public UseCaseContentViewModel ContentView { get { return GetValue<UseCaseContentViewModel>(); } set { SetValue(value); } }
         public UseCaseSentenceCollectionManagerInputData SentenceCollectionInputData { get { return GetValue<UseCaseSentenceCollectionManagerInputData>(); } set { SetValue(value); } }
+        public UseCaseContext UseCaseContext { get { return GetValue<UseCaseContext>(); } set { SetValue(value); } }
 
         public IMapper Mapper { get; private set; }
-
         public EditUseCaseWindowViewModel()
         {
+            UseCaseContext = new UseCaseContext();
             InitializeMapper();
             InitializeCommands();
+
             AddSetterPropertiesTrigger(new DD.Lab.Wpf.Models.PropertiesTrigger(() =>
             {
                 SentenceCollectionInputData = new UseCaseSentenceCollectionManagerInputData()
@@ -64,6 +66,7 @@ namespace DomainGeneratorUI.Viewmodels
                         .ToList(),
                     SentenceCollection = ContentView.SentenceCollection,
                     GenericManager = GenericManager,
+                    UseCaseContext = UseCaseContext,
                 };
             }, nameof(ContentView), nameof(GenericManager)));
         }
@@ -111,7 +114,7 @@ namespace DomainGeneratorUI.Viewmodels
 
         public void UpdatedUseCaseParameters(UseCaseContentViewModel newValue)
         {
-            UpdateUseCaseContent(newValue);
+            UpdateUseCaseContent();
         }
 
         public void UpdatedUseCaseSentence(UseCaseSentenceViewModel source, UseCaseSentence newValue)
@@ -126,21 +129,46 @@ namespace DomainGeneratorUI.Viewmodels
             {
                 ContentView.SentenceCollection.Sentences.Add(newViewModel);
             }
-            
-            UpdateUseCaseContent(ContentView);
+            UpdateUseCaseContent();
         }
 
         public void UpdatedUseCaseInputParameters(UseCaseSentenceViewModel source, List<MethodParameterReferenceValueViewModel> parameters)
         {
             var sentence = ContentView.SentenceCollection.Sentences.First(k => k == source);
             sentence.ReferencedInputParametersValues = parameters;
-            UpdateUseCaseContent(ContentView);
+            UpdateUseCaseContent();
         }
 
-        private void UpdateUseCaseContent(UseCaseContentViewModel newValue)
+        private void UpdateUseCaseContent()
         {
             var data = Mapper.Map<UseCaseContent>(ContentView);
             Content = data;
+        }
+
+        public void CopiedUseCase(UseCaseSentenceViewModel useCase)
+        {
+            UseCaseContext.CopiedSentence = useCase;
+            UpdateUseCaseContent();
+        }
+
+        public void PastedUseCase(UseCaseSentenceViewModel useCase)
+        {
+            UpdateUseCaseContent();
+        }
+
+        public void DeletedUseCase(UseCaseSentenceViewModel useCase)
+        {
+            UpdateUseCaseContent();
+        }
+
+        public void MovedUpUseCase(UseCaseSentenceViewModel useCase)
+        {
+            UpdateUseCaseContent();
+        }
+
+        public void MovedDownUseCase(UseCaseSentenceViewModel useCase)
+        {
+            UpdateUseCaseContent();
         }
     }
 }

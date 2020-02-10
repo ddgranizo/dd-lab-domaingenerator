@@ -42,7 +42,6 @@ namespace DD.Lab.Wpf.Viewmodels.Windows
             RegisterCommand(SaveCommand);
         }
 
-
         private void UpdatedValues(Dictionary<string, object> data)
         {
             HasUpdated = true;

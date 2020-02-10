@@ -15,5 +15,6 @@ namespace DomainGeneratorUI.Inputs
         public List<MethodParameterReferenceViewModel> ParentOutputParameters { get; set; }
         public UseCaseSentenceCollectionViewModel SentenceCollection { get; set; }
         public GenericManager GenericManager { get; set; }
+        public UseCaseContext UseCaseContext { get; set; }
     }
 }

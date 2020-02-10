@@ -3,6 +3,7 @@ using DomainGeneratorUI.Viewmodels.UseCases.Sentences.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
 namespace DomainGeneratorUI.Viewmodels.UseCases
@@ -11,5 +12,7 @@ namespace DomainGeneratorUI.Viewmodels.UseCases
     {
         public List<UseCaseSentenceViewModel> Sentences { get { return GetValue<List<UseCaseSentenceViewModel>>(); } set { SetValue(value); UpdateListToCollection(value, SentencesCollection); } }
         public ObservableCollection<UseCaseSentenceViewModel> SentencesCollection { get; set; } = new ObservableCollection<UseCaseSentenceViewModel>();
+
+        
     }
 }
