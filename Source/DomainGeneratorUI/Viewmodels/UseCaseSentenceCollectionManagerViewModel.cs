@@ -65,16 +65,18 @@ namespace DomainGeneratorUI.Viewmodels
         {
             if (IsItemInList(sentence))
             {
-                var index = UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.IndexOf(sentence);
-                var newViewModel =  Mapper.Map<UseCaseSentenceViewModel>(newSentence);
+                var newList = new List<UseCaseSentenceViewModel>(UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences);
+                var index = IndexInList(sentence);
+                var newViewModel = Mapper.Map<UseCaseSentenceViewModel>(newSentence);
                 if (index > -1)
                 {
-                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences[index] = newViewModel;
+                    newList[index] = newViewModel;
                 }
                 else
                 {
-                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.Add(newViewModel);
+                    newList.Add(newViewModel);
                 }
+                UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences = newList;
                 _view.RaiseUpdateUseCaseSentenceEvent(newViewModel);
             }
         }
@@ -133,7 +135,7 @@ namespace DomainGeneratorUI.Viewmodels
             {
                 var index = IndexInList(sentence);
                 UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.RemoveAt(index);
-                UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.Insert(index-1, sentence);
+                UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences.Insert(index - 1, sentence);
                 _view.RaiseMovedUpUseCaseSentenceEvent(sentence);
             }
         }
@@ -156,7 +158,7 @@ namespace DomainGeneratorUI.Viewmodels
 
         public bool GetCanPaste(UseCaseSentenceViewModel sentence)
         {
-            return UseCaseContext.CopiedSentence != null;
+            return UseCaseContext != null && UseCaseContext.CopiedSentence != null;
         }
 
         public bool GetCanDelete(UseCaseSentenceViewModel sentence)
@@ -176,9 +178,12 @@ namespace DomainGeneratorUI.Viewmodels
 
         private void UpdatedUseCaseSentenceCollectionManagerInputData(UseCaseSentenceCollectionManagerInputData data)
         {
+            if (Mapper == null)
+            {
+                Mapper = data.Mapper;
+            }
             SentenceCollection = data.SentenceCollection;
             UseCaseContext = data.UseCaseContext;
-            Mapper = data.Mapper;
         }
 
         public List<MethodParameterReferenceViewModel> GetInputParametersForSentence(UseCaseSentenceViewModel sentence)
@@ -220,24 +225,24 @@ namespace DomainGeneratorUI.Viewmodels
             {
                 if (SelectedSentenceType.Value == (int)UseCaseSentence.SentenceType.ExecuteRepositoryMethod)
                 {
-                    var newCollectionSentence = new List<UseCaseSentenceViewModel>();
-                    //var newCollection = UseCaseSentenceCollectionManagerInputData.SentenceCollection;
-                    foreach (var item in UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences)
-                    {
-                        newCollectionSentence.Add(item);
-                    }
-                    newCollectionSentence.Add(new UseCaseSentenceViewModel() { Type = UseCaseSentence.SentenceType.ExecuteRepositoryMethod });
-                    var newInputData = new UseCaseSentenceCollectionManagerInputData()
-                    {
-                        GenericManager = UseCaseSentenceCollectionManagerInputData.GenericManager,
-                        ParentInputParameters = UseCaseSentenceCollectionManagerInputData.ParentInputParameters,
-                        ParentOutputParameters = UseCaseSentenceCollectionManagerInputData.ParentOutputParameters,
-                        SentenceCollection = new UseCaseSentenceCollectionViewModel()
-                        {
-                            Sentences = newCollectionSentence
-                        }
-                    };
-                    UseCaseSentenceCollectionManagerInputData = newInputData;
+
+                    var newSentence = new UseCaseSentenceViewModel() { Type = UseCaseSentence.SentenceType.ExecuteRepositoryMethod };
+                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences
+                        .Add(newSentence);
+
+                    _view.RaiseMovedUpUseCaseSentenceEvent(newSentence);
+                    //var newInputData = new UseCaseSentenceCollectionManagerInputData()
+                    //{
+                    //    GenericManager = UseCaseSentenceCollectionManagerInputData.GenericManager,
+                    //    ParentInputParameters = UseCaseSentenceCollectionManagerInputData.ParentInputParameters,
+                    //    ParentOutputParameters = UseCaseSentenceCollectionManagerInputData.ParentOutputParameters,
+                    //    SentenceCollection = new UseCaseSentenceCollectionViewModel()
+                    //    {
+                    //        Sentences = newCollectionSentence
+                    //    },
+                    //    Mapper = Mapper,
+                    //};
+                    //UseCaseSentenceCollectionManagerInputData = newInputData;
                 }
             }, (input) =>
             {

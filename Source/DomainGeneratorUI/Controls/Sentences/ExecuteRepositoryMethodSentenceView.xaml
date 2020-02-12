@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="clr-namespace:DomainGeneratorUI.Viewmodels.Sentences"
+        xmlns:conv="clr-namespace:DD.Lab.Wpf.Converters;assembly=DD.Lab.Wpf"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
         <vm:ExecuteRepositoryMethodSentenceViewModel x:Key="ViewModel" d:IsDataSource="True" />
+        <conv:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     </UserControl.Resources>
     <Grid x:Name="MainGrid" DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.Resources>
@@ -22,7 +24,11 @@
                 <TextBlock Text="Execute repository method" FontWeight="Bold" />
                 <!--<TextBlock Cursor="Hand" Text="Select repository method" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Name_MouseDown" Visibility="{Binding }"/>-->
                 <TextBlock Cursor="Hand" Text="{Binding DisplayName}" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Name_MouseDown"/>
-                <TextBlock Cursor="Hand" Text="Inputs" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Inputs_MouseDown"/>
+                <materialDesign:PackIcon Margin="5,0,0,0" Kind="Warning" Foreground="Red" Visibility="{Binding IsRepositoryOk, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" />
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowParametersMenu, Converter={StaticResource BoolToCollapsedConverter}}">
+                    <TextBlock Cursor="Hand" Text="Inputs" Margin="5,0,0,0" TextDecorations="Underline" Foreground="Blue" MouseDown="Inputs_MouseDown"/>
+                    <materialDesign:PackIcon Margin="5,0,0,0" Kind="Warning" Foreground="Red" Visibility="{Binding AreInputsOk, Converter={StaticResource BoolToCollapsedConverter}, ConverterParameter=False}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!--<Button Grid.Column="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Edit sentence" Command="{Binding Source={StaticResource ViewModel}, Path=EditCommand, Mode=OneWay}"  Padding="5" Margin="5">

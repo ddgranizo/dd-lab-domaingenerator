@@ -49,7 +49,8 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         public Guid RepositoryMethodId { get { return GetValue<Guid>(); } set { SetValue(value); } }
         public bool AreInputsOk { get { return GetValue<bool>(); } set { SetValue(value); } }
         public bool IsRepositoryOk { get { return GetValue<bool>(); } set { SetValue(value); } }
-
+        public bool ShowParametersMenu { get { return GetValue<bool>(); } set { SetValue(value); } }
+        public bool RepositoryHasZeroParameters { get; set; }
 
         public IMapper Mapper { get; private set; }
 
@@ -112,18 +113,66 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
         {
             CheckIfRepositoryMethodIsOk();
             CheckIfInputsAreOk();
+            ShowParametersMenu = IsRepositoryOk && !RepositoryHasZeroParameters;
         }
 
         private void CheckIfInputsAreOk()
         {
             if (IsRepositoryOk)
             {
+
                 var repository = Entity.DictionartyToEntity<RepositoryMethod>
                     (GenericManager.Retrieve(RepositoryMethod.LogicalName, Sentence.RepositoryMethodId.Id).Values);
                 var repositoryContentJson = repository.Content;
                 var repositoryContent = GenericManager
                     .ParserService
                     .ObjectifyWithTypes<RepositoryMethodContent>(repositoryContentJson);
+
+                var notFoundParameters = new List<MethodParameter>();
+                foreach (var item in repositoryContent.Parameters
+                                            .Where(k=>k.Direction == MethodParameter.ParameterDirection.Input))
+                {
+                    var setParameter = Sentence
+                        .ReferencedInputParametersValues
+                        .FirstOrDefault(k => k.RegardingMethodParameter != null
+                            && k.RegardingMethodParameter.Name == item.Name
+                            && k.RegardingMethodParameter.Type == item.Type);
+                    if (setParameter == null)
+                    {
+                        notFoundParameters.Add(item);
+                    }
+                }
+                if (notFoundParameters.Count > 0)
+                {
+                    Sentence
+                        .ReferencedInputParametersValues = new List<MethodParameterReferenceValue>();
+                }
+                RepositoryHasZeroParameters = repositoryContent.Parameters
+                                            .Where(k => k.Direction == MethodParameter.ParameterDirection.Input).Count() == 0;
+                bool isUnsetParameter = Sentence.ReferencedInputParametersValues.Count == 0;
+                bool areAllInputsOk = true;
+                foreach (var item in Sentence
+                        .ReferencedInputParametersValues)
+                {
+                    bool inputIsOk = true;
+                    if (item.Type == MethodParameterReferenceValue.ValueType.Constant)
+                    {
+                        inputIsOk = item.ConstantValue != null;
+                    }
+                    else if (item.Type == MethodParameterReferenceValue.ValueType.SentenceOutput)
+                    {
+                        inputIsOk = item.RegardingMethodParameter != null 
+                                    && item.RegardingReferenceMethodParameter != null;
+                    }
+                    else if (item.Type == MethodParameterReferenceValue.ValueType.UseCaseInput)
+                    {
+                        inputIsOk = item.RegardingMethodParameter != null;
+                    }
+                    areAllInputsOk = !areAllInputsOk ? areAllInputsOk : inputIsOk;
+                }
+
+                AreInputsOk = RepositoryHasZeroParameters || areAllInputsOk && !isUnsetParameter;
+
             }
         }
 
@@ -146,23 +195,22 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             var schemaId = repository.SchemaId.Id;
             var schema = Entity.DictionartyToEntity<Schema>(GenericManager.Retrieve(Schema.LogicalName, schemaId).Values);
             var newSentence = new ExecuteRepositoryMethodSentence(schema.Name, repository.Name, method);
+
             _view.RaiseUpdateUseCaseSentenceEvent(newSentence, BasicSentence);
         }
 
         private void UpdatedExecuteRepositoryMethodSentenceInputData(ExecuteRepositoryMethodSentenceInputData data)
         {
-            BasicSentence = data.Sentence;
-            GenericManager = data.GenericManager;
             ParentInputParameters = data.ParentInputParameters;
             ParentOutputParameters = data.ParentOutputParameters;
-            
+            GenericManager = data.GenericManager;
+            BasicSentence = data.Sentence;
         }
 
         private void UpdatedBasicSentence(UseCaseSentenceViewModel data)
         {
             var sentence = Mapper.Map<UseCaseSentence>(BasicSentence);
             SetCurrentSentenceFromUseCase(sentence);
-
             CheckIfSentenceIsOk();
         }
 
@@ -186,7 +234,6 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
             }
             DisplayName = displayName;
 
-
         }
 
         private MapperConfiguration ConfigureMappingProfiles()
@@ -201,7 +248,6 @@ namespace DomainGeneratorUI.Viewmodels.Sentences
                 mc.CreateReversiveMap<MethodParameterReferenceValue, MethodParameterReferenceValueViewModel>();
                 mc.CreateReversiveMap<SentenceInputReferencedParameter, SentenceInputReferencedParameterViewModel>();
                 mc.CreateReversiveMap<SentenceOutputReferencedParameter, SentenceOutputReferencedParameterViewModel>();
-
             });
         }
 
