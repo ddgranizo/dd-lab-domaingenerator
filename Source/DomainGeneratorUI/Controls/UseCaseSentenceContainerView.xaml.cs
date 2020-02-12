@@ -445,6 +445,32 @@ namespace DomainGeneratorUI.Controls
             SentenceGrid.Children.Add(instance);
         }
 
+
+        public void AddExecuteUseCaseSentence(
+           GenericManager manager,
+           UseCaseSentenceViewModel sentence,
+           List<MethodParameterReferenceViewModel> parentInputParameters,
+           List<MethodParameterReferenceViewModel> parentOutputParameters)
+        {
+            foreach (var item in SentenceGrid.Children.OfType<ExecuteUseCaseSentenceView>())
+            {
+                item.UpdatedUseCase -= Instance_UpdatedUseCase;
+            }
+            SentenceGrid.Children.Clear();
+            var instance = new ExecuteUseCaseSentenceView()
+            {
+                ExecuteUseCaseSentenceInputData = new ExecuteUseCaseSentenceInputData()
+                {
+                    Sentence = sentence,
+                    GenericManager = manager,
+                    ParentInputParameters = parentInputParameters,
+                    ParentOutputParameters = parentOutputParameters,
+                }
+            };
+            instance.UpdatedUseCase += Instance_UpdatedUseCase;
+            SentenceGrid.Children.Add(instance);
+        }
+
         private void Instance_UpdatedUseCase(object sender, RoutedEventArgs e)
         {
             var data = e as UpdatedUseCaseSentenceEventArgs;

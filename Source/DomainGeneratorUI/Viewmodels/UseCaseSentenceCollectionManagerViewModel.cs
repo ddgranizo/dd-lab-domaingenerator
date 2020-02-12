@@ -205,7 +205,6 @@ namespace DomainGeneratorUI.Viewmodels
             return parameters;
         }
 
-
         private void SetSentenceTypes()
         {
             var sentences = new List<SentenceType>();
@@ -217,7 +216,6 @@ namespace DomainGeneratorUI.Viewmodels
             SentenceTypes = sentences;
         }
 
-
         public ICommand AddSentenceCommand { get; set; }
         private void InitializeCommands()
         {
@@ -225,25 +223,19 @@ namespace DomainGeneratorUI.Viewmodels
             {
                 if (SelectedSentenceType.Value == (int)UseCaseSentence.SentenceType.ExecuteRepositoryMethod)
                 {
-
                     var newSentence = new UseCaseSentenceViewModel() { Type = UseCaseSentence.SentenceType.ExecuteRepositoryMethod };
                     UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences
                         .Add(newSentence);
-
                     _view.RaiseMovedUpUseCaseSentenceEvent(newSentence);
-                    //var newInputData = new UseCaseSentenceCollectionManagerInputData()
-                    //{
-                    //    GenericManager = UseCaseSentenceCollectionManagerInputData.GenericManager,
-                    //    ParentInputParameters = UseCaseSentenceCollectionManagerInputData.ParentInputParameters,
-                    //    ParentOutputParameters = UseCaseSentenceCollectionManagerInputData.ParentOutputParameters,
-                    //    SentenceCollection = new UseCaseSentenceCollectionViewModel()
-                    //    {
-                    //        Sentences = newCollectionSentence
-                    //    },
-                    //    Mapper = Mapper,
-                    //};
-                    //UseCaseSentenceCollectionManagerInputData = newInputData;
                 }
+                if (SelectedSentenceType.Value == (int)UseCaseSentence.SentenceType.ExecuteUseCase)
+                {
+                    var newSentence = new UseCaseSentenceViewModel() { Type = UseCaseSentence.SentenceType.ExecuteUseCase };
+                    UseCaseSentenceCollectionManagerInputData.SentenceCollection.Sentences
+                        .Add(newSentence);
+                    _view.RaiseMovedUpUseCaseSentenceEvent(newSentence);
+                }
+
             }, (input) =>
             {
                 return SelectedSentenceType != null;
@@ -256,7 +248,6 @@ namespace DomainGeneratorUI.Viewmodels
         {
             _view = v;
         }
-
 
     }
 }

@@ -48,9 +48,9 @@ namespace DomainGeneratorUI.Viewmodels
                 {
                     _view.AddExecuteRepositoryMethodSentence(GenericManager, Sentence, childInputParameters, childOutputParameters);
                 }
-                else if (Sentence.Type == Models.UseCases.Sentences.Base.UseCaseSentence.SentenceType.ExecuteService)
+                else if (Sentence.Type == Models.UseCases.Sentences.Base.UseCaseSentence.SentenceType.ExecuteUseCase)
                 {
-
+                    _view.AddExecuteUseCaseSentence(GenericManager, Sentence, childInputParameters, childOutputParameters);
                 }
                 else
                 {

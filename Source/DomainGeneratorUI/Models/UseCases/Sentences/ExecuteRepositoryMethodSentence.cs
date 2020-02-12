@@ -19,7 +19,7 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
         public string RepositoryName { get; set; }
         public EntityReferenceValue RepositoryMethodId { get; set; }
         public IJsonParserService JsonParserService { get; set; }
-        //public RepositoryMethod RegardingRepositoryMethod { get; set; }
+
         public ExecuteRepositoryMethodSentence()
         {
             JsonParserService = new JsonParserService();
@@ -34,8 +34,6 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
             InputParameters = baseSentence.InputParameters;
             OutputParameters = baseSentence.OutputParameters;
             ReferencedInputParametersValues = baseSentence.ReferencedInputParametersValues;
-            //InputReferencedParameters = baseSentence.InputReferencedParameters;
-            //OutputReferencedParameters = baseSentence.OutputReferencedParameters;
             Name = baseSentence.Name;
             Description = baseSentence.Description;
             DisplayName = baseSentence.DisplayName;
@@ -79,20 +77,12 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences
                                     .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Input))
             {
                 InputParameters.Add(item);
-                //InputReferencedParameters.Add(new SentenceInputReferencedParameter()
-                //{
-                //    RegardingParameter = item,
-                //});
             }
 
             foreach (var item in repositoryMethod.Parameters
                                     .Where(k => k.Direction == Methods.MethodParameter.ParameterDirection.Output))
             {
                 OutputParameters.Add(item);
-                //OutputReferencedParameters.Add(new SentenceOutputReferencedParameter()
-                //{
-                //    RegardingParameter = item,
-                //});
             }
         }
 

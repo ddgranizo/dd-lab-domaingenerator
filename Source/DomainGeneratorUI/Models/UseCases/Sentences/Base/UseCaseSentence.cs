@@ -9,8 +9,9 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
     {
         public enum SentenceType
         {
+            If = 1,
             ExecuteRepositoryMethod = 10,
-            ExecuteService = 20,
+            ExecuteUseCase = 20,
         }
 
         public SentenceType Type { get; set; }

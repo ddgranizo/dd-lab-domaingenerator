@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\Sentences\ExecuteUseCaseSentenceView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Windows\InputParameterSelectorWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
