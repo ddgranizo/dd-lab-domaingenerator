@@ -30,8 +30,6 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <!--<Button Grid.Column="1" Style="{DynamicResource  MaterialDesignRaisedLightButton}" ToolTip="Edit sentence" Command="{Binding Source={StaticResource ViewModel}, Path=EditCommand, Mode=OneWay}"  Padding="5" Margin="5">
-            <materialDesign:PackIcon Kind="Edit"/>
-        </Button>-->
+        
     </Grid>
 </UserControl>

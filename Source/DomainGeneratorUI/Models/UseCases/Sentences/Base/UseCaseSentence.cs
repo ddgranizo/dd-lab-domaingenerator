@@ -45,5 +45,25 @@ namespace DomainGeneratorUI.Models.UseCases.Sentences.Base
             }
             return default(T);
         }
+
+        public void AddValue(string name, object value)
+        {
+            if (Values.ContainsKey(name))
+            {
+                Values[name] = value;
+            }
+            else
+            {
+                Values.Add(name, value);
+            }
+        }
+
+        public void RemoveValue(string name)
+        {
+            if (Values.ContainsKey(name))
+            {
+                Values.Remove(name);
+            }
+        }
     }
 }
